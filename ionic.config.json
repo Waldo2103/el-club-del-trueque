@@ -1,0 +1,8 @@
+{
+  "name": "El Club del Trueque",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "angular",
+  "id": "cdb2bdd0"
+}

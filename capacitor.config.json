@@ -1,0 +1,13 @@
+{
+  "appId": "io.ionic.starter",
+  "appName": "El Club del Trueque",
+  "bundledWebRuntime": false,
+  "npmClient": "npm",
+  "webDir": "www",
+  "plugins": {
+    "SplashScreen": {
+      "launchShowDuration": 0
+    }
+  },
+  "cordova": {}
+}
