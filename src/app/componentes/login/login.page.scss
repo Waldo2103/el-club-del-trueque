@@ -1,0 +1,58 @@
+.icon {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    width: 60%;
+}
+
+ion-card{ 
+    transform: translateX(0%) translateY(0%); 
+    background:transparent;
+}
+
+ion-content.background{
+    --background: url(../../../assets/img/video.gif) 0 0/150% 100% no-repeat;
+}
+
+.transparent{
+    --background: transparent;
+}
+
+
+ion-list{
+    background-color: transparent;
+}
+ion-checkbox{
+    background-color: transparent;
+}
+ion-item{
+    --border-color: blue;
+
+}
+
+ion-button{
+    --color: white;
+    --background: #ffc409;
+}
+
+ion-label{
+    font-weight: bold;
+}
+
+.btn-social{
+    position: relative;
+    text-align: center;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    color: #fff;
+    border-color: rgba(0,0,0,0.2);
+  }
+  
+  .facebook{
+    --background: #4267B2;
+  }
+  .google{
+    --background: #DB4437;
+  }
+  

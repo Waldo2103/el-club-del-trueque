@@ -1,0 +1,84 @@
+<ion-header>
+  <ion-toolbar>
+      <ion-buttons slot="start">
+      <ion-back-button defaultHref="login"></ion-back-button>
+      </ion-buttons>
+      <ion-title>
+          Registro de Usuarios
+      </ion-title>
+  </ion-toolbar>
+</ion-header>
+
+
+<ion-content class="ion-padding">
+  <!--div [hidden]="ocultarSeccion0">
+      <ion-button class="button1" (click)="ElegirCliente('cliente')"expand="block">
+          Registrarme como cliente
+      </ion-button>
+  </div-->
+  
+  <div class="ion-no-padding">
+      <form [formGroup]="form" (ngSubmit)="OnSubmitRegister()">
+      <ion-card class="card-background" style="background-color:rgba(255, 255, 255, 0.8);">
+          <ion-card-content>
+              <div align="center" class="width-100 center-horizontal center-vertical">
+                  <img class="profile-picture" width="50%" height="50%" src="assets/img/registro.png">
+              </div>
+
+              <ion-item class="itemc">
+                  <ion-label position="floating" color="success">Correo</ion-label>
+                  <br>
+                  <ion-input  color="success" type="email"
+                      [(ngModel)]="usuario.correo"
+                      placeholder="algo@algo.com" formControlName="mail" required></ion-input>
+              </ion-item>
+
+              <ion-item class="itemc">
+                  <ion-label position="floating" color="primary">Clave</ion-label>
+                  <br>
+                  <ion-input  color="primary" type="password"
+                      [(ngModel)]="password"
+                      placeholder="Mínimo de 6 caracteres" formControlName="password" required></ion-input>
+              </ion-item>
+
+              <ion-item class="itemc">
+                  <ion-label position="floating" color="danger">Confirmar Clave</ion-label>
+                  <br>
+                  <ion-input  color="danger" type="password"
+                      [(ngModel)]="password2"
+                      placeholder="Mínimo de 6 caracteres" formControlName="password2" required></ion-input>
+              </ion-item>
+
+              <ion-item class="itemc">
+                  <ion-label position="floating" color="warning" >Nombre</ion-label>
+                  <br>
+                  <ion-input  color="warning" type="text" [(ngModel)]="usuario.nombre"  formControlName="nombre" required></ion-input>
+              </ion-item>
+
+              <ion-item class="itemc">
+                  <ion-label position="floating" color="secondary">Apellido</ion-label>
+                  <br>
+                  <ion-input  color="secondary" type="text" [(ngModel)]="usuario.apellido"  formControlName="apellido" required></ion-input>
+              </ion-item>
+
+              <div class="width-100 center-horizontal center-vertical">
+                  <ion-button color="danger" fill="outline" type="submit" [disabled]="!form.valid">Registrar</ion-button>
+              </div>
+          </ion-card-content>
+      </ion-card>
+  </form>
+  </div>
+  
+
+  <!--div [hidden]="ocultarSeccion2" class="width-100 center-horizontal">
+      <ion-button class="button1" (click)="SacarFoto()">Sacar foto</ion-button>
+      <ion-button class="button1" (click)="SinFoto()">Sin foto</ion-button>
+  </div-->
+
+  <!--div [hidden]="ocultarSeccion1" class="width-100 center-horizontal">
+      <ion-button color="primary" fill="outline" (click)="RellenarDatos()">Rellenar</ion-button>
+  </div>
+  <div [hidden]="!ocultarSeccion1" class="width-100 center-horizontal center-vertical">
+      <ion-button color="warning" fill="outline" (click)="Volver()">Volver</ion-button>
+  </div-->
+</ion-content>

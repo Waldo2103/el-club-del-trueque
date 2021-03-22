@@ -1,7 +1,10 @@
 {
   "name": "El Club del Trueque",
   "integrations": {
-    "capacitor": {}
+    "capacitor": {
+      "enabled": false
+    },
+    "cordova": {}
   },
   "type": "angular",
   "id": "cdb2bdd0"

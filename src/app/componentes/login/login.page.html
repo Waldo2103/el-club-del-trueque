@@ -1,0 +1,71 @@
+<!--ion-header>
+  <ion-toolbar color="success">
+    <ion-title>Inicio de Sesión</ion-title>
+  </ion-toolbar>
+</ion-header-->
+
+<ion-content class="background" padding>
+  <ion-card>
+    <ion-card-header>
+      <ion-card-title><img class="icon" src="assets/icon/ECDT1024LBlancas.png" alt="" ></ion-card-title>
+    </ion-card-header>
+  
+    <ion-card-content>
+      <br><br><br><br><br><br>
+      <ion-card>
+        <ion-card-content>
+          <ion-item class="transparent">
+        <ion-label position="floating" color="success" size="large"> Correo</ion-label>
+        <ion-input  color="success" type="text" name="email"></ion-input>
+      </ion-item>
+      <ion-item class="transparent">
+        <ion-label color="primary" position="floating" size="large">Contraseña</ion-label>
+        <ion-input  color="primary" type="password" name="password"></ion-input>
+      </ion-item>
+      <br>
+      <ion-button (click)="OnSubmitLogin()" expand="block" color="danger">Entrar</ion-button>
+        </ion-card-content>
+      </ion-card>
+      <ion-button routerLink="/registro" expand="block">Registrarme</ion-button>                
+                <div class="form-group">
+                  <ion-button class="facebook" (click)="loginFacebook()">
+                    Continuar con <ion-icon name="logo-facebook"></ion-icon>
+                  </ion-button>
+                  <ion-button class="btn btn-block btn-social btn-google" (click)="onLoginGoogle()">
+                    <span class="fa fa-google"></span>
+                    GOOGLE
+                  </ion-button>
+                </div>
+    </ion-card-content>
+  </ion-card>
+
+  <!--img class="icon" src="assets/icon/icon.png" alt="" >
+<ion-item class="transparent-item">
+  <ion-label position="floating" color="primary"> Correo</ion-label>
+  <ion-input  color="primary" type="text" [(ngModel)]="email" name="email"></ion-input>
+</ion-item>
+<ion-item class="transparent-item">
+  <ion-label  color="primary" position="floating">Contraseña</ion-label>
+  <ion-input  color="primary" type="password" [(ngModel)]="password" name="password"></ion-input>
+</ion-item>
+<br>
+<ion-button (click)="OnSubmitLogin()" expand="block" color="primary" fill="outline">Entrar</ion-button>
+<br>
+<ion-button routerLink="/registro-cliente" expand="block" color="primary" fill="outline">Registrarme</ion-button-->
+<!--ion-item class="transparent-item">
+  <ion-button color="primary" (click)="autocomplete('admin')" slot="start" color="primary" fill="outline">Admin</ion-button>
+</ion-item-->
+<!--ion-item class="transparent-item">
+  <ion-button color="primary" (click)="autocomplete('invitado')" slot="start" color="primary" fill="outline">Invitado</ion-button>
+</ion-item>
+<ion-item class="transparent-item">
+  <ion-button color="primary" (click)="autocomplete('cristian')" slot="start" color="primary" fill="outline">Anonimo</ion-button>
+</ion-item>
+<ion-item class="transparent-item">
+  <ion-button color="primary" (click)="autocomplete('aitu')" slot="start" color="primary" fill="outline">Aitana</ion-button>
+</ion-item>
+<ion-item class="transparent-item">
+  <ion-button color="primary" (click)="autocomplete('tester')" slot="start" color="primary" fill="outline">Tester</ion-button>
+</ion-item-->
+
+</ion-content>
