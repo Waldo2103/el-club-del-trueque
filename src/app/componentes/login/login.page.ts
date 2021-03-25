@@ -15,31 +15,13 @@ export class LoginPage implements OnInit {
   password: string;
   public folder: string;
 
+  public mostrar = false;
+
   constructor(private alertCtrl: AlertController, private activatedRoute: ActivatedRoute, private authService: AuthService, public router: Router, public toastController: ToastController) { }
 
   ngOnInit() {
   }
-  autocomplete(user: string){
-    if (user == "admin") {
-      this.email = "admin@admin.com";
-      this.password = "111111";
-    } else if (user == "invitado") {
-      this.email = "invitado@invitado.com";
-      this.password = "222222";
-    } else if (user == "cristian") {
-      this.email = "usuario@usuario.com";
-      this.password = "333333";
-    } else if (user == "aitu") {
-      this.email = "anonimo@anonimo.com";
-      this.password = "444444";
-    } else if (user == "tester") {
-      this.email = "tester@tester.com";
-      this.password = "555555";
-    } else {
-      this.email = "";
-      this.password = "";
-    }
-  }
+  
 
   public presentAlert(header: string, subHeader: string, message: string) {
     this.alertCtrl.create({
@@ -78,19 +60,22 @@ export class LoginPage implements OnInit {
     */
   }
 
-  /*onLoginGoogle(): void {
-    this.authService.loginGoogleUser()
-      .then((res) => {
-        this.onLoginRedirect();
-      }).catch(err => console.log('err', err.message));
-  }*/
+  
+  loginGoogle(): void {
+    this.authService.loginWithGoogle()
+    .then(() =>{
+      this.router.navigate(['/home']);
+    }).catch(err =>{
+      this.presentAlert('Error!', null, '¡Se produjo un error!');
+    });
+      
+  }
   loginFacebook(): void {
-    //this.authService.signInWithPopup(new auth.FacebookAuthProvider());
     this.authService.loginWithFacebook()
     .then(res =>{
       this.router.navigate(['/home']);
     }).catch(err =>{
-      alert("hubo un error");
+      this.presentAlert('Error!', null, '¡Se produjo un error!');
     });
       
   }
@@ -103,8 +88,17 @@ export class LoginPage implements OnInit {
     const toast = await this.toastController.create({
       message: 'los datos son incorrectos o no existe el usuario',
       duration: 2000,
-      color: "secondary"
+      color: "danger"
     });
     toast.present();
   }
+
+  public sesion(){
+    if (this.mostrar === true) {
+      this.mostrar = false
+    } else {
+      this.mostrar = true
+    }
+  }
+  
 }

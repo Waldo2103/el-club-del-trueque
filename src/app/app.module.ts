@@ -15,7 +15,9 @@ import { AngularFireAuthModule } from '@angular/fire/auth';
 
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 
-import { Facebook,  } from '@ionic-native/facebook/ngx';
+import { Facebook  } from '@ionic-native/facebook/ngx';
+import { GooglePlus  } from '@ionic-native/google-plus/ngx';
+
 
 
 
@@ -33,6 +35,7 @@ import { Facebook,  } from '@ionic-native/facebook/ngx';
   ],
     
   providers: [
+    GooglePlus,
     Facebook,
     StatusBar,
     SplashScreen,

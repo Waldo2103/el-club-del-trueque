@@ -4,10 +4,12 @@ import { Cliente, ClienteAConfirmar, ClienteKey } from '../clases/cliente/client
 import { Router } from '@angular/router';
 
 
+
 import * as firebase from 'firebase/app';
 
 import { AngularFirestore, QuerySnapshot, DocumentSnapshot } from '@angular/fire/firestore';
 
+import { GooglePlus  } from '@ionic-native/google-plus/ngx';
 import { Facebook, FacebookLoginResponse } from '@ionic-native/facebook/ngx';
 
 
@@ -16,7 +18,7 @@ import { Facebook, FacebookLoginResponse } from '@ionic-native/facebook/ngx';
 })
 export class AuthService {
 
-  constructor(public AFauth: AngularFireAuth, public router: Router, private db: AngularFirestore, private face: Facebook) { }
+  constructor(public AFauth: AngularFireAuth, public router: Router, private db: AngularFirestore, private gp: GooglePlus, private face: Facebook) { }
 
   async sendVerificationEmail(): Promise<void>{
     return (await this.AFauth.currentUser).sendEmailVerification();
@@ -31,11 +33,6 @@ export class AuthService {
       console.log(error);
       
     }
-    /*return new Promise((resolve,reject) => {
-      this.AFauth.createUserWithEmailAndPassword(email,pass)
-      .then( userData => resolve(userData),
-      err => reject (err));
-    })*/
   }
 
   async login(email: string, password: string){
@@ -53,7 +50,13 @@ export class AuthService {
     })*/
     
   }
-
+  loginWithGoogle(){
+    return this.gp.login({}).then((resul)=>{
+      const user_data_google = resul; 
+      return this.AFauth.signInWithCredential(firebase.default.auth.GoogleAuthProvider.credential(null, user_data_google.accessToken))
+     
+    });
+  }
   loginWithFacebook(){
     var permissions =['email', 'public_profile'];
     return this.face.login(permissions).then((response: FacebookLoginResponse)=>{
@@ -62,18 +65,13 @@ export class AuthService {
     });
   }
 
-  loginFacebookUser() {
-    //return this.AFauth.signInWithPopup(new auth.FacebookAuthProvider())
-      //.then(credential => this.updateUserData(credential.user))
-  }
 
-  loginGoogleUser() {
-    //return this.AFauth.signInWithPopup(new auth.GoogleAuthProvider())
-     // .then(credential => this.updateUserData(credential.user))
-  }
-
-  logoutUser() {
-    return this.AFauth.signOut();
+  logout() {
+    return this.AFauth.signOut().then(()=>{
+      this.gp.disconnect();
+      this.face.logout();
+      this.router.navigate(['/login'])
+    });
   }
 
   
