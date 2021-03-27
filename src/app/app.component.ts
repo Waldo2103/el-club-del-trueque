@@ -1,4 +1,6 @@
 import { Component } from '@angular/core';
+import { Router } from '@angular/router';
+import { MenuController } from '@ionic/angular';
 import { AuthService } from './servicios/auth.service';
 @Component({
   selector: 'app-root',
@@ -17,10 +19,17 @@ export class AppComponent {
     { title: 'Historial', url: '/folder/Spam', icon: 'time' },*/
   ];
   //public labels = ['Family', 'Friends', 'Notes', 'Work', 'Travel', 'Reminders'];
-  constructor(private authService: AuthService) {}
+  constructor(private router: Router, private authService: AuthService,
+      private ctrl: MenuController
+    ) {} 
+  ngOnInit(){
+  }
   logout(){
+    this.ctrl.enable(false);
     this.authService.logout();
 }
+
+
 
 }
 

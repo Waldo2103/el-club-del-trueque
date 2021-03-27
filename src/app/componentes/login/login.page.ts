@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { AuthService } from '../../servicios/auth.service';
 import { Router, ActivatedRoute } from '@angular/router';
 
-import { ToastController, AlertController } from '@ionic/angular';
+import { ToastController, AlertController, MenuController } from '@ionic/angular';
 
 @Component({
   selector: 'app-login',
@@ -14,12 +14,16 @@ export class LoginPage implements OnInit {
   email: string;
   password: string;
   public folder: string;
-
   public mostrar = false;
 
-  constructor(private alertCtrl: AlertController, private activatedRoute: ActivatedRoute, private authService: AuthService, public router: Router, public toastController: ToastController) { }
+  constructor(private ctrl: MenuController, private alertCtrl: AlertController,
+     private activatedRoute: ActivatedRoute, private authService: AuthService, 
+     public router: Router, public toastController: ToastController) { }
+
+     enLogin: boolean;
 
   ngOnInit() {
+    this.ctrl.enable(false);
   }
   
 
@@ -36,6 +40,7 @@ export class LoginPage implements OnInit {
     try {
       const user = await this.authService.login(this.email, this.password);
       if (user /*&& user.user.emailVerified*/) {
+        this.ctrl.enable(true);
         this.router.navigate(['/home']);
       } /*else if(user) {
         this.router.navigate(['/send-email']);
@@ -46,18 +51,6 @@ export class LoginPage implements OnInit {
     } catch (error) {
       this.presentAlert('Error!', null, '¡Los datos ingresados NO son válidos!');
     }
-    /*this.folder = this.activatedRoute.snapshot.paramMap.get('id')
-    //console.log(this.email,"----", this.password)
-    const user = await this.authService.login(this.email, this.password).then(res => {
-      
-      this.router.navigate(['/folder/Inbox']);
-    }).catch(err => {
-      console.log(err)
-      //alert('los datos son incorrectos o no existe el usuario');
-      // Implementar toast
-      this.presentToast()
-    })
-    */
   }
 
   
@@ -92,7 +85,7 @@ export class LoginPage implements OnInit {
     });
     toast.present();
   }
-
+//Muestra para ingresar  las credenciales
   public sesion(){
     if (this.mostrar === true) {
       this.mostrar = false

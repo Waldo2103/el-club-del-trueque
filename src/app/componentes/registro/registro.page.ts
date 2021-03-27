@@ -9,7 +9,7 @@ import * as firebase from 'firebase';
 //import { Camera } from '@ionic-native/camera/ngx';
 //import { CameraOptions } from '@ionic-native/camera';
 //import { BarcodeScannerOptions, BarcodeScanResult, BarcodeScanner } from '@ionic-native/barcode-scanner/ngx';
-import { AlertController } from '@ionic/angular';
+import { AlertController, MenuController } from '@ionic/angular';
 import { FormGroup, FormBuilder, FormControl, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 
@@ -41,6 +41,7 @@ export class RegistroPage implements OnInit {
   constructor(private authService: AuthService,
     //private resulService: ResultadosService,
     private alertCtrl: AlertController,
+    private ctrl: MenuController,
     private router: Router, private formBuilder: FormBuilder) { // private toastService: ToastrService
 
       this.form = this.formBuilder.group({
@@ -65,6 +66,7 @@ export class RegistroPage implements OnInit {
 
 ngOnInit() {
   this.usuario = new Cliente();
+  this.ctrl.enable(false);
 }
 loguear(user: any){
   //this.resulService.createLog(user);

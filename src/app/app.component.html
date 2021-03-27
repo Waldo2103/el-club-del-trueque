@@ -1,6 +1,9 @@
+
+
+
 <ion-app>
   <ion-split-pane contentId="main-content">
-    <ion-menu contentId="main-content" type="overlay">
+    <ion-menu *ngIf="!enLogin" contentId="main-content" type="overlay">
       <ion-content>
         <ion-list id="inbox-list">
           <ion-list-header><img src="../assets/icon/icon.png" width="30%" height="60%">ECDT</ion-list-header>

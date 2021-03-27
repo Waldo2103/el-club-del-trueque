@@ -35,9 +35,7 @@ export class HomePage implements OnInit {
     ) { }
 
   ngOnInit() {
-    //this.presentAlert('Ojo!', null, '¡Para buscar el producto con menor huella de carbono usa nuestro EcoMapa!');
     this.traerTodos();
-    
   }
 
   public presentAlert(header: string, subHeader: string, message: string) {
@@ -66,11 +64,9 @@ export class HomePage implements OnInit {
 
   public recarga(){
     this.traerTodos();
-    //console.log("al regarcar", this.listado);
   }
   public desplegar(item){
     this.itemSelected = item;
-    //console.log(item)
     if (this.desplegado === true) {
       this.desplegado = false;
     } else {
