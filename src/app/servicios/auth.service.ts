@@ -27,7 +27,7 @@ export class AuthService {
   async registerUser(email: string, pass: string){
     try {
       const result = await this.AFauth.createUserWithEmailAndPassword(email, pass);
-      this.sendVerificationEmail();
+      //this.sendVerificationEmail();
       return result;
     } catch (error) {
       console.log(error);
@@ -86,8 +86,7 @@ export class AuthService {
  RegistrarClienteDatos(usuario: Cliente, clave: string) {
   const d: ClienteAConfirmar = usuario as ClienteAConfirmar;
   d.clave = clave;
-  console.log("entre al servicio")
-  return this.db.collection('clientes').add({
+  return this.db.collection('usuarios').doc(d.correo).set({
     apellido: d.apellido,
     //clave: d.clave,
     correo: d.correo,

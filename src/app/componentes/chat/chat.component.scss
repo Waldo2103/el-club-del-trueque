@@ -1,0 +1,25 @@
+ion-content{
+    --background: #cccccc;
+}
+
+ion-card{
+    --background: #ffffff;
+}
+
+.emisor{
+    --background: #8c00ff;
+    --color: white;
+    font-weight: bold;
+    font-family: Questrial !important;
+}
+
+.receptor{
+    --background: #b6b6b6;
+    --color: black;
+    font-weight: bold;
+}
+
+@font-face {
+    font-family: "Questrial";
+    src: url('../../../assets/font/Questrial/Questrial-Regular.ttf');
+}

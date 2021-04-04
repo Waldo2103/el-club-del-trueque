@@ -1,17 +1,17 @@
 export class Producto {
     public id:string;
-    public duenio: string;
+    public owner: string;
     public nombre: string;
     public descripcion: string;
-    public zona: string;
-    public rutaDeFoto: string;
+    public etiquetas: string;
+    public imagen: string;
 
-    constructor(id: string,duenio: string, nombre: string, descripcion: string, zona: string, foto: string) {
+    constructor(id: string,owner: string, nombre: string, descripcion: string, etiquetas: string, foto: string) {
         this.id = id;
         this.nombre = nombre; 
-        this.duenio = duenio;
+        this.owner = owner;
         this.descripcion = descripcion;
-        this.zona = zona;
-        this.rutaDeFoto = foto;
+        this.etiquetas = etiquetas;
+        this.imagen = foto;
     }
 }

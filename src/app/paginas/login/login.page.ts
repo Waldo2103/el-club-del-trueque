@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { AuthService } from '../../servicios/auth.service';
 import { Router, ActivatedRoute } from '@angular/router';
 
-import { ToastController, AlertController, MenuController } from '@ionic/angular';
+import { ToastController, AlertController, MenuController, LoadingController } from '@ionic/angular';
 
 @Component({
   selector: 'app-login',
@@ -16,9 +16,14 @@ export class LoginPage implements OnInit {
   public folder: string;
   public mostrar = false;
 
-  constructor(private ctrl: MenuController, private alertCtrl: AlertController,
-     private activatedRoute: ActivatedRoute, private authService: AuthService, 
-     public router: Router, public toastController: ToastController) { }
+  constructor(private ctrl: MenuController, 
+    private alertCtrl: AlertController,
+     private activatedRoute: ActivatedRoute, 
+     private authService: AuthService, 
+     public router: Router, 
+     public toastController: ToastController,
+     private loadingCtrl: LoadingController
+     ) { }
 
      enLogin: boolean;
 
@@ -37,22 +42,40 @@ export class LoginPage implements OnInit {
   }
 
   async OnSubmitLogin() {
+    const loading = await this.loadingCtrl.create();
+    await loading.present();
     try {
-      const user = await this.authService.login(this.email, this.password);
-      if (user /*&& user.user.emailVerified*/) {
-        this.ctrl.enable(true);
-        this.router.navigate(['/home']);
-      } /*else if(user) {
-        this.router.navigate(['/send-email']);
-      }*/else {
-        this.presentAlert('Error!', null, '¡Los datos ingresados NO son válidos!');
-        //this.router.navigate(['/registro-cliente']);
-      }
+      const user = await this.authService.login(this.email, this.password).then(res =>{
+        loading.dismiss();
+        if (res /*&& user.user.emailVerified*/) {
+          this.ctrl.enable(true);
+          this.router.navigate(['/home']);
+        } /*else if(user) {
+          this.router.navigate(['/send-email']);
+        }*/else {
+          this.presentAlert('Error!', null, '¡Los datos ingresados NO son válidos!');
+          //this.router.navigate(['/registro-cliente']);
+        }
+      });
+      
+      
     } catch (error) {
+      loading.dismiss();
       this.presentAlert('Error!', null, '¡Los datos ingresados NO son válidos!');
     }
   }
 
+  /*presentLoadingDefault() {
+    let loading = this.loadingCtrl.create({
+      spinner: 'dots'
+    });
+  
+    loading.present();
+  
+    setTimeout(() => {
+      loading.dismiss();
+    }, 5000);
+  }*/
   
   loginGoogle(): void {
     this.authService.loginWithGoogle()

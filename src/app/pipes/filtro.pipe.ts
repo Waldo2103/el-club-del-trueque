@@ -13,7 +13,7 @@ export class FiltroPipe implements PipeTransform {
 
     return productos.filter( producto => {
       return producto.nombre.toLocaleLowerCase().includes(texto)
-          || producto.zona.toLocaleLowerCase().includes(texto);
+          || producto.etiquetas.toLocaleLowerCase().includes(texto);
     });
 
   }

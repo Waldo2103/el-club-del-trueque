@@ -1,5 +1,8 @@
+import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
+import { BrowserModule } from '@angular/platform-browser';
 import { Routes, RouterModule } from '@angular/router';
+import { MensajesComponent } from '../componentes/mensajes/mensajes.component';
 
 import { FolderPage } from './folder.page';
 
@@ -11,7 +14,10 @@ const routes: Routes = [
 ];
 
 @NgModule({
-  imports: [RouterModule.forChild(routes)],
-  exports: [RouterModule],
+  imports: [
+    RouterModule.forChild(routes),
+    CommonModule
+  ],
+  exports: [RouterModule]
 })
 export class FolderPageRoutingModule {}

@@ -12,30 +12,35 @@ import { environment } from 'src/environments/environment';
 //FIREBASE
 import { AngularFireModule } from '@angular/fire';
 import { AngularFireAuthModule } from '@angular/fire/auth';
+import { AngularFirestore, AngularFirestoreModule } from '@angular/fire/firestore';
+
 
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 
 import { Facebook  } from '@ionic-native/facebook/ngx';
 import { GooglePlus  } from '@ionic-native/google-plus/ngx';
 import { CommonModule } from '@angular/common';
+import { MensajesComponent } from './componentes/mensajes/mensajes.component';
+import { FolderPage } from './folder/folder.page';
+
 
 
 
 
 @NgModule({
-  declarations: [AppComponent],
-  entryComponents: [],
+  declarations: [AppComponent, FolderPage],
+  entryComponents: [FolderPage],
   imports: [
-    CommonModule,
     BrowserModule, 
     IonicModule.forRoot(), 
     AppRoutingModule,
     FormsModule,
     ReactiveFormsModule,
     AngularFireModule.initializeApp(environment.firebaseConfig),
-    AngularFireAuthModule
+    AngularFireAuthModule,
+    AngularFirestoreModule
   ],
-    exports:[IonMenu],
+    exports:[],
   providers: [
     GooglePlus,
     Facebook,

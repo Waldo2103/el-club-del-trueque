@@ -48,9 +48,9 @@
     </ion-item>
   </ion-list>
   <ion-list *ngIf="listado.length > 0">
-    <ion-item *ngFor="let item of listado | filtro: filtroBuscar" (click)="desplegar(item)">
+    <ion-item *ngFor="let item of listado | filtro: filtroBuscar" (click)="openProduct(item)">
       <ion-thumbnail slot="start">
-        <img src="{{item.rutaDeFoto}}">
+        <img src="{{item.imagen}}">
       </ion-thumbnail>
       <ion-label>
         <h3>
@@ -60,7 +60,7 @@
           {{ item.descripcion }}
         </p>
         <p>
-          {{ item.zona }}
+          {{ item.etiquetas }}
         </p>
       </ion-label>
     </ion-item>

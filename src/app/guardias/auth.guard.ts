@@ -10,7 +10,8 @@ import { isNull } from '@angular/compiler/src/output/output_ast';
 })
 export class AuthGuard implements CanActivate {
 
-  constructor(private AFauth: AngularFireAuth,
+  constructor(
+    private AFauth: AngularFireAuth,
     private router: Router
     ){  }
   canActivate(

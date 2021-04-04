@@ -1,8 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { FirebaseService } from 'src/app/servicios/firebase/firebase.service';
 import { Producto } from '../../clases/producto/producto';
-import { AlertController } from '@ionic/angular';
+import { AlertController, ModalController } from '@ionic/angular';
 import { Router } from '@angular/router';
+import { ProductoComponent } from 'src/app/componentes/producto/producto.component';
+import { producto, ProductosService } from 'src/app/servicios/productos/productos.service';
+import { MensajesService } from 'src/app/servicios/mensajes/mensajes.service';
 
 @Component({
   selector: 'app-home',
@@ -29,12 +32,15 @@ export class HomePage implements OnInit {
   };
 
   constructor(
-    private firebaseService: FirebaseService, 
+    private prodServ: ProductosService, 
     private alertCtrl: AlertController, 
-    private router: Router
+    private router: Router,
+    private modal: ModalController,
+    private mensServ: MensajesService,
     ) { }
 
   ngOnInit() {
+    //this.mensServ.getMensajesXUsuario(['']);
     this.traerTodos();
   }
 
@@ -45,8 +51,8 @@ export class HomePage implements OnInit {
       message,
       buttons: [ 
       {
-        text: 'Nop',
-        role: 'cancel',
+        text: 'No',
+        role: 'Cancel',
         handler: () => {
           console.log('Cancel clicked');
         }
@@ -65,6 +71,8 @@ export class HomePage implements OnInit {
   public recarga(){
     this.traerTodos();
   }
+
+  //sin uso, se trajo de organicapp - simula accordion
   public desplegar(item){
     this.itemSelected = item;
     if (this.desplegado === true) {
@@ -81,21 +89,34 @@ export class HomePage implements OnInit {
   }
 
   async traerTodos() {
-    await this.firebaseService.getProductos().subscribe((productsSnapshot) => {
+    await this.prodServ.getProductos().subscribe((productsSnapshot) => {
       this.listado = [];
-      productsSnapshot.forEach((productData: any) => {
+      this.listado = productsSnapshot
+      /*productsSnapshot.forEach((productData: any) => {
         this.listado.push(
           {
             id: productData.payload.doc.id,
             nombre: productData.payload.doc.data().nombre,
-            duenio: productData.payload.doc.data().duenio,
+            owner: productData.payload.doc.data().owner,
             descripcion: productData.payload.doc.data().descripcion,
-            zona: productData.payload.doc.data().zona,
-            rutaDeFoto: productData.payload.doc.data().rutaDeFoto         
+            etiquetas: productData.payload.doc.data().etiquetas,
+            imagen: productData.payload.doc.data().imagen         
         });
         //console.log(this.listado[0].open = true);
-      })
+      })*/
     });
+  }
+
+  openProduct(producto){
+    //producto = JSON.stringify(producto);
+    //producto = JSON.parse(producto);
+    //console.log("producto en open modal"+producto)
+    this.modal.create({
+      component: ProductoComponent,
+      componentProps: {
+        producto: producto
+      }
+    }).then((modal)=>modal.present())
   }
 
 }

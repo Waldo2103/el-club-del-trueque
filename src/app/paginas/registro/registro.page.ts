@@ -70,7 +70,7 @@ ngOnInit() {
 }
 loguear(user: any){
   //this.resulService.createLog(user);
-  localStorage.setItem("email", user.email)
+  //localStorage.setItem("email", user.email)//no esta en uso
 }
 private usuario: Cliente;
 
@@ -86,7 +86,6 @@ public presentAlert(header: string, subHeader: string, message: string) {
 public RegistrarCliente() {
    
   this.authService.RegistrarClienteDatos(this.usuario, this.password).then(auth => {
-    console.log("dvolvio servicio a REGISTRARCLiente")
     this.usuario = new Cliente();
     this.password = '';
     //this.ocultarSeccion0 = false;
@@ -106,11 +105,13 @@ OnSubmitRegister(){
       let f = new Date;
         var fec: string = f.getDate()+"/"+f.getMonth()+"/"+f.getUTCFullYear()+" - "+f.getUTCHours()+":"+f.getUTCMinutes()+":"+f.getUTCSeconds();
         let data = { email: this.form.get('mail').value,fec}
-        this.loguear(data);
-        localStorage.setItem("email", this.form.get('mail').value);
+        //this.loguear(data);//no esta en uso
+        //localStorage.setItem("email", this.form.get('mail').value);//no esta en uso
         this.RegistrarCliente();
         this.presentAlert('Exito!', null, '¡Usted ha sido registrado!');
-      this.router.navigate(['/send-email']);
+      //this.router.navigate(['/send-email']);//Esta linea se habilita cuando se agregue envio de mail
+      this.ctrl.enable(true)
+      this.router.navigate(['home'])
     }).catch(error => {
       (<HTMLButtonElement>document.getElementById('btnModal')).click();
       if (error.code === 'auth/email-already-in-use') {

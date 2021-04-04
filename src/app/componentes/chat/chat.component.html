@@ -1,0 +1,27 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="folder/Mensajes" (click)="closeChat()"></ion-back-button>
+    </ion-buttons>
+    <ion-title>{{chat.nombre}}</ion-title>
+  </ion-toolbar>
+</ion-header>
+<ion-content padding>
+  <div *ngIf="room">
+    <ion-card *ngFor="let mensaje of room.messages" [ngClass]="{emisor: mensaje.owner === userLogin, receptor: mensaje.owner != userLogin}"><!--mensaje.owner = userLogin ? 'class1' : ''-->
+      <ion-card-content>
+        {{mensaje.content}}
+      </ion-card-content>
+      <ion-card-subtitle style="text-align:end;color: black;">{{mensaje.date * 1000 | date: 'd/M h:mm' }}</ion-card-subtitle>
+    </ion-card>
+  </div>
+
+</ion-content>
+<ion-footer padding>
+  <ion-item>
+    <ion-textarea [(ngModel)]="mens"></ion-textarea>
+    <ion-button color="success" (click)="sendMessage()">
+      <ion-icon name="send"></ion-icon>
+    </ion-button>
+  </ion-item>
+</ion-footer>

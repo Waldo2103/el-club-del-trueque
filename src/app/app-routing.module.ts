@@ -1,5 +1,9 @@
 import { NgModule } from '@angular/core';
+import { BrowserModule } from '@angular/platform-browser';
 import { PreloadAllModules, RouterModule, Routes } from '@angular/router';
+import { MensajesComponent } from './componentes/mensajes/mensajes.component';
+import { FolderPageRoutingModule } from './folder/folder-routing.module';
+import { FolderPageModule } from './folder/folder.module';
 import { AuthGuard } from './guardias/auth.guard';
 import { NoLoginGuard } from './guardias/no-login.guard';
 
@@ -15,21 +19,22 @@ const routes: Routes = [
   },
   {
     path: 'home',
-    loadChildren: () => import('./componentes/home/home.module').then( m => m.HomePageModule),
+    loadChildren: () => import('./paginas/home/home.module').then( m => m.HomePageModule),
     canActivate:[AuthGuard]
   },
   {
     path: 'login',
-    loadChildren: () => import('./componentes/login/login.module').then( m => m.LoginPageModule),
+    loadChildren: () => import('./paginas/login/login.module').then( m => m.LoginPageModule),
     canActivate:[NoLoginGuard]
   },
   {
     path: 'registro',
-    loadChildren: () => import('./componentes/registro/registro.module').then( m => m.RegistroPageModule)
+    loadChildren: () => import('./paginas/registro/registro.module').then( m => m.RegistroPageModule),
+    canActivate:[NoLoginGuard]
   },
   {
     path: 'modal-page',
-    loadChildren: () => import('./componentes/modal-page/modal-page.module').then( m => m.ModalPagePageModule)
+    loadChildren: () => import('./paginas/modal-page/modal-page.module').then( m => m.ModalPagePageModule)
   }
 
 
@@ -37,7 +42,8 @@ const routes: Routes = [
 
 @NgModule({
   imports: [
-    RouterModule.forRoot(routes, { preloadingStrategy: PreloadAllModules })
+    RouterModule.forRoot(routes, { preloadingStrategy: PreloadAllModules }), 
+    BrowserModule
   ],
   exports: [RouterModule]
 })
