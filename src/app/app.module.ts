@@ -22,14 +22,15 @@ import { GooglePlus  } from '@ionic-native/google-plus/ngx';
 import { CommonModule } from '@angular/common';
 import { MensajesComponent } from './componentes/mensajes/mensajes.component';
 import { FolderPage } from './folder/folder.page';
+import { ProductoComponent } from './componentes/producto/producto.component';
 
 
 
 
 
 @NgModule({
-  declarations: [AppComponent, FolderPage],
-  entryComponents: [FolderPage],
+  declarations: [AppComponent, FolderPage, ProductoComponent],
+  entryComponents: [FolderPage, ProductoComponent],
   imports: [
     BrowserModule, 
     IonicModule.forRoot(), 

@@ -12,7 +12,7 @@ export interface mensaje {
   id: Array<string>
   imagen: Array<string>
   uid: string
-  //messages: message
+  messages: message
 }
 
 @Injectable({
@@ -22,15 +22,37 @@ export class MensajesService {
 
   constructor(private db: AngularFirestore) { }
 
-  createMensajes(data:mensaje){
-    this.db.collection('mensajes').add(data)
+  async createMensajes(data:mensaje): Promise<any>{
+
+    const docRef = this.db.collection("mensajes").doc();
+    data.uid = docRef.ref.id
+    docRef.set(data);
+    return data.uid
+    return this.db.collection('mensajes').add(data).then(res =>{ 
+      return res.id
+     })
   }
 
-  getMensajesXUsuario(uids){
-    uids = ['t6XM3zF8dL0zWTdRLIWU', 'klmno...', 'wxyz...'];
-    const promises = uids.map(u => this.db.collection("mensajes").doc(u).snapshotChanges().pipe( map(chats=>{
+  getMensajeXUsuario(id){    
+    
+    return this.db.collection('mensajes', ref => ref.where("id", "array-contains", id)).snapshotChanges().pipe( map(chat=>{
+      console.log("chat.length: "+chat.length)
+      if (chat.length === 0) {
+      let noData: mensaje[]
+      return noData
+    } else{
+      return chat.map(a =>{
+        console.log("en serv mesxuser"+chat)
+        const data = a.payload.doc.data() as mensaje;
+        data.uid = a.payload.doc.id;
+        return data;
+      })
+    }
+      
+    }));
+    /* const promises = id.map(u => this.db.collection("mensajes").doc(u).snapshotChanges().pipe( map(chats=>{
       console.log("getMensajes"+ chats)
-    })));
+    }))); */
     }
   
 
@@ -39,15 +61,16 @@ export class MensajesService {
     return this.getUsers().pipe(
       switchMap(res =>{
         users = res;
+        console.log(res)
         return this.db.collection('mensajes', ref => ref.orderBy('messages')).valueChanges({idField:'uid'}) as Observable<mensaje[]>;
       }),
-      /*map(messages =>{
+      map(messages =>{
         for(let m of messages){
           m.messages
         }
-      })*/
+      })
     );
-    return this.db.collection('mensajes').snapshotChanges().pipe( map(chats=>{
+    /*return this.db.collection('mensajes').snapshotChanges().pipe( map(chats=>{
       //console.log("getMensajes"+ chats)
       
       return chats.map(a =>{
@@ -56,18 +79,22 @@ export class MensajesService {
         
         return data;
       })
-    }));
+    }));*/
   }
 
   getUsers(){
-    return this.db.collection('mensajes').valueChanges({idField:'correo'}) as Observable<usuario[]>;
+    return this.db.collection('mensajes').valueChanges(/*{idField:'uid'}*/) as Observable<usuario[]>;
   }
 
-  getMensaje(id:string){
+  getMensaje(id:string):Observable<any>{
+    console.log("entre a getmens en servic")
+    //return this.db.collection<message>('mercados').snapshotChanges().pipe(delay(2000));
     return this.db.collection('mensajes').doc(id).valueChanges()
+    //return this.db.collection('mensajes').snapshotChanges().pipe()
   }
 
   sendMsgToFirebase(message: message, chat_id: string){
+    console.log("entre en envio de mensaje")
     this.db.collection('mensajes').doc(chat_id).update({
       messages: firebase.default.firestore.FieldValue.arrayUnion(message)
     })

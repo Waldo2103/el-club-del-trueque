@@ -17,7 +17,7 @@ export class HomePage implements OnInit {
   public listado: Array<Producto> = [];
   filtroBuscar = '';
   public desplegado:boolean = true;
-  public itemSelected /*:Producto*/ = {
+  /* public itemSelected:Producto = {
     id:'0',
     correo: 'string',
     clave: 'string',
@@ -29,7 +29,7 @@ export class HomePage implements OnInit {
     productos: 'string', 
     zonas: 'string', 
     rutaDeFoto: 'string'
-  };
+  }; */
 
   constructor(
     private prodServ: ProductosService, 
@@ -73,14 +73,14 @@ export class HomePage implements OnInit {
   }
 
   //sin uso, se trajo de organicapp - simula accordion
-  public desplegar(item){
+  /*public desplegar(item){
     this.itemSelected = item;
     if (this.desplegado === true) {
       this.desplegado = false;
     } else {
       this.desplegado = true;
     }
-  }
+  }*/
 
   buscarProducto(event){
     

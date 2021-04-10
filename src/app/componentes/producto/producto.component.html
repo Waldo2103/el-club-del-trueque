@@ -1,10 +1,11 @@
 <ion-header>
   <ion-toolbar>
-    <ion-button slot="start" defaultHref="/home" (click)="closeProduct()" fill="none">
-      <ion-icon name="arrow-back-outline"></ion-icon>
-    </ion-button>
+      <ion-button slot="start" defaultHref="/home" (click)="closeProduct()" fill="none">
+        <ion-icon name="arrow-back-outline"></ion-icon>
+      </ion-button>
+
     <ion-title>Publicado por: {{usuarioP.nombre}}</ion-title>
-    <ion-button slot="end" (click)="crearChat()" fill="none">
+    <ion-button *ngIf="!ownerOfProduct" slot="end" (click)="crearChat()" fill="none">
       <ion-icon name="chatbubbles-sharp" color="danger"></ion-icon>
     </ion-button>
   </ion-toolbar>

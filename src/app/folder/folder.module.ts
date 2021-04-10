@@ -10,15 +10,19 @@ import { FolderPage } from './folder.page';
 import { BrowserModule } from '@angular/platform-browser';
 import { MensajesComponent } from '../componentes/mensajes/mensajes.component';
 import { ChatComponent } from '../componentes/chat/chat.component';
+import { AlbumesComponent } from '../componentes/albumes/albumes.component';
+import { AlbumComponent } from '../componentes/album/album.component';
+import { PipesModule } from '../pipes/pipes.module';
 
 @NgModule({
   imports: [
     FormsModule,
     IonicModule,
     FolderPageRoutingModule,
-    CommonModule
+    CommonModule,
+    PipesModule
   ],
-  declarations: [FolderPage, MensajesComponent, ChatComponent],
-  entryComponents:[MensajesComponent, ChatComponent]
+  declarations: [FolderPage, MensajesComponent, ChatComponent, AlbumesComponent, AlbumComponent],
+  entryComponents:[MensajesComponent, ChatComponent, AlbumesComponent, AlbumComponent]
 })
 export class FolderPageModule {}

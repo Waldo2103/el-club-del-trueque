@@ -17,7 +17,6 @@ import { UsuariosService } from 'src/app/servicios/usuarios/usuarios.service';
 export class MensajesComponent implements OnInit {
 
   public mensajes: any = [];
-  //esta variable guarda los datos del otro participante del chat que son los que se mostraran
   public mensajesBis: any = [];
   public userLogin: string;
   public usuario;
@@ -29,34 +28,29 @@ export class MensajesComponent implements OnInit {
      ) { }
 
   ngOnInit() {
-    
-    this.traerMensajes()
+    console.log("entre en mmensaje component")
     this.traerUserLogin();
   }
-
-  async traerMensajes(){
-  await this.mensServ.getMensajes().subscribe(mensajes =>{
-    this.mensajes = []
-    this.mensajes = mensajes
-    //console.log(this.mensajes)
-    });
-  }
-
-
   traerUserLogin(){
-    this.AFauth.authState.subscribe(res =>{
+    console.log("entre en mmensaje component - traeruser")
+    this.AFauth.authState.subscribe(async res =>{
       this.userLogin = res.email
-      //console.log("userlogin", this.userLogin)
-      this.userServ.getUsuario(this.userLogin).subscribe( pro =>{
-        this.usuario = []
-        this.usuario = pro;
-        //console.log("antes de vali chat", this.usuario)
-        this.validacionChat();
-        //console.log(pro)
-      })
-      //this.validacionChat();
+      console.log("entre en mmensaje component - traeruser  - authstate")
+      let uns = await this.mensServ.getMensajeXUsuario(this.userLogin).subscribe(mensajes =>{
+        this.mensajes = []
+        this.mensajes = mensajes
+        console.log(this.mensajes)
+        console.log("entre en mmensaje component - traeruser auth - getmensuser")
+        this.userServ.getUsuario(this.userLogin).subscribe( pro =>{
+          this.usuario = []
+          this.usuario = pro;
+          this.validacionChat();
+          console.log("entre en mmensaje component - traeruser get user")
+          uns.unsubscribe()
+        })
+        });
+      
     });
-    //console.log("userlogin2", this.userLogin)
     
   }
 
@@ -93,7 +87,6 @@ export class MensajesComponent implements OnInit {
   
 
   openChat(chat){
-    //console.log(chat)
     this.modal.create({
       component: ChatComponent,
       componentProps: {

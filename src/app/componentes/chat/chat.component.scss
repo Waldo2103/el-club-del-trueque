@@ -1,9 +1,13 @@
 ion-content{
-    --background: #cccccc;
+    --background: #b099c0;
 }
 
 ion-card{
     --background: #ffffff;
+}
+
+ion-card-subtitle{
+    margin-right: 5%;
 }
 
 .emisor{
@@ -11,12 +15,32 @@ ion-card{
     --color: white;
     font-weight: bold;
     font-family: Questrial !important;
+    margin-left: 30%;
+    border-radius:  40px 40px 0px 40px;
 }
 
 .receptor{
     --background: #b6b6b6;
     --color: black;
     font-weight: bold;
+    margin-right: 30%;
+    border-radius:  0px 20px 20px 20px;
+}
+
+ion-textarea{
+    font-weight: bold;
+    font-family: Questrial !important;
+    --color: #32005a;
+    --background: #d9baf0;
+}
+
+ion-button{
+    --color: #d9baf0;
+    --background: #32005a;
+}
+
+.textArea{
+    --background: #d9baf0;
 }
 
 @font-face {

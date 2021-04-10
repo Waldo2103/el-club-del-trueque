@@ -1,6 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
 import { AngularFireAuth } from '@angular/fire/auth';
 import { NavParams, ModalController } from '@ionic/angular';
+import { Subscription } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { MensajesService } from 'src/app/servicios/mensajes/mensajes.service';
 import { message } from "../../models/message"; 
@@ -11,16 +12,18 @@ import { message } from "../../models/message";
   selector: 'app-chat',
   templateUrl: './chat.component.html',
   styleUrls: ['./chat.component.scss'],
+  changeDetection: ChangeDetectionStrategy.Default
 })
 export class ChatComponent implements OnInit {
 
   public chat: any;
   public mensajes = [];
-  //public message: message;
   public room: any;
   public mens: string;
   public userLogin: string;
   public owner: boolean;
+
+  public unsubscribe;
   constructor(
     private navParams: NavParams,
     private modal: ModalController,
@@ -31,22 +34,21 @@ export class ChatComponent implements OnInit {
   ngOnInit() {
     this.AFauth.authState.subscribe(res =>{
       this.userLogin = res.email
-      //console.log(user)
     });
     this.chat = this.navParams.get('chat')
-    //console.log(this.chat)
-    this.mensService.getMensaje(this.chat.uid).subscribe( room =>{
+    console.log("entro en init de chatcomp")
+    this.mensService.getMensaje(this.chat.uid).subscribe( (room) =>{
       this.room = room;
-      console.log(room)
     })
-    
   }
+  
 
   closeChat(){
     this.modal.dismiss()
   }
 
   sendMessage(){
+    
     const mensaje: message = {
       content: this.mens,
       date: new Date(),
@@ -55,6 +57,7 @@ export class ChatComponent implements OnInit {
     }
     this.mensService.sendMsgToFirebase(mensaje , this.chat.uid)
     this.mens = "";
+    
   }
 
 }

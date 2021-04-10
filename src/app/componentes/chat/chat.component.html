@@ -15,12 +15,11 @@
       <ion-card-subtitle style="text-align:end;color: black;">{{mensaje.date * 1000 | date: 'd/M h:mm' }}</ion-card-subtitle>
     </ion-card>
   </div>
-
 </ion-content>
 <ion-footer padding>
-  <ion-item>
+  <ion-item class="textArea">
     <ion-textarea [(ngModel)]="mens"></ion-textarea>
-    <ion-button color="success" (click)="sendMessage()">
+    <ion-button class="btnEnv" shape="round" size="large" (click)="sendMessage()">
       <ion-icon name="send"></ion-icon>
     </ion-button>
   </ion-item>

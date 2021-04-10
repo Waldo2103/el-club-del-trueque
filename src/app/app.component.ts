@@ -13,7 +13,7 @@ export class AppComponent {
     { title: 'Perfil', url: '/folder/Perfil', icon: 'person', color:"primary" },
     { title: 'Mis Trueques', url: '/folder/Mis Trueques', icon: 'repeat', color:"danger" },
     { title: 'Mensajes', url: '/folder/Mensajes', icon: 'mail', color:"warning" },
-    { title: 'Mi Album', url: '/folder/Mi Album', icon: 'book', color:"secondary" },
+    { title: 'Mi Album', url: '/folder/Albumes', icon: 'book', color:"secondary" },
     { title: 'Login', url: '/login', icon: 'person', color:"success" },/*
     { title: 'Login', url: '', func: 'logout()', icon: 'log-out', color:"danger" },
     { title: 'Historial', url: '/folder/Spam', icon: 'time' },*/

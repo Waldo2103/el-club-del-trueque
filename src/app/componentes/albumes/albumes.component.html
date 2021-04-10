@@ -1,0 +1,21 @@
+<ion-fab vertical="bottom" horizontal="end" slot="fixed">
+  <ion-fab-button color="warning">
+    <ion-icon name="add"></ion-icon>
+  </ion-fab-button>
+</ion-fab>
+
+<ion-content padding>
+  <ion-list *ngFor="let album of albumes">
+    <ion-card (click)="openAlbum(album)">
+      <ion-card-header>
+        <img [src]="album.imagen" />
+        <ion-card-title>{{album.nombre}}</ion-card-title>
+        <ion-card-subtitle>Cantidad de Artículos:{{album.cantProd}}</ion-card-subtitle>
+      </ion-card-header>
+      <ion-card-content>
+        <p>{{album.descripcion}}</p>
+      </ion-card-content>
+    </ion-card>
+  </ion-list>
+
+</ion-content>

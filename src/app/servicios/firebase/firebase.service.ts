@@ -14,9 +14,9 @@ export class FirebaseService {
   constructor(private firestore: AngularFirestore, private storage: AngularFireStorage) { }
 
    //Alta
-   public createProducto(id:string ,data: {id: string, nombre: string, tipo: string, domicilio: string, responsable: string, telefono: string, productos: string, zonas: string, rutaDeFoto: string}) {
+   /* public createProducto(id:string ,data: {id: string, nombre: string, tipo: string, domicilio: string, responsable: string, telefono: string, productos: string, zonas: string, rutaDeFoto: string}) {
     return this.firestore.collection('productos').doc(id).set(data);
-  }
+  } 
   //Trae 1
   public getProducto(documentId: string) {
     return this.firestore.collection('productos').doc(documentId).snapshotChanges();
@@ -39,7 +39,7 @@ export class FirebaseService {
   public deleteProducto(documentId: string) {
     console.log(documentId);
     return this.firestore.collection('productos').doc(documentId).delete();
-  }
+  }*/
 
    //Tarea para subir archivo
   public tareaCloudStorage(nombreArchivo: string, datos: any) {
