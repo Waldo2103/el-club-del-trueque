@@ -2,6 +2,14 @@
   <ion-fab-button color="warning">
     <ion-icon name="add"></ion-icon>
   </ion-fab-button>
+  <ion-fab-list side="top">
+    <ion-fab-button color="danger" (click)="openGallery(album)">
+      <ion-icon name="cloud-upload"></ion-icon>
+    </ion-fab-button>
+    <ion-fab-button color="danger" (click)="openCamera(album)">
+      <ion-icon name="camera"></ion-icon>
+    </ion-fab-button>
+  </ion-fab-list>
 </ion-fab>
 
 <ion-content padding>

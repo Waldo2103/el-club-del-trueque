@@ -4,6 +4,7 @@ import { ModalController } from '@ionic/angular';
 import { AlbumesService } from 'src/app/servicios/albumes/albumes.service';
 import { UsuariosService } from 'src/app/servicios/usuarios/usuarios.service';
 import { AlbumComponent } from '../album/album.component';
+import { ProdAltaComponent } from '../prod-alta/prod-alta.component';
 
 @Component({
   selector: 'app-albumes',
@@ -52,6 +53,26 @@ export class AlbumesComponent implements OnInit {
       component: AlbumComponent,
       componentProps: {
         album: album
+      }
+    }).then((modal)=>modal.present())
+  }
+
+  openGallery(prod){
+    this.modal.create({
+      component: ProdAltaComponent,
+      componentProps: {
+        prod: prod,
+        modo: "gallery"
+      }
+    }).then((modal)=>modal.present())
+  }
+
+  openCamera(prod){
+    this.modal.create({
+      component: ProdAltaComponent,
+      componentProps: {
+        prod: prod,
+        modo: "camera"
       }
     }).then((modal)=>modal.present())
   }

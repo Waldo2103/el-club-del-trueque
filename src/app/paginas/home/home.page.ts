@@ -6,6 +6,8 @@ import { Router } from '@angular/router';
 import { ProductoComponent } from 'src/app/componentes/producto/producto.component';
 import { producto, ProductosService } from 'src/app/servicios/productos/productos.service';
 import { MensajesService } from 'src/app/servicios/mensajes/mensajes.service';
+import { AngularFireAuth } from '@angular/fire/auth';
+import { UsuariosService } from 'src/app/servicios/usuarios/usuarios.service';
 
 @Component({
   selector: 'app-home',
@@ -16,6 +18,7 @@ export class HomePage implements OnInit {
 
   public listado: Array<Producto> = [];
   filtroBuscar = '';
+  public userLogin;
   public desplegado:boolean = true;
   /* public itemSelected:Producto = {
     id:'0',
@@ -36,12 +39,27 @@ export class HomePage implements OnInit {
     private alertCtrl: AlertController, 
     private router: Router,
     private modal: ModalController,
-    private mensServ: MensajesService,
+    private AFauth: AngularFireAuth,
+    private userServ: UsuariosService
     ) { }
 
   ngOnInit() {
     //this.mensServ.getMensajesXUsuario(['']);
     this.traerTodos();
+    this.traerUsuario();
+  }
+
+  traerUsuario(){
+    this.AFauth.authState.subscribe(async res => {
+      this.userLogin = res.email;
+      this.userServ.getUsuario(this.userLogin).subscribe(pro => {
+        this.userLogin = []
+        this.userLogin = pro;
+        localStorage.setItem("userLogin", JSON.stringify(this.userLogin))
+        //let a = localStorage.getItem("userLogin")
+        //console.log(a);
+      })
+    })
   }
 
   public presentAlert(header: string, subHeader: string, message: string) {

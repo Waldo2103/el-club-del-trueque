@@ -1,0 +1,93 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-button slot="start" defaultHref="/folder/Albumes" fill="none">
+      <ion-icon name="arrow-back-outline"></ion-icon>
+    </ion-button>
+    <ion-title>Creá tu álbum</ion-title>
+  </ion-toolbar>
+</ion-header>
+<ion-content>
+
+  <ion-list *ngIf="fotos.length === 0">
+    <ion-item *ngFor="let i of [1,1,1,1,1,1,1,1,1,1,1]">
+      <ion-thumbnail slot="start">
+        <ion-skeleton-text animated></ion-skeleton-text>
+      </ion-thumbnail>
+      <ion-label>
+        <h3>
+          <ion-skeleton-text animated style="width: 50%"></ion-skeleton-text>
+        </h3>
+        <p>
+          <ion-skeleton-text animated style="width: 80%"></ion-skeleton-text>
+        </p>
+        <p>
+          <ion-skeleton-text animated style="width: 60%"></ion-skeleton-text>
+        </p>
+      </ion-label>
+    </ion-item>
+    <ion-item text-wrap detail="false" lines="none">
+      <ion-label>
+        <ion-skeleton-text width="30%"></ion-skeleton-text>
+        <ion-skeleton-text width="80%"></ion-skeleton-text>
+      </ion-label>
+    </ion-item>
+  </ion-list>
+  <br>
+  <ion-list *ngIf="fotos.length > 0">
+    <form [formGroup]="form" (ngSubmit)="altaTroque(form.value)">
+      <div class="form-group">
+        <ion-item>
+          <ion-input class="album" color="dark" type="text" formControlName="nombreA" placeholder="Nombre Álbum"></ion-input>
+        </ion-item>
+        <ion-item>
+          <ion-input class="album" focus color="secondary" type="text" formControlName="descripcionA" name="descripcion"
+            placeholder="Descripción Álbum"></ion-input>
+        </ion-item>
+      </div>
+      <div formArrayName="troques">
+        <ion-item *ngFor="let item of getDatos.controls; let i = index">
+          <ion-thumbnail slot="start">
+            <img src="{{fotos[item]}}">
+          </ion-thumbnail>
+          <div class="form-group">
+            <ion-item [formGroupName]="i">
+              <ion-input color="success" type="text" formControlName="nombre" placeholder="Nombre Artículo"></ion-input>
+            </ion-item>
+            <ion-item [formGroupName]="i">
+              <ion-input focus color="warning" type="text" formControlName="descripcion" name="descripcion"
+                placeholder="Descripción"></ion-input>
+            </ion-item>
+            <ion-item [formGroupName]="i">
+              <ion-input color="danger" type="text" formControlName="etiquetas"
+                placeholder="Separá con ; Ej: lampara;portafoco"></ion-input>
+            </ion-item>
+          </div>
+          <ion-button color="danger" fill="clear" shape="round" (click)="removeTroque(i)">
+            <ion-icon name="trash"></ion-icon>
+          </ion-button>
+
+
+        </ion-item>
+        <ion-button color="success" (click)="addTroque(1)">
+          <ion-icon name="arrow-back"></ion-icon>
+        </ion-button>
+      </div>
+      <div class="text-center">
+        <ion-button color="warning" type="submit">
+          <ion-icon name="checkmark-circle-outline"></ion-icon> Crear Álbum
+        </ion-button>
+        <!--[disabled]="!troque.valid"-->
+      </div>
+    </form>
+  </ion-list>
+</ion-content>
+<ion-fab vertical="bottom" horizontal="start" slot="fixed">
+  <ion-fab-button color="danger" (click)="abrirCamara()">
+    <ion-icon name="camera"></ion-icon>
+  </ion-fab-button>
+</ion-fab>
+<ion-fab vertical="bottom" horizontal="end" slot="fixed">
+  <ion-fab-button color="danger" (click)="abrirGaleria()">
+    <ion-icon name="cloud-upload"></ion-icon>
+  </ion-fab-button>
+</ion-fab>

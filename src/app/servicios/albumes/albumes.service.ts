@@ -9,7 +9,7 @@ export interface album {
   id: string
   imagen: string
   owner: string
-  uid: string
+  uid?: string
 }
 
 @Injectable({
@@ -18,6 +18,10 @@ export interface album {
 export class AlbumesService {
 
   constructor(private db: AngularFirestore) { }
+
+  createAlbum(data: album){
+    return this.db.collection('albumes').add(data);
+  }
 
   getAlbumesXUsuario(id){    
     

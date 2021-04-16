@@ -3,12 +3,13 @@ import { AngularFirestore } from '@angular/fire/firestore';
 import { map } from 'rxjs/operators';
 
 export interface producto {
-  id: string
+  id?: string
   nombre: string
   descripcion: string 
   etiquetas: string
   owner:string
   imagen: string
+  album: string
 }
 
 @Injectable({
@@ -19,7 +20,7 @@ export class ProductosService {
 
   constructor(private db: AngularFirestore) { }
 
-  createProductos(data: producto){
+  createProducto(data: producto){
     return this.db.collection('productos').add(data);
   }
   getProductos(){
