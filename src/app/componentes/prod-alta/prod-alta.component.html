@@ -1,6 +1,6 @@
 <ion-header>
   <ion-toolbar>
-    <ion-button slot="start" defaultHref="/folder/Albumes" fill="none">
+    <ion-button slot="start" defaultHref="/folder/Albumes" (click)="closeAlbum()" fill="none">
       <ion-icon name="arrow-back-outline"></ion-icon>
     </ion-button>
     <ion-title>Creá tu álbum</ion-title>
@@ -47,7 +47,7 @@
       <div formArrayName="troques">
         <ion-item *ngFor="let item of getDatos.controls; let i = index">
           <ion-thumbnail slot="start">
-            <img src="{{fotos[item]}}">
+            <img src="{{fotos[i]}}">
           </ion-thumbnail>
           <div class="form-group">
             <ion-item [formGroupName]="i">

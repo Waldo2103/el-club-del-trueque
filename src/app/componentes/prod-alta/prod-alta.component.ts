@@ -1,13 +1,13 @@
 import { Component, OnInit } from '@angular/core';
 import { Camera, CameraOptions } from '@ionic-native/camera/ngx';
-import { NavParams } from '@ionic/angular';
+import { ModalController, NavParams } from '@ionic/angular';
 
 import { ImagePicker, ImagePickerOptions } from "@ionic-native/image-picker/ngx";
 import { File } from "@ionic-native/file/ngx";
-import { AngularFireStorage } from '@angular/fire/storage';
 import { FormBuilder, FormControl, Validators, FormGroup, FormArray } from '@angular/forms';
 import { album, AlbumesService } from 'src/app/servicios/albumes/albumes.service';
 import { producto, ProductosService } from 'src/app/servicios/productos/productos.service';
+import { StorageService } from 'src/app/servicios/storage/storage.service';
 
 export interface Foto {
   nombre: string[]
@@ -24,9 +24,9 @@ export interface Foto {
 export class ProdAltaComponent implements OnInit {
 
   public prod;
-  public photo;
+  fotosASub: any = [];
   public vModo;
-  fotos: any = [""];
+  fotos: any = [];
   nombre: string[];
   descripcion: string[];
   etiquetas: string[];
@@ -35,25 +35,26 @@ export class ProdAltaComponent implements OnInit {
   public troque: producto;
   public arrayTroque:Array<producto>;
   public user;
+  public URLs = []
   constructor(
+    private modal: ModalController,
     private camera: Camera,
     private navParams: NavParams,
     public iPicker: ImagePicker,
     public file: File,
-    public storage: AngularFireStorage,
+    public storageServ: StorageService,
     private fBuilder: FormBuilder,
     private albServ:AlbumesService,
     private prodServ: ProductosService
 
   ) {
-    /* this.form = this.fBuilder.group({
-
-    }) */
+    
   }
 
   /**PARA SUBIR ARCHIVO */
   public mensajeArchivo = 'No hay un archivo seleccionado';
   public datosFormulario = new FormData();
+  public arrayFotos = [];
   public nombreArchivo = '';
   public URLPublica = '';
   public porcentaje = 0;
@@ -64,76 +65,67 @@ export class ProdAltaComponent implements OnInit {
     this.modoEntrada();
     this.form = this.fBuilder.group({
       descripcionA: [''],
-      id: ['',Validators.required],
-      imagen: ['',Validators.required],
-      nombreA: ['',Validators.required],
-      owner: ['',Validators.required],
-      troques: this.fBuilder.array([this.fBuilder.group(
-        {
-          nombre: [Validators.required],
-          descripcion: [Validators.required],
-          etiquetas: []
-        }
-      )])
+      id: new FormControl('', Validators.required),
+      imagen: new FormControl('', Validators.required),
+      nombreA: new FormControl('', Validators.required),
+      owner: new FormControl('', Validators.required),
+      troques: this.fBuilder.array([])
     })
-    //this.fotos = new Array<string>();
   }
   get getDatos() {
     //console.log(this.form.get('troques') as FormArray)
     return this.form.get('troques') as FormArray;
   }
 
-  public altaAlbum() {
-    this.album = {
-      nombre: '',
-      descripcion: '',
-      id: '',
-      imagen: '',
-      owner: '',
-      uid: '',
-    }
-  }
 
-  altaTroque() {
+  async altaTroque() {
+
     this.arrayTroque = [];
     
     let  f = this.form.value
     let fTroque = f.troques
-    this.album = {
+     //= this.form.value;
+     this.album = {
       nombre: f.nombreA,
       descripcion: f.descripcionA,
       id: this.user.correo+"-"+f.nombreA,
-      imagen: this.fotos[0],//f.troques[0].nombre,
+      imagen: "this.URLs[0]",//CUANDO SE ELIMINE UN PRODUCTO DEL ALBUM HAY QUE ACTUALIZAR QUE LA PRIMERA SIGA EXISTIENDO O ACTUALIZAR
       owner: this.user.correo,
       //uid: ,
-    } //= this.form.value;
-
+    }
+    var cont = 0
     for(let p of fTroque){
+      
+      //alert( this.URLs[cont])
       this.troque = {
       //id: f.
       nombre: p.nombre,
       descripcion: p.descripcion,
       etiquetas: p.etiquetas,
       owner: this.user.correo,
-      imagen: this.fotos[p],
+      imagen: "",
       album : this.user.correo+"-"+f.nombreA
     }
     this.arrayTroque.push(this.troque);
+    await this.subirArchivo(cont, this.troque)
+    cont++
     }
     
     console.log("form:",fTroque,"Album: ",this.album,"Prod: ",this.arrayTroque)
-    //this.albServ.createAlbum(this.album);
-    //this.prodServ.createProducto(this.prod);
+    this.albServ.createAlbum(this.album).then(resp=>{
+      this.closeAlbum()
+    })
+    
   }
 
   addTroque(cant: number) {
     const control = this.form.controls['troques'] as FormArray;
-    //console.log(control);
+    //alert(cant+" cant")
     for (let i = 0; i < cant; i++) {
       control.push(this.fBuilder.group({
-        nombre: [],
-        descripcion: [],
-        etiquetas: []
+        nombre:["", new FormControl( Validators.required)],
+          descripcion:["", new FormControl( Validators.required)],
+          etiquetas: []
       }))
       
     }
@@ -142,7 +134,11 @@ export class ProdAltaComponent implements OnInit {
   removeTroque(index: number) {
     const control = <FormArray>this.form.controls['troques'];
     control.removeAt(index)
-    
+    //
+    if ( index !== -1 ) {
+      this.fotos.splice( index, 1 );
+      this.fotosASub.splice( index, 1 );
+    }
   }
 
   public modoEntrada() {
@@ -174,18 +170,11 @@ export class ProdAltaComponent implements OnInit {
       this.fotos.push(('data:image/jpeg;base64,' + imageData));
       
       this.addTroque(1)
+      this.fotosASub.push(imageData);
     }, (err) => {
       // Handle error
       alert(err)
     });
-  }
-
-  subir() {
-    for (let foto of this.fotos) {
-      //foto.
-      //this.referenciaCloudStorage(nombreArchivo)
-      //this.tareaCloudStorage(nombreArchivo, datos)
-    }
   }
 
   abrirGaleria() {
@@ -200,7 +189,7 @@ export class ProdAltaComponent implements OnInit {
       this.addTroque(res.length)
       for (var index = 0; index < res.length; index++) {
         this.fotos.push(('data:image/jpeg;base64,' + res[index]));
-        
+        this.fotosASub.push(res[index]);
         let filename = res[index].substring(res[index].lastIndexOf('/') + 1);
         let path = res[index].substring(0, res[index].lastIndexOf('/') + 1);
         this.file.readAsDataURL(path, filename).then(base64string => {
@@ -210,16 +199,63 @@ export class ProdAltaComponent implements OnInit {
       alert("hay algo mal que no anda bien con estas fotos" + (JSON.stringify(err)))
     });
   }
-  //Tarea para subir archivo
-  tareaCloudStorage(nombreArchivo: string, datos: any) {
-    return this.storage.upload(nombreArchivo, datos);
+  
+   //Evento que se gatilla cuando el input de tipo archivo cambia
+   public cambioArchivo(event) {
+    if (event.target.files.length > 0) {
+      for (let i = 0; i < event.target.files.length; i++) {
+        this.mensajeArchivo = `Archivo preparado: ${event.target.files[i].name}`;
+        this.nombreArchivo = event.target.files[i].name;
+        //this.datosFormulario.delete('archivo');
+        this.datosFormulario.append('archivo', event.target.files[i], event.target.files[i].name)
+      }
+    } else {
+      this.mensajeArchivo = 'No hay un archivo seleccionado';
+    }
   }
 
-  //Referencia del archivo
-  referenciaCloudStorage(nombreArchivo: string) {
-    return this.storage.ref(nombreArchivo);
-  }
+  //Sube el archivo a Cloud Storage
+  public subirArchivo(cont, troque) {
+    let f;
+    var fe = new Date();
+    var fec: string = fe.getDate()+"-"+fe.getMonth()+"-"+fe.getUTCFullYear()+"_"+fe.getUTCHours()+fe.getUTCMinutes();
+    //for(let f of this.fotosASub){
+      for (let i = 0; i < this.fotosASub.length; i++) {
+        if (i===cont) {
+          f = this.fotosASub[i]
+        }
+      }
+      //alert(JSON.stringify(this.fotosASub))
+      //f = (f as string).split(',', 2)[1];
+      this.nombreArchivo =`${this.album.id.replace( '@', '-' ).toLowerCase()}_${cont}_${fec}+.jpg`
+      //let archivo = this.datosFormulario.get('archivo');
+      var referencia = this.storageServ.referenciaCloudStorage(this.nombreArchivo);
+      var tarea = this.storageServ.tareaCloudStorage(this.nombreArchivo, f);
+       //Cambia el porcentaje
+      tarea.percentageChanges().subscribe((porcentaje) => {
+        this.porcentaje = Math.round(porcentaje);
+        if (this.porcentaje == 100) {
+          this.finalizado = true;
+        }
+      });
 
+      referencia.putString(f, 'base64', { contentType: 'image/jpeg' }).then(async (snapshot) => {
+        alert(troque)
+        troque.imagen = await snapshot.ref.getDownloadURL()
+        if (cont==0) {
+          this.album.imagen = await snapshot.ref.getDownloadURL()
+        }
+        this.prodServ.createProducto(troque);
+        
+      }
+        
+      ) 
+    
+   
+  }
+  closeAlbum(){
+    this.modal.dismiss()
+  }
 }
 
 
