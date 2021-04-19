@@ -1,8 +1,14 @@
 
-
-
+  <div class="splash" *ngIf="showSplash" >
+  <div class="spin">
+    <img src="../assets/img/logo.png">
+  </div>
+  <img src="../assets/img/logoText.png">
+</div>
 <ion-app>
-  <ion-split-pane contentId="main-content">
+  
+  
+  <ion-split-pane *ngIf="!showSplash" contentId="main-content" >
     <ion-menu *ngIf="!enLogin" contentId="main-content" type="overlay">
       <ion-content>
         <ion-list id="inbox-list">

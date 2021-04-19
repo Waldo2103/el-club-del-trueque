@@ -31,3 +31,18 @@
 }
 
 $font-family-base: "Questrial" !important;
+
+  
+  .spinner {
+    position: absolute;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100vh;
+    height: 100vh;
+    // margin: 100px auto;
+    -webkit-animation: 3s rotate linear infinite;
+    animation: 3s rotate linear infinite;
+    -webkit-transform-origin: 50% 50%;
+    transform-origin: 50% 50%;
+  }

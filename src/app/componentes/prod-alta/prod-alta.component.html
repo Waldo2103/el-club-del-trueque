@@ -37,7 +37,8 @@
     <form [formGroup]="form" (ngSubmit)="altaTroque(form.value)">
       <div class="form-group">
         <ion-item>
-          <ion-input class="album" color="dark" type="text" formControlName="nombreA" placeholder="Nombre Álbum"></ion-input>
+          <ion-input class="album" color="dark" type="text" formControlName="nombreA" placeholder="Nombre Álbum">
+          </ion-input>
         </ion-item>
         <ion-item>
           <ion-input class="album" focus color="secondary" type="text" formControlName="descripcionA" name="descripcion"
@@ -65,19 +66,11 @@
           <ion-button color="danger" fill="clear" shape="round" (click)="removeTroque(i)">
             <ion-icon name="trash"></ion-icon>
           </ion-button>
-
-
         </ion-item>
-        <ion-button color="success" (click)="addTroque(1)">
-          <ion-icon name="arrow-back"></ion-icon>
-        </ion-button>
       </div>
-      <div class="text-center">
-        <ion-button color="warning" type="submit">
+        <ion-button color="success" shape="round" type="submit" [disabled]="!form.valid">
           <ion-icon name="checkmark-circle-outline"></ion-icon> Crear Álbum
         </ion-button>
-        <!--[disabled]="!troque.valid"-->
-      </div>
     </form>
   </ion-list>
 </ion-content>
