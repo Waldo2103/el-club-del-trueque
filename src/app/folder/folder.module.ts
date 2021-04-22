@@ -2,7 +2,7 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
-import { IonicModule } from '@ionic/angular';
+import { IonicModule, NavParams } from '@ionic/angular';
 
 import { FolderPageRoutingModule } from './folder-routing.module';
 
@@ -20,6 +20,9 @@ import { File } from "@ionic-native/file/ngx";
 
 import { ProdAltaComponent } from '../componentes/prod-alta/prod-alta.component';
 import { AngularFireStorageModule } from '@angular/fire/storage';
+import { PerfilComponent } from '../componentes/perfil/perfil.component';
+import { PhotoViewer } from "@ionic-native/photo-viewer/ngx";
+import { PopComponent } from '../componentes/pop/pop.component';
 
 @NgModule({
   imports: [
@@ -31,12 +34,14 @@ import { AngularFireStorageModule } from '@angular/fire/storage';
     AngularFireStorageModule,
     ReactiveFormsModule
   ],
-  declarations: [FolderPage, MensajesComponent, ChatComponent, AlbumesComponent, AlbumComponent, ProdAltaComponent],
-  entryComponents:[MensajesComponent, ChatComponent, AlbumesComponent, AlbumComponent, ProdAltaComponent],
+  declarations: [FolderPage, MensajesComponent, ChatComponent, AlbumesComponent, AlbumComponent, ProdAltaComponent, PerfilComponent, PopComponent],
+  entryComponents:[MensajesComponent, ChatComponent, AlbumesComponent, AlbumComponent, ProdAltaComponent, PerfilComponent, PopComponent],
   providers:[
     Camera,
     ImagePicker,
-    File
+    File,
+    NavParams,
+    PhotoViewer
   ]
 })
 export class FolderPageModule {}

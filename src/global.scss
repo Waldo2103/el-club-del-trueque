@@ -46,3 +46,8 @@ $font-family-base: "Questrial" !important;
     -webkit-transform-origin: 50% 50%;
     transform-origin: 50% 50%;
   }
+//esta class es para el popover
+  .my-custom-class{
+    --max-width: 30%;
+    orientation:initial;
+  }

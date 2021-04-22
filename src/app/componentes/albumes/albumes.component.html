@@ -1,4 +1,4 @@
-<ion-fab vertical="bottom" horizontal="end" slot="fixed">
+<ion-fab *ngIf="userParam==undefined" vertical="bottom" horizontal="end" slot="fixed">
   <ion-fab-button color="warning">
     <ion-icon name="add"></ion-icon>
   </ion-fab-button>
@@ -11,7 +11,14 @@
     </ion-fab-button>
   </ion-fab-list>
 </ion-fab>
-
+<ion-header>
+  <ion-toolbar *ngIf="userParam!==undefined">
+    <ion-button slot="start" (click)="closeAlbum()" fill="none">
+      <ion-icon name="arrow-back-outline"></ion-icon>
+    </ion-button>
+    <ion-title></ion-title>
+  </ion-toolbar>
+</ion-header> 
 <ion-content padding>
   <ion-list *ngFor="let album of albumes">
     <ion-card (click)="openAlbum(album)">

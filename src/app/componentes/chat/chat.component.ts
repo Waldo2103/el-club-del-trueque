@@ -1,4 +1,6 @@
-import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, Component, OnInit, ViewChild, AfterViewChecked } from '@angular/core';
+import { IonCard } from "@ionic/angular";
+
 import { AngularFireAuth } from '@angular/fire/auth';
 import { NavParams, ModalController } from '@ionic/angular';
 import { Subscription } from 'rxjs';
@@ -14,8 +16,9 @@ import { message } from "../../models/message";
   styleUrls: ['./chat.component.scss'],
   changeDetection: ChangeDetectionStrategy.Default
 })
-export class ChatComponent implements OnInit {
+export class ChatComponent implements OnInit, AfterViewChecked {
 
+  @ViewChild('content') content: any;
   public chat: any;
   public mensajes = [];
   public room: any;
@@ -31,7 +34,15 @@ export class ChatComponent implements OnInit {
     private AFauth: AngularFireAuth
   ) { }
 
+  scrollToBottomOnInit() {
+    this.content.scrollToBottom(100);
+  }
+  ngAfterViewChecked(){
+    this.scrollToBottomOnInit()
+  }
+
   ngOnInit() {
+    //
     this.AFauth.authState.subscribe(res =>{
       this.userLogin = res.email
     });
@@ -39,6 +50,7 @@ export class ChatComponent implements OnInit {
     console.log("entro en init de chatcomp")
     this.mensService.getMensaje(this.chat.uid).subscribe( (room) =>{
       this.room = room;
+      
     })
   }
   
@@ -48,8 +60,9 @@ export class ChatComponent implements OnInit {
   }
 
   sendMessage(){
-    
-    const mensaje: message = {
+    if(this.mens !== ""){
+      
+const mensaje: message = {
       content: this.mens,
       date: new Date(),
       type: "text",
@@ -57,7 +70,9 @@ export class ChatComponent implements OnInit {
     }
     this.mensService.sendMsgToFirebase(mensaje , this.chat.uid)
     this.mens = "";
-    
+    this.scrollToBottomOnInit()
+    }
+    this.scrollToBottomOnInit()
   }
-
+  
 }

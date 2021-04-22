@@ -1,0 +1,194 @@
+<ion-header *ngIf="userParam!==undefined">
+  <ion-toolbar>
+    <ion-button slot="start" defaultHref="/folder/Albumes" (click)="closePerfil()" fill="none">
+      <ion-icon name="arrow-back-outline"></ion-icon>
+    </ion-button>
+    <ion-title></ion-title>
+  </ion-toolbar>
+</ion-header>
+<ion-content padding *ngIf="usuarioP!=''">
+  <!-- INFO, FOTOS Y CONTACTO USUARIO EXTERNO -->
+  <ion-card *ngIf="userParam!==undefined" color="tertiary" class="cardPrincipal">
+    <ion-card-header>
+      <ion-item color="tertiary" lines="none">
+        <ion-avatar (click)="fullScreen(usuarioP.foto)" class="principal" slot="start">
+          <ion-img [src]="usuarioP.foto"></ion-img>
+        </ion-avatar>
+
+        <ion-label>
+          <h1 *ngIf="usuarioP.apodo!=''"><b>@{{usuarioP.apodo}}</b></h1>
+          <h1 *ngIf="usuarioP.apodo==''"><b>{{usuarioP.nombre}}</b></h1>
+          <h2>
+            <ion-icon color="success" name="map"></ion-icon> {{usuarioP.zona}}
+          </h2>
+          <h3>
+            <ion-icon color="warning" name="timer"></ion-icon> {{usuarioP.fechaAlta * 1000 | date: 'd/M'}} meses en<p>El
+              Club del Trueque</p>
+          </h3>
+        </ion-label>
+      </ion-item>
+      <ion-card-content color="success">
+        <h2>
+          <ion-icon color="warning" name="finger-print"></ion-icon> {{usuarioP.descripcion}}
+        </h2>
+      </ion-card-content>
+      <ion-card-title color="success">
+        <ion-button shape="round" fill="outline" color="dark" (click)="crearChat()">
+          <ion-icon color="danger" name="chatbubbles"></ion-icon> Enviar mensaje
+        </ion-button>
+
+      </ion-card-title>
+      <ion-card-title color="success">
+        <ion-button shape="round" fill="outline" color="dark" (click)="verAlbumes()">
+          <ion-icon color="secondary" name="images"></ion-icon> Mis Albumes
+        </ion-button>
+
+      </ion-card-title>
+    </ion-card-header>
+
+  </ion-card>
+  <!-- INFO, FOTOS Y CONTACTO PERFIL PROPIO-->
+  <ion-card *ngIf="userParam===undefined" color="tertiary" class="cardPrincipal">
+    <ion-card-header>
+      <ion-fab vertical="top" horizontal="end">
+        <ion-fab-button (click)="presentPopover($event)" id="opciones">
+          <ion-icon color="dark" name="ellipsis-vertical-outline"></ion-icon>
+        </ion-fab-button>
+      </ion-fab>
+      <!-- MODO VER -->
+      <ion-item *ngIf="!modoEditar" color="tertiary" lines="none">
+        <ion-avatar (click)="fullScreen(usuarioP.foto)" class="principal" slot="start">
+          <ion-img [src]="usuarioP.foto"></ion-img>
+        </ion-avatar>
+
+        <ion-label>
+          <h1 *ngIf="usuarioP.apodo!=''"><b>@{{usuarioP.apodo}}</b></h1>
+          <h1 *ngIf="usuarioP.apodo==''"><b>{{usuarioP.nombre}}</b></h1>
+          <h2>
+            <ion-icon color="success" name="map"></ion-icon> {{usuarioP.zona}}
+          </h2>
+          <h3>
+            <ion-icon color="warning" name="timer"></ion-icon> {{usuarioP.fechaAlta * 1000 | date: 'd/M'}} meses en<p>El
+              Club del Trueque</p>
+          </h3>
+        </ion-label>
+
+      </ion-item>
+      <!-- MODO EDITAR -->
+      <ion-item *ngIf="modoEditar" color="tertiary" lines="none">
+        <ion-avatar (click)="fullScreen(usuarioP.foto)" class="principal" slot="start">
+          <ion-img [src]="usuarioP.foto"></ion-img>
+          <ion-fab vertical="top" horizontal="start">
+            <ion-fab-button (click)="cambiarFoto()" color="warning" size="small">
+              <ion-icon name="camera"></ion-icon>
+            </ion-fab-button>
+          </ion-fab>
+        </ion-avatar>
+        <ion-label>
+          <form [formGroup]="form" (ngSubmit)="modiPerfil(form.value)">
+            <ion-label class="modi">
+              <ion-item>
+                <ion-label position="floating">Nombre</ion-label>
+                <ion-input color="dark" type="text" formControlName="nombre" placeholder="{{usuarioP.nombre}}"></ion-input>
+              </ion-item>
+              <ion-item>
+                <ion-label position="floating">Apellido</ion-label>
+                <ion-input focus color="secondary" type="text" formControlName="apellido" placeholder="{{usuarioP.apellido}}">
+                </ion-input>
+              </ion-item>
+              <ion-item>
+                <ion-label position="floating">Nombre de Usuario</ion-label>
+                <ion-input color="dark" type="text" formControlName="apodo" placeholder="{{usuarioP.apodo}}">
+                </ion-input>
+              </ion-item>
+              <ion-item>
+                <ion-label position="floating">Zona(Barrio y Ciudad)</ion-label>
+                <ion-input focus color="secondary" type="text" formControlName="zona"
+                  placeholder="{{usuarioP.zona}}"></ion-input>
+              </ion-item>
+              <ion-item style="display: none;" >
+                <ion-input color="dark" type="text" formControlName="descripcion"
+                  value="{{lades}}" placeholder="Cuentale a los troqueros sobre vos!">
+                </ion-input>
+              </ion-item>
+            </ion-label>
+
+          </form>
+        </ion-label>
+
+      </ion-item>
+      <ion-item id="itemDescri" *ngIf="modoEditar">
+        <ion-label position="floating">Cuentale a los troqueros sobre vos!</ion-label>
+        <ion-textarea id="descri" color="dark" type="text" [(ngModel)]="lades"
+          placeholder="{{usuarioP.descripcion}}">
+        </ion-textarea>
+      </ion-item>
+      <ion-card-content *ngIf="!modoEditar">
+        <h2>
+          <ion-icon color="warning" name="finger-print"></ion-icon> {{usuarioP.descripcion}}
+        </h2>
+      </ion-card-content>
+      <ion-button *ngIf="modoEditar" color="success" shape="round" (click)="modiPerfil(form.value)">
+        <ion-icon name="checkmark-circle-outline"></ion-icon>
+      </ion-button>
+      <ion-button  *ngIf="modoEditar" color="danger" shape="round" (click)="cancelarModi()">
+        <ion-icon name="close-circle-outline"></ion-icon>
+      </ion-button>
+      <ion-card-title color="success">
+        <ion-button *ngIf="userParam!==undefined" shape="round" fill="outline" color="dark" (click)="crearChat()">
+          <ion-icon color="danger" name="chatbubbles"></ion-icon> Enviar mensaje
+        </ion-button>
+
+      </ion-card-title>
+      <ion-card-title color="success">
+        <ion-button shape="round" fill="outline" color="dark" (click)="verAlbumes()">
+          <ion-icon color="secondary" name="images"></ion-icon> Mis Albumes
+        </ion-button>
+
+      </ion-card-title>
+    </ion-card-header>
+
+  </ion-card>
+  <!-- CALIFICACIONES Y COMENTARIOS -->
+  <ng-container>
+    <ion-card color="primary" class="post-list-card">
+      <ion-item lines="none">
+        <ion-label>
+          Calificación promedio: <span color="warning">3.5 </span>
+          <ion-icon name="star" color="warning"></ion-icon>
+          <ion-icon name="star" color="warning"></ion-icon>
+          <ion-icon name="star" color="warning"></ion-icon>
+          <ion-icon name="star-half" color="warning"></ion-icon>
+          <ion-icon name="star-outline" color="warning"></ion-icon>
+
+        </ion-label>
+      </ion-item>
+
+    </ion-card>
+  </ng-container>
+  <ng-container>
+    <ion-card color="success" class="post-list-card" *ngFor="let post of [1,1,1,1,1,1,1,1,1,1]; let i = index">
+      <ion-item lines="none">
+        <ion-avatar slot="start">
+          <img src="../../../assets/img/registro.png">
+        </ion-avatar>
+        <ion-label>
+          Fulano de Tal
+          <p>hace 1 semana</p>
+        </ion-label>
+        <ion-buttons slot="end">
+          <ion-button color="medium">
+            <ion-icon slot="icon-only" md="ellipsis-vertical-outline" ios="ellipsis-horizontal-outline"></ion-icon>
+          </ion-button>
+        </ion-buttons>
+      </ion-item>
+
+      <ion-card-content class="post-list-content">
+        todo bien no me afano todo bien no me afano todo bien no me afano todo bien no me afano
+      </ion-card-content>
+    </ion-card>
+  </ng-container>
+  <!-- <ion-list *ngFor="let album of albumes">
+  </ion-list> -->
+
+</ion-content>

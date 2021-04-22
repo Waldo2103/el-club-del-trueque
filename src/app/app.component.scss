@@ -21,6 +21,18 @@
   background-color: white; //radial-gradient(circle, #7eef4f 0%, #7d9677 40%);
 }
 
+.menu-header-bg{
+  height: 180px;
+  width: 350px;
+  background: rgb(108, 247, 103);
+  background: linear-gradient(90deg, rgb(182, 255, 179) 0%, rgb(85, 248, 80) 100%);
+  transform: rotate(-15deg);
+  border-bottom-left-radius: 40%;
+  margin-left: -18px;
+  margin-top: -50px;
+  margin-bottom: 60px;
+}
+
 ion-menu ion-content {
   --background: var(--ion-item-background, var(--ion-background-color, #fff));
 }

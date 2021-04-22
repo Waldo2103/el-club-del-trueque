@@ -4,7 +4,7 @@
         <ion-icon name="arrow-back-outline"></ion-icon>
       </ion-button>
 
-    <ion-title>Publicado por: {{usuarioP.nombre}}</ion-title>
+    <ion-title (click)="verPerfil()">Publicado por:<a>{{usuarioP.nombre}}</a> </ion-title><!-- <span>{{usuarioP.nombre}}</span> -->
     <ion-button *ngIf="!ownerOfProduct" slot="end" (click)="crearChat()" fill="none">
       <ion-icon name="chatbubbles-sharp" color="danger"></ion-icon>
     </ion-button>

@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { AngularFireAuth } from '@angular/fire/auth';
-import { ModalController } from '@ionic/angular';
+import { ModalController, NavParams } from '@ionic/angular';
 import { AlbumesService } from 'src/app/servicios/albumes/albumes.service';
 import { UsuariosService } from 'src/app/servicios/usuarios/usuarios.service';
 import { AlbumComponent } from '../album/album.component';
@@ -14,28 +14,33 @@ import { ProdAltaComponent } from '../prod-alta/prod-alta.component';
 export class AlbumesComponent implements OnInit {
   public albumes: any = [];
   public albumesBis: any = [];
-  public userLogin: string;
+  public userLogin: any;
   public usuario;
+  public userParam: any;
   constructor(
     private albServ: AlbumesService,
     private modal: ModalController,
-    private AFauth: AngularFireAuth,
-    private userServ: UsuariosService
+    private modalP: ModalController,
+    private userServ: UsuariosService,
+    private navParams: NavParams
   ) { }
 
-  ngOnInit() {
-    this.traerUserLogin()
+  async ngOnInit() {
+    this.userParam = await this.navParams.get('usuarioP');
+    if (this.userParam !== undefined) {
+      this.userLogin = this.userParam;
+    } else {
+      this.userLogin = JSON.parse(localStorage.getItem('userLogin'));
+    }
+    this.traerAlbumes()
   }
 
-  traerUserLogin() {
-    this.AFauth.authState.subscribe(async res => {
-      this.userLogin = res.email
-
-      let uns = await this.albServ.getAlbumesXUsuario(this.userLogin).subscribe(albumes => {
+  traerAlbumes() {
+      let uns = this.albServ.getAlbumesXUsuario(this.userLogin.correo).subscribe(albumes => {
         this.albumes = []
         this.albumes = albumes
         //console.log(this.albumes)
-        this.userServ.getUsuario(this.userLogin).subscribe(pro => {
+        this.userServ.getUsuario(this.userLogin.correo).subscribe(pro => {
           this.usuario = []
           this.usuario = pro;
           //this.validacionChat();
@@ -43,13 +48,12 @@ export class AlbumesComponent implements OnInit {
         })
       });
 
-    });
 
   }
 
   openAlbum(album){
     //console.log("genial")
-    this.modal.create({
+    this.modalP.create({
       component: AlbumComponent,
       componentProps: {
         album: album
@@ -75,6 +79,10 @@ export class AlbumesComponent implements OnInit {
         modo: "camera"
       }
     }).then((modal)=>modal.present())
+  }
+//sirve solo cuando se entra a ver el perfil de otro usuario
+  closeAlbum(){
+    this.modal.dismiss()
   }
 
 }

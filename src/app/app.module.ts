@@ -23,7 +23,7 @@ import { CommonModule } from '@angular/common';
 import { MensajesComponent } from './componentes/mensajes/mensajes.component';
 import { FolderPage } from './folder/folder.page';
 import { ProductoComponent } from './componentes/producto/producto.component';
-
+import { PhotoViewer } from "@ionic-native/photo-viewer/ngx";
 
 
 
@@ -47,6 +47,7 @@ import { ProductoComponent } from './componentes/producto/producto.component';
     Facebook,
     StatusBar,
     SplashScreen,
+    PhotoViewer,
     //native
     //Geolocation,
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy }],

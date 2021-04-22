@@ -6,7 +6,7 @@
     <ion-title>{{chat.nombre}}</ion-title>
   </ion-toolbar>
 </ion-header>
-<ion-content padding>
+<ion-content #content>
   <div *ngIf="room">
     <ion-card *ngFor="let mensaje of room.messages" [ngClass]="{emisor: mensaje.owner === userLogin, receptor: mensaje.owner != userLogin}"><!--mensaje.owner = userLogin ? 'class1' : ''-->
       <ion-card-content>
@@ -16,9 +16,9 @@
     </ion-card>
   </div>
 </ion-content>
-<ion-footer padding>
+<ion-footer  padding>
   <ion-item class="textArea">
-    <ion-textarea [(ngModel)]="mens"></ion-textarea>
+    <ion-textarea (click)="scrollToBottomOnInit()" [(ngModel)]="mens"></ion-textarea>
     <ion-button class="btnEnv" shape="round" size="large" (click)="sendMessage()">
       <ion-icon name="send"></ion-icon>
     </ion-button>

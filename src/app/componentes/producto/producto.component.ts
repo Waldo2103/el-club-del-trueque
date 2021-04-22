@@ -8,6 +8,7 @@ import { ProductosService } from 'src/app/servicios/productos/productos.service'
 import { UsuariosService } from 'src/app/servicios/usuarios/usuarios.service';
 import { message } from "../../models/message";
 import { ChatComponent } from '../chat/chat.component';
+import { PerfilComponent } from '../perfil/perfil.component';
 
 @Component({
   selector: 'app-producto',
@@ -29,6 +30,7 @@ export class ProductoComponent implements OnInit {
     public modal: ModalController,
     public modalChat: ModalController,
     public modalChatEx: ModalController,
+    public modalPerfil: ModalController,
     private AFauth: AngularFireAuth,
     private navParams: NavParams,
     private prodServ: ProductosService,
@@ -65,7 +67,7 @@ export class ProductoComponent implements OnInit {
   async traerOwnerProduct(){
     this.userServ.getUsuario(this.prod.owner).subscribe( userP =>{
       this.usuarioP = userP;
-    if (this.usuarioL.correo === this.usuarioP.icorreod) {
+    if (this.usuarioL.correo === this.usuarioP.correo) {
       this.ownerOfProduct = true;
     } else if (this.usuarioL.correo != this.usuarioP.correo) {
       this.ownerOfProduct = false;
@@ -143,6 +145,15 @@ export class ProductoComponent implements OnInit {
     
     
     
+  }
+
+  verPerfil(){
+    this.modalPerfil.create({
+      component: PerfilComponent,
+      componentProps: {
+        perfil: this.usuarioP
+      }
+    }).then((modalP)=>{modalP.present();this.modal.dismiss();console.log("creo modal de perfil nuevo")})
   }
 
   closeProduct(){
