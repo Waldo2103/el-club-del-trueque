@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { PopoverController } from '@ionic/angular';
+import { NavParams, PopoverController } from '@ionic/angular';
 
 @Component({
   selector: 'app-pop',
@@ -8,9 +8,14 @@ import { PopoverController } from '@ionic/angular';
 })
 export class PopComponent implements OnInit {
   public items = ["Editar"];
-  constructor(private popo: PopoverController) { }
+  
+  constructor(
+    private popo: PopoverController,
+    private navParams: NavParams
+    ) { }
 
-  ngOnInit() {}
+  ngOnInit() {
+  }
 
   onClick(i: number){
     this.items[i]

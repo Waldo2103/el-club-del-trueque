@@ -49,6 +49,7 @@ export class LoginPage implements OnInit {
         loading.dismiss();
         if (res /*&& user.user.emailVerified*/) {
           this.ctrl.enable(true);
+          //localStorage.setItem("email", this.email)
           this.router.navigate(['/home']);
         } /*else if(user) {
           this.router.navigate(['/send-email']);

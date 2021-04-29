@@ -8,7 +8,7 @@ export interface usuario{
   descripcion: string
   apellido: string
   correo: string
-  foto: string
+  foto?: string
   zona: string
 }
 @Injectable({

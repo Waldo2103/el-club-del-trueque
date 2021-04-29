@@ -13,13 +13,8 @@
       <ion-title size="large">{{ folder }}</ion-title>
     </ion-toolbar>
   </ion-header>
-
-  <div id="container">
-    <strong class="capitalize">{{ folder }}</strong>
-    
-
-  </div>
   <app-mensajes *ngIf="folder==='Mensajes'"></app-mensajes>
   <app-albumes *ngIf="folder==='Albumes'"></app-albumes>
   <app-perfil *ngIf="folder==='Perfil'"></app-perfil>
+  <app-trueques *ngIf="folder==='Trueques'"></app-trueques>
 </ion-content>

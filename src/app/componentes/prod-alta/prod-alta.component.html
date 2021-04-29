@@ -55,12 +55,16 @@
               <ion-input color="success" type="text" formControlName="nombre" placeholder="Nombre Artículo"></ion-input>
             </ion-item>
             <ion-item [formGroupName]="i">
-              <ion-input focus color="warning" type="text" formControlName="descripcion" name="descripcion"
+              <ion-input focus color="tertiary" type="text" formControlName="descripcion" name="descripcion"
                 placeholder="Descripción"></ion-input>
             </ion-item>
             <ion-item [formGroupName]="i">
               <ion-input color="danger" type="text" formControlName="etiquetas"
                 placeholder="Separá con ; Ej: lampara;portafoco"></ion-input>
+            </ion-item>
+            <ion-item [formGroupName]="i">
+              <ion-input color="danger" type="text" formControlName="zona"
+                placeholder="Barrio, Ciudad"></ion-input>
             </ion-item>
           </div>
           <ion-button color="danger" fill="clear" shape="round" (click)="removeTroque(i)">

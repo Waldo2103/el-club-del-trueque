@@ -1,0 +1,122 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="home" (click)="closeTrueque()"></ion-back-button>
+    </ion-buttons>
+    <ion-title>{{estado}}</ion-title>
+  </ion-toolbar>
+</ion-header>
+<ion-content>
+  <div class="cont d height-100 width-100 center-horizontal center-vertical flex-v">
+    <div class="b height-45 width-100 center-horizontal center-vertical
+      flex-v">
+      <ion-item>
+        <ion-avatar>
+          <ion-img src="./assets/img/registro.png"></ion-img>
+        </ion-avatar>
+        <ion-label>
+          <h2>@{{usuarioP.apodo}}</h2>
+        </ion-label>
+      </ion-item>
+      <ion-card>
+        
+        
+        <ion-card-header>
+          <img [src]="troqueVendedor.imagen" />
+        </ion-card-header>
+        <ion-card-content>
+          {{troqueVendedor.nombre}}
+        </ion-card-content>
+      </ion-card>
+      <!-- <div align="center">
+        <ion-col size="12">
+          <ion-slides [options]="{ slidesPerView: 'auto', zoom: false, grabCursor: true }">
+            <ion-slide *ngFor="let troque of troquesVendedor"
+              style="width: 150px; height: 180px; border: 2px solid #517566">
+              <ion-col>
+                <ion-img [src]="troque.imagen"></ion-img>
+                <ion-label>{{troque.nombre}}</ion-label>
+              </ion-col>
+            </ion-slide>
+            <ion-slide style="width: 150px; height: 180px; border: 2px solid #517566" (click)="buscarEnAlbum()">
+              <ion-col>
+                <ion-img style="width: 80px; height: 80px; display: block; margin-left: auto; margin-right: auto;"
+                  src="./assets/img/plus.png"></ion-img>
+                <ion-label>Agregar Troque</ion-label>
+              </ion-col>
+            </ion-slide>
+          </ion-slides>
+        </ion-col>
+      </div> -->
+    </div>
+    <div *ngIf="!btnContraoferta">
+      <ion-row size="12">
+        <ion-col size="6">
+          <ion-button fill="outline" expand="block" color="success" [disabled]="!troqueAgregado" (click)="ofertar()">Ofertar</ion-button>
+        </ion-col>
+        <ion-col size="6">
+          <ion-button fill="outline" expand="block" color="danger">Cancelar</ion-button>
+        </ion-col>
+      </ion-row>
+    </div>
+    <div *ngIf="btnContraoferta">
+      <ion-row size="12">
+        <ion-col size="4">
+          <ion-button fill="outline" expand="block" color="success">Confirmar</ion-button>
+        </ion-col>
+        <ion-col size="4">
+          <ion-button fill="outline" expand="block" color="warning" [disabled]="!nuevaOferta">Contraofertar</ion-button>
+        </ion-col>
+        <ion-col size="4">
+          <ion-button fill="outline" expand="block" color="danger" (click)="rechazarTrueque()">Rechazar</ion-button>
+        </ion-col>
+      </ion-row>
+    </div>
+
+    <div class="c height-45 width-100 center-horizontal center-vertical
+      flex-v">
+        <ion-label>
+          <h2>@{{usuarioL.apodo}}</h2>
+        </ion-label>
+        <ion-card *ngIf="troqueComprador===undefined" (click)="agregarTroque()">
+          
+          
+          <ion-card-header>
+            <img src="./assets/img/plus.png" />
+          </ion-card-header>
+          <ion-card-content>
+            Agrega el Troque que ofrecerás a cambio
+          </ion-card-content>
+        </ion-card>
+        <ion-card *ngIf="troqueComprador!==undefined">
+          
+          
+          <ion-card-header>
+            <img [src]="troqueComprador.imagen" />
+          </ion-card-header>
+          <ion-card-content>
+           {{troqueComprador.nombre}} 
+          </ion-card-content>
+        </ion-card>
+        <!-- <ion-col style="display: block; margin-left: auto; margin-right: auto;" size="12">
+          <ion-slides [options]="{ slidesPerView: 'auto', zoom: false, grabCursor: true }">
+            <ion-slide *ngFor="let troque of troquesComprador"
+              style="width: 150px; height: 180px; border: 2px solid #517566">
+              <ion-col>
+                <ion-img [src]="troque.imagen"></ion-img>
+                <ion-label>{{troque.nombre}}</ion-label>
+              </ion-col>
+            </ion-slide>
+            <ion-slide style="width: 150px; height: 180px; border: 2px solid #517566" (click)="agregarTroque()">
+              <ion-col>
+                <ion-img style="width: 80px; height: 80px; display: block; margin-left: auto; margin-right: auto;"
+                  src="./assets/img/plus.png"></ion-img>
+                <ion-label>Agregar Troque/s</ion-label>
+              </ion-col>
+            </ion-slide>
+          </ion-slides>
+        </ion-col> -->
+    </div>
+  </div>
+
+</ion-content>

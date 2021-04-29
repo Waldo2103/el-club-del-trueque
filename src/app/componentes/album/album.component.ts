@@ -1,8 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { ModalController, NavParams } from '@ionic/angular';
+import { AlertController, ModalController, NavParams } from '@ionic/angular';
 import { Producto } from 'src/app/clases/producto/producto';
 import { AlbumesService } from 'src/app/servicios/albumes/albumes.service';
+import { producto, ProductosService } from 'src/app/servicios/productos/productos.service';
 import { ProductoComponent } from '../producto/producto.component';
 
 @Component({
@@ -15,10 +16,12 @@ export class AlbumComponent implements OnInit {
   public alb: any;
   public album: Array<Producto> = [];
   public usuarioL: any;
-  public usuarioP: any = [];
+  public usuarioP: any;
   public uidChat: string;
   public ownerOfAlbum: boolean = true;
   filtroBuscar = '';
+  public enTrueque: boolean = false;
+  public troque: producto;
 
   constructor(
     public modal: ModalController,
@@ -27,22 +30,35 @@ export class AlbumComponent implements OnInit {
     private navParams: NavParams,
     private albServ: AlbumesService,
     //private userServ: UsuariosService,
-    private router: Router
+    private router: Router,
+    private alertCtrl: AlertController,
+    private prodServ: ProductosService
 
   ) { }
 
   ngOnInit() {
     //console.log("aaaa"+this.album.length)
     this.traerAlbum()
+    this.enTrueque = this.navParams.get("enTrueque");
+    
+    console.log(this.enTrueque+"asi quedo en trueque, si sale undefined agregar valdiacion")
   }
 
   traerAlbum() {
     this.alb = this.navParams.get('album')
+    this.usuarioL = this.navParams.get("usuarioL");
     //console.log("aaaa"+this.alb)
-    this.albServ.getAlbum(this.alb.id).subscribe(al => {
+    if (this.alb === undefined) {
+      this.prodServ.getProductosXOwner(this.usuarioL.correo).subscribe(prods=>{
+        this.album = prods;
+      })
+    } else {
+      this.albServ.getAlbum(this.alb.id).subscribe(al => {
       this.album = al;
       //console.log("bbbb" + JSON.stringify(al))
     })
+    }
+    
 
   }
 
@@ -52,19 +68,52 @@ export class AlbumComponent implements OnInit {
   }
 
   openProduct(producto){
-    //producto = JSON.stringify(producto);
-    //producto = JSON.parse(producto);
-    //console.log("producto en open modal"+producto)
-    this.modalP.create({
+    
+    if (!this.enTrueque) {
+      this.modalP.create({
       component: ProductoComponent,
       componentProps: {
         producto: producto
       }
     }).then((modal)=>modal.present())
+    }
+    
   }
 
   closeAlbum(){
-    this.modal.dismiss()
+    if(this.enTrueque){
+      this.modal.dismiss({data:this.troque})
+    }else{
+      this.modal.dismiss()
+    }
+  }
+
+  aTrueque(troque){
+    this.alertaConfirmacion("Selección de Troque",troque,"¿Estás seguro de que esto es lo que querés trocar?")
+  }
+
+  public alertaConfirmacion(header: string, troque: producto, message: string) {
+    this.alertCtrl.create({
+      header,
+      message,
+      buttons: [ 
+      {
+        text: 'No',
+        role: 'Cancel',
+        handler: () => {
+          console.log('Cancel clicked');
+        }
+      },
+      {
+        text: 'Si',
+        handler: () => {
+          this.troque = troque;
+          this.closeAlbum()
+          //console.log('Buy clicked');
+        }
+      }
+    ]
+    }).then(a => { a.present(); });
   }
 
 }

@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { ModalController, NavParams } from '@ionic/angular';
+import { ActionSheetController, ModalController, NavParams } from '@ionic/angular';
 import { mensaje, MensajesService } from 'src/app/servicios/mensajes/mensajes.service';
 import { usuario, UsuariosService } from 'src/app/servicios/usuarios/usuarios.service';
 import { AlbumesComponent } from '../albumes/albumes.component';
@@ -11,6 +11,7 @@ import { FormBuilder, FormGroup } from '@angular/forms';
 import { ImagePicker, ImagePickerOptions } from "@ionic-native/image-picker/ngx";
 import { Camera, CameraOptions } from '@ionic-native/camera/ngx';
 import { StorageService } from 'src/app/servicios/storage/storage.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-perfil',
@@ -18,7 +19,7 @@ import { StorageService } from 'src/app/servicios/storage/storage.service';
   styleUrls: ['./perfil.component.scss'],
 })
 export class PerfilComponent implements OnInit {
-  public colores=["danger", "secondary", "warning", "primary","success","danger", "secondary", "warning", "primary","success","danger", "secondary", "warning", "primary","success","danger", "secondary", "warning", "primary","success","danger", "secondary", "warning", "primary","success","danger", "secondary", "warning", "primary","success","danger", "secondary", "warning", "primary","success","danger", "secondary", "warning", "primary","success","danger", "secondary", "warning", "primary","success","danger", "secondary", "warning", "primary","success","danger", "secondary", "warning", "primary","success"]
+  public colores=["danger", "secondary", "tertiary", "primary","success","danger", "secondary", "tertiary", "primary","success","danger", "secondary", "tertiary", "primary","success","danger", "secondary", "tertiary", "primary","success","danger", "secondary", "tertiary", "primary","success","danger", "secondary", "tertiary", "primary","success","danger", "secondary", "tertiary", "primary","success","danger", "secondary", "tertiary", "primary","success","danger", "secondary", "tertiary", "primary","success","danger", "secondary", "tertiary", "primary","success","danger", "secondary", "tertiary", "primary","success"]
   public usuarioL;
   public usuarioP:any = "";
   public userParam:any;
@@ -35,6 +36,7 @@ export class PerfilComponent implements OnInit {
   public foto;
   public fotoASub;
   public vModo;
+  public cambieFoto: boolean = false;
   constructor(
     private navParams: NavParams,
     private mensServ: MensajesService,
@@ -46,7 +48,9 @@ export class PerfilComponent implements OnInit {
     private fbu: FormBuilder,
     private iPicker: ImagePicker,
     private camera: Camera,
-    private storageServ: StorageService
+    private storageServ: StorageService,
+    private actionSheetController: ActionSheetController,
+    private router: Router
   ) {
     this.form = this.fbu.group({
       apellido: '',
@@ -120,12 +124,12 @@ export class PerfilComponent implements OnInit {
           id: [this.usuarioL.correo,this.usuarioP.correo],
           imagen: [this.usuarioL.foto,this.usuarioP.foto],
           uid: ``,
-          messages:  {
+          /* messages:  {
             content: "",
             type: "",   
             date: new Date(),
             owner: ""
-          }
+          } */
         }
         let res = this.mensServ.createMensajes(data)
         res.then(resp=>{
@@ -141,12 +145,12 @@ export class PerfilComponent implements OnInit {
         }
         //this.router.navigate['folder/Mensajes']
         //this.modal.dismiss()
-        this.modal.create({
+        this.modalC.create({
           component: ChatComponent,
           componentProps: {
             chat: chat
           }
-        }).then((modalC)=>{modalC.present();this.modal.dismiss();console.log("creo modal de chat nuevo")})
+        }).then((modalC)=>{modalC.present();this.modalC.dismiss();console.log("creo modal de chat nuevo")})
         })
       }
       uns.unsubscribe()
@@ -169,6 +173,7 @@ export class PerfilComponent implements OnInit {
     const popover = await this.pop.create({
       component: PopComponent,
       cssClass: 'my-custom-class',
+      //componentProps: {modo: 'editar'},
       event: ev,
       translucent: true,
       mode: 'ios'
@@ -177,67 +182,119 @@ export class PerfilComponent implements OnInit {
 
     const { data } = await  popover.onWillDismiss();
     console.log('onWillDismiss resolved with role', data);
-    const { role } = await  popover.onDidDismiss();
-    console.log('onWillDismiss resolved with role', role);
-    if (data.item === "Editar") {
+    /* const { role } = await  popover.onDidDismiss();
+    console.log('onWillDismiss resolved with role', role); */
+    if (data != undefined) {
+      if (data.item === "Editar") {
       this.modoEditar = true;
     } else {
       this.modoEditar = false;
     }
-  }
-
-  async opcionesCambioFoto(ev: any) {
-    /* const popover = await this.pop.create({
-      component: PopComponent,
-      cssClass: 'my-custom-class',
-      event: ev,
-      translucent: true,
-      mode: 'ios'
-    });
-    await popover.present();
-
-    const { data } = await  popover.onWillDismiss();
-    console.log('onWillDismiss resolved with role', data);
-    const { role } = await  popover.onDidDismiss();
-    console.log('onWillDismiss resolved with role', role);
-    if (data.item === "Editar") {
-      this.modoEditar = true;
-    } else {
-      this.modoEditar = false;
-    } */
+    }
+    
   }
 
   async cambiarFoto(){
     /** REVISAR: FALTA AGREGAR QUE BORRE LA QUE YA TIENE DE STORAGE */
-    await this.abrirPopCamara()//REVISAR abre pop y ahi se tiene que elegir 
-                                //modo por aho es lo mismo que opcionesCambioFoto
-    await this.subirArchivo()
+    const accSheet = await this.actionSheetController.create({
+      header: 'Foto de Perfil',
+      cssClass: 'my-custom-class2',
+      buttons: [{
+        text: 'Borrar',
+        role: 'destructive',
+        icon: 'trash',
+        handler: () => {
+          this.borrarFotoVieja()
+          console.log('Delete clicked');
+        }
+      }, {
+        text: 'Sacar Foto',
+        icon: 'camera',
+        handler: () => {
+          this.abrirCamara()
+          console.log('Share clicked');
+        }
+      }, {
+        text: 'Subir desde Galería',
+        icon: 'image',
+        handler: () => {
+          this.abrirGaleria()
+          console.log('Play clicked');
+        }
+      }, {
+        text: 'Cancel',
+        icon: 'close',
+        role: 'cancel',
+        handler: () => {
+          console.log('Cancel clicked');
+        }
+      }]
+    });
+    await accSheet.present();
+
+    /* const { data } = await  popover.onWillDismiss();
+    console.log('onWillDismiss resolved with role', data); */
+    const { data } = await  accSheet.onDidDismiss();
+    console.log('onDidDismiss resolved with role', data);
+
+    //await this.modoEntrada(data.modo)
+    
+    //this.borrarFotoVieja()
   }
 
-  abrirPopCamara(){
-    /***aca hace lo qu tiene que hacer y despues */
-    this.modoEntrada()//seguro hay que pasarle el mdoo
-  }
-  modiPerfil(form){
-    console.log(form)//esto queda sin uso, se podria
-                      // sacar despues de probarlo si funciona tomar datos del form posta
+  async modiPerfil(form){
+    if(this.cambieFoto){
+      await this.subirArchivo();
+    }
+    
+   // console.log(form)//esto queda sin uso, se podria
+                    // sacar despues de probarlo si funciona tomar datos del form posta
     let u = this.form.value;
+    let valida: usuario;
+    if (u.apellido === "") {
+      u.apellido = this.usuarioP.apellido
+    } 
+    if (u.apodo === "") {
+      u.apodo = this.usuarioP.apodo
+    }
+    if (u.descripcion === "") {
+      u.descripcion = this.usuarioP.descripcion
+    }
+    if (u.nombre === "") {
+      u.nombre = this.usuarioP.nombre
+    }
+    if (u.zona === "") {
+      u.zona = this.usuarioP.zona
+    }
     this. datos =  {
-      correo: u.correo,
+      correo: this.usuarioP.correo,
       apellido: u.apellido,
       apodo: u.apodo,
       descripcion: u.descripcion,
-      foto: u.foto,//REVISAR esto
+      foto: this.usuarioP.foto,//REVISAR esto|
       nombre: u.nombre,
       zona: u.zona
     }
-    
+    this.userServ.updateUsuario(this.datos).then(res=>{
+      //alert(res)
+      this.usuarioP.foto = this.datos.foto;
+      this.usuarioP = this.datos;
+      this.form = this.fbu.group({
+        apellido: '',
+        apodo: '',
+        descripcion: '',
+        foto: '',
+        nombre: '',
+        zona: ''
+      })
+    }).catch(err =>{ alert(err)})
     this.modoEditar = false;
   }
 
-  /*** PARA CAMBIAR FOTO */
-  public modoEntrada() {
-    this.vModo = this.navParams.get('modo');
+  /*** PARA CAMBIAR FOTO - revisar*/
+  /* public modoEntrada(modo) {
+    
+    this.vModo = modo;
     if (this.vModo === "camera") {
       this.abrirCamara()
     } else if (this.vModo === "gallery") {
@@ -245,7 +302,7 @@ export class PerfilComponent implements OnInit {
     } else {
       alert("fallo abrir camara o galeria")
     }
-  }
+  } */
 
   abrirCamara() {
     const options: CameraOptions = {
@@ -257,12 +314,15 @@ export class PerfilComponent implements OnInit {
       sourceType: this.camera.PictureSourceType.CAMERA
     }
 
-    this.camera.getPicture(options).then((imageData) => {
+    this.camera.getPicture(options).then(async (imageData) => {
       // imageData is either a base64 encoded string or a file URI
       // If it's base64 (DATA_URL):
       this.foto = ('data:image/jpeg;base64,' + imageData);
       
       this.fotoASub = imageData;
+      this.cambieFoto = true;
+      this.usuarioP.foto = this.foto;
+      //await this.subirArchivo()
     }, (err) => {
       // Handle error
       alert(err)
@@ -277,20 +337,22 @@ export class PerfilComponent implements OnInit {
       outputType: 1,
       //maximumImagesCount: 1
     }
-    this.iPicker.getPictures(options2).then((res) => {
+    this.iPicker.getPictures(options2).then(async (res) => {
       //agrego un nuevo formulario de troque
       if (res!=="OK") {//le puse esto porque me paso que devolvia esto a veces al iniar
-      
-      
       //tener en cuenta que lo puede devolver como array y en ese caso seria res[0]
       this.foto = ('data:image/jpeg;base64,' + res);
       this.fotoASub =  res;
+      //await this.subirArchivo()
+      this.cambieFoto = true;
+      this.usuarioP.foto = this.foto;
     }else{
       this.abrirGaleria()
     }
+    
     }, (err) => {
       alert("hay algo mal que no anda bien con estas fotos" + (JSON.stringify(err)))
-    });
+    }).catch(err =>{alert(err)});
   }
 
   //Sube el archivo a Cloud Storage
@@ -299,10 +361,10 @@ export class PerfilComponent implements OnInit {
     
     //genero el nombre del archivo
     var fe = new Date();
-    var fec: string = fe.getDate()+"-"+fe.getMonth()+"-"+fe.getUTCFullYear()+"_"+fe.getUTCHours()+fe.getUTCMinutes();
+    //var fec: string = fe.getDate()+"-"+fe.getMonth()+"-"+fe.getUTCFullYear()+"_"+fe.getUTCHours()+fe.getUTCMinutes();
     //firebase no acepta el arroba entonces lo reemplazo
-    this.nombreArchivo =`${this.usuarioL.correo.replace( '@', '-' ).toLowerCase()}_${fec}.jpg`
-    var referencia = this.storageServ.referenciaCloudStorage(`productos/${this.nombreArchivo}`);
+    this.nombreArchivo =`${this.usuarioL.correo.replace( '@', '-' ).toLowerCase()}.jpg`;//fotoPerfil/admin-admin.com.jpg
+    var referencia = this.storageServ.referenciaCloudStorage(`fotoPerfil/${this.nombreArchivo}`);
     var tarea = this.storageServ.tareaCloudStorage(this.nombreArchivo, f);
       //Cambia el porcentaje
     tarea.percentageChanges().subscribe((porcentaje) => {
@@ -315,12 +377,18 @@ export class PerfilComponent implements OnInit {
     referencia.putString(f, 'base64', { contentType: 'image/jpeg' }).then(async (snapshot) => {
       this.datos.foto = await snapshot.ref.getDownloadURL()
       
-      this.userServ.updateUsuario(this.datos);
+      
     })
     
+  }
+  borrarFotoVieja(){
+    this.storageServ.deleteArchivo('fotoPerfil/'+this.usuarioL.correo.replace( '@', '-' ).toLowerCase()+'.jpg');
+    this.usuarioP.foto = "";
+    this.datos.foto = ""
   }
   cancelarModi(){
     this.modoEditar = false;
   }
+ 
 
 }

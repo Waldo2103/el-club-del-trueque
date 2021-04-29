@@ -12,12 +12,14 @@
     <ion-menu *ngIf="!enLogin" contentId="main-content" type="overlay">
       <ion-content>
         <ion-list id="inbox-list">
-          <ion-list-header class="menu-header-bg" ><img src="../assets/img/spinner.gif" width="30%" height="30%">ECDT</ion-list-header>
+          <ion-list-header class="menu-header-bg" >
+            <img src="./assets/img/logo.png" width="130px" height="130px"><span style="color:#00af91">El Club del<br> Trueque</span>
+          </ion-list-header>
           <ion-note></ion-note>
 
           <ion-menu-toggle auto-hide="false" *ngFor="let p of appPages; let i = index">
             <ion-item routerDirection="root" [routerLink]="[p.url]" lines="none" detail="false" routerLinkActive="selected">
-              <ion-icon [color]="p.color" slot="start" [ios]="p.icon + '-outline'" [md]="p.icon + '-sharp'"></ion-icon>
+              <ion-icon color="secondary" slot="start" [ios]="p.icon + '-outline'" [md]="p.icon + '-sharp'"></ion-icon>
               <ion-label>{{ p.title }}</ion-label>
             </ion-item>
           </ion-menu-toggle>

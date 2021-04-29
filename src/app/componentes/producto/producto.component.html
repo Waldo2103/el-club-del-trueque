@@ -13,6 +13,11 @@
 <ion-content padding>
   <ion-card>
     <img [src]="producto.imagen" />
+    <ion-fab vertical="center" horizontal="end">
+      <ion-fab-button (click)="trocar(producto)" color="tertiary" size="small">
+        <ion-icon name="sync"></ion-icon>
+      </ion-fab-button>
+    </ion-fab>
     <ion-card-header>
       <ion-card-subtitle>{{producto.etiquetas}}</ion-card-subtitle>
       <ion-card-title>{{producto.nombre}}</ion-card-title>

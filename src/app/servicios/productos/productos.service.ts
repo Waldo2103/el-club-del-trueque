@@ -7,6 +7,7 @@ export interface producto {
   nombre: string
   descripcion: string 
   etiquetas: string
+  zona?: string
   owner:string
   imagen: string
   album: string
@@ -35,5 +36,16 @@ export class ProductosService {
 
   getProducto(id:string){
     return this.db.collection('productos').doc(id).valueChanges()
+  }
+
+  getProductosXOwner(owner){
+    return this.db.collection('productos', ref => ref.where("owner", "==", owner)).snapshotChanges().pipe(map(productos =>{
+      //console.log("servi"+JSON.stringify(productos))
+      return productos.map(a =>{
+        const data = a.payload.doc.data() as producto;
+        data.id = a.payload.doc.id;
+        return data;
+      })
+    }))
   }
 }

@@ -4,11 +4,12 @@ import { AngularFireAuth } from '@angular/fire/auth';
 import { Router } from '@angular/router';
 import { ModalController, NavParams } from '@ionic/angular';
 import { mensaje, MensajesService } from 'src/app/servicios/mensajes/mensajes.service';
-import { ProductosService } from 'src/app/servicios/productos/productos.service';
+import { producto, ProductosService } from 'src/app/servicios/productos/productos.service';
 import { UsuariosService } from 'src/app/servicios/usuarios/usuarios.service';
 import { message } from "../../models/message";
 import { ChatComponent } from '../chat/chat.component';
 import { PerfilComponent } from '../perfil/perfil.component';
+import { TruequeComponent } from '../trueque/trueque.component';
 
 @Component({
   selector: 'app-producto',
@@ -31,6 +32,7 @@ export class ProductoComponent implements OnInit {
     public modalChat: ModalController,
     public modalChatEx: ModalController,
     public modalPerfil: ModalController,
+    public modalTrueque: ModalController,
     private AFauth: AngularFireAuth,
     private navParams: NavParams,
     private prodServ: ProductosService,
@@ -110,12 +112,12 @@ export class ProductoComponent implements OnInit {
           id: [this.usuarioL.correo,this.usuarioP.correo],
           imagen: [this.usuarioL.foto,this.usuarioP.foto],
           uid: ``,
-          messages:  {
+          /* messages:  {
             content: "",
             type: "",   
             date: new Date(),
             owner: ""
-          }
+          } */
         }
         let res = this.mensServ.createMensajes(data)
         res.then(resp=>{
@@ -158,6 +160,19 @@ export class ProductoComponent implements OnInit {
 
   closeProduct(){
     this.modal.dismiss()
+  }
+
+  trocar(troqueV){
+    let troqueC = undefined;
+    this.modalTrueque.create({
+      component: TruequeComponent,
+      componentProps: {
+        troqueV,
+        troqueC,
+        usuarioL: this.usuarioL,
+        usuarioP: this.usuarioP
+      }
+    }).then((modalP)=>{modalP.present();this.modal.dismiss();console.log("creo modal de trueque nuevo")})
   }
 
 }

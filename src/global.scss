@@ -51,3 +51,14 @@ $font-family-base: "Questrial" !important;
     --max-width: 30%;
     orientation:initial;
   }
+
+
+  ion-toolbar{
+    --background: #ffcc29;
+    color: #00af91;
+    & ion-buttons ion-menu-button{
+      color: #00af91 !important;
+    }
+  }
+
+

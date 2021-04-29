@@ -69,6 +69,7 @@ export class AuthService {
   logout() {
     return this.AFauth.signOut().then(()=>{
       this.gp.disconnect();
+      localStorage.setItem("userLogin", "")
       this.face.logout();
       this.router.navigate(['/login'])
     });

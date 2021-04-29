@@ -20,4 +20,10 @@ export class StorageService {
   referenciaCloudStorage(nombreArchivo: string) {
     return this.storage.ref(nombreArchivo);
   }
+  //Eliminar archivo
+  public deleteArchivo(nombreArchivo: string){
+    return this.storage.ref(nombreArchivo).delete().subscribe(resp =>{
+      alert(resp)
+    });
+  }
 }

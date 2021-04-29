@@ -12,7 +12,7 @@ export interface mensaje {
   id: Array<string>
   imagen: Array<string>
   uid: string
-  messages: message
+  messages?: message
 }
 
 @Injectable({

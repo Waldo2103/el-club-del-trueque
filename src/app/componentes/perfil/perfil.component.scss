@@ -1,5 +1,5 @@
 ion-content{
-    --background: rgb(51, 51, 54);
+    --background: #007965;
 }
 span{
     color: #ffc409;
@@ -106,3 +106,10 @@ ion-label.modi ion-item{
     max-height: 90px;
 }
 
+.editar{
+    display: block;
+}
+
+.noEditar{
+    display: none;
+}

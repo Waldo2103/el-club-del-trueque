@@ -8,13 +8,13 @@
 </ion-header>
 <ion-content #content>
   <div *ngIf="room">
-    <ion-card *ngFor="let mensaje of room.messages" [ngClass]="{emisor: mensaje.owner === userLogin, receptor: mensaje.owner != userLogin}"><!--mensaje.owner = userLogin ? 'class1' : ''-->
-      <ion-card-content>
+    <ion-card *ngFor="let mensaje of room" [ngClass]="{emisor: mensaje.owner === userLogin, receptor: mensaje.owner != userLogin}"><!--mensaje.owner = userLogin ? 'class1' : ''-->
+      <ion-card-content><!-- REVISAR ES ACA DONDE TIRA EL ERROR POR NGFOR -->
         {{mensaje.content}}
       </ion-card-content>
       <ion-card-subtitle style="text-align:end;color: black;">{{mensaje.date * 1000 | date: 'd/M h:mm' }}</ion-card-subtitle>
     </ion-card>
-  </div>
+  </div> 
 </ion-content>
 <ion-footer  padding>
   <ion-item class="textArea">

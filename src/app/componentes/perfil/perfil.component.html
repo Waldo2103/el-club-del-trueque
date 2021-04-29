@@ -22,14 +22,14 @@
             <ion-icon color="success" name="map"></ion-icon> {{usuarioP.zona}}
           </h2>
           <h3>
-            <ion-icon color="warning" name="timer"></ion-icon> {{usuarioP.fechaAlta * 1000 | date: 'd/M'}} meses en<p>El
+            <ion-icon color="tertiary" name="timer"></ion-icon> {{usuarioP.fechaAlta * 1000 | date: 'd/M'}} meses en<p>El
               Club del Trueque</p>
           </h3>
         </ion-label>
       </ion-item>
       <ion-card-content color="success">
         <h2>
-          <ion-icon color="warning" name="finger-print"></ion-icon> {{usuarioP.descripcion}}
+          <ion-icon color="tertiary" name="finger-print"></ion-icon> {{usuarioP.descripcion}}
         </h2>
       </ion-card-content>
       <ion-card-title color="success">
@@ -50,13 +50,13 @@
   <!-- INFO, FOTOS Y CONTACTO PERFIL PROPIO-->
   <ion-card *ngIf="userParam===undefined" color="tertiary" class="cardPrincipal">
     <ion-card-header>
-      <ion-fab vertical="top" horizontal="end">
+      <ion-fab *ngIf="!modoEditar" vertical="top" horizontal="end">
         <ion-fab-button (click)="presentPopover($event)" id="opciones">
           <ion-icon color="dark" name="ellipsis-vertical-outline"></ion-icon>
         </ion-fab-button>
       </ion-fab>
       <!-- MODO VER -->
-      <ion-item *ngIf="!modoEditar" color="tertiary" lines="none">
+      <ion-item [ngClass]="{editar: modoEditar === false, noEditar: modoEditar === true}" color="tertiary" lines="none">
         <ion-avatar (click)="fullScreen(usuarioP.foto)" class="principal" slot="start">
           <ion-img [src]="usuarioP.foto"></ion-img>
         </ion-avatar>
@@ -68,18 +68,18 @@
             <ion-icon color="success" name="map"></ion-icon> {{usuarioP.zona}}
           </h2>
           <h3>
-            <ion-icon color="warning" name="timer"></ion-icon> {{usuarioP.fechaAlta * 1000 | date: 'd/M'}} meses en<p>El
+            <ion-icon color="tertiary" name="timer"></ion-icon> {{usuarioP.fechaAlta * 1000 | date: 'd/M'}} meses en<p>El
               Club del Trueque</p>
           </h3>
         </ion-label>
 
       </ion-item>
       <!-- MODO EDITAR -->
-      <ion-item *ngIf="modoEditar" color="tertiary" lines="none">
-        <ion-avatar (click)="fullScreen(usuarioP.foto)" class="principal" slot="start">
+      <ion-item [ngClass]="{editar: modoEditar === true, noEditar: modoEditar === false}" color="tertiary" lines="none"><!-- *ngIf="modoEditar" -->
+        <ion-avatar class="principal" slot="start">
           <ion-img [src]="usuarioP.foto"></ion-img>
           <ion-fab vertical="top" horizontal="start">
-            <ion-fab-button (click)="cambiarFoto()" color="warning" size="small">
+            <ion-fab-button (click)="cambiarFoto()" color="tertiary" size="small">
               <ion-icon name="camera"></ion-icon>
             </ion-fab-button>
           </ion-fab>
@@ -118,14 +118,14 @@
 
       </ion-item>
       <ion-item id="itemDescri" *ngIf="modoEditar">
-        <ion-label position="floating">Cuentale a los troqueros sobre vos!</ion-label>
+        <ion-label position="floating">Contale a los troqueros sobre vos!</ion-label>
         <ion-textarea id="descri" color="dark" type="text" [(ngModel)]="lades"
           placeholder="{{usuarioP.descripcion}}">
         </ion-textarea>
       </ion-item>
       <ion-card-content *ngIf="!modoEditar">
         <h2>
-          <ion-icon color="warning" name="finger-print"></ion-icon> {{usuarioP.descripcion}}
+          <ion-icon color="tertiary" name="finger-print"></ion-icon> {{usuarioP.descripcion}}
         </h2>
       </ion-card-content>
       <ion-button *ngIf="modoEditar" color="success" shape="round" (click)="modiPerfil(form.value)">
@@ -151,15 +151,15 @@
   </ion-card>
   <!-- CALIFICACIONES Y COMENTARIOS -->
   <ng-container>
-    <ion-card color="primary" class="post-list-card">
+    <ion-card color="secondary" class="post-list-card">
       <ion-item lines="none">
         <ion-label>
-          Calificación promedio: <span color="warning">3.5 </span>
-          <ion-icon name="star" color="warning"></ion-icon>
-          <ion-icon name="star" color="warning"></ion-icon>
-          <ion-icon name="star" color="warning"></ion-icon>
-          <ion-icon name="star-half" color="warning"></ion-icon>
-          <ion-icon name="star-outline" color="warning"></ion-icon>
+          Calificación promedio: <span color="tertiary">3.5 </span>
+          <ion-icon name="star" color="tertiary"></ion-icon>
+          <ion-icon name="star" color="tertiary"></ion-icon>
+          <ion-icon name="star" color="tertiary"></ion-icon>
+          <ion-icon name="star-half" color="tertiary"></ion-icon>
+          <ion-icon name="star-outline" color="tertiary"></ion-icon>
 
         </ion-label>
       </ion-item>
@@ -167,7 +167,7 @@
     </ion-card>
   </ng-container>
   <ng-container>
-    <ion-card color="success" class="post-list-card" *ngFor="let post of [1,1,1,1,1,1,1,1,1,1]; let i = index">
+    <ion-card color="quinto" class="post-list-card" *ngFor="let post of [1,1,1,1,1,1,1,1,1,1]; let i = index">
       <ion-item lines="none">
         <ion-avatar slot="start">
           <img src="../../../assets/img/registro.png">

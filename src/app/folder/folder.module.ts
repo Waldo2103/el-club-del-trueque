@@ -23,6 +23,8 @@ import { AngularFireStorageModule } from '@angular/fire/storage';
 import { PerfilComponent } from '../componentes/perfil/perfil.component';
 import { PhotoViewer } from "@ionic-native/photo-viewer/ngx";
 import { PopComponent } from '../componentes/pop/pop.component';
+import { TruequesComponent } from '../componentes/trueques/trueques.component';
+import { TruequeComponent } from '../componentes/trueque/trueque.component';
 
 @NgModule({
   imports: [
@@ -34,8 +36,17 @@ import { PopComponent } from '../componentes/pop/pop.component';
     AngularFireStorageModule,
     ReactiveFormsModule
   ],
-  declarations: [FolderPage, MensajesComponent, ChatComponent, AlbumesComponent, AlbumComponent, ProdAltaComponent, PerfilComponent, PopComponent],
-  entryComponents:[MensajesComponent, ChatComponent, AlbumesComponent, AlbumComponent, ProdAltaComponent, PerfilComponent, PopComponent],
+  declarations: [FolderPage, 
+    MensajesComponent, ChatComponent, 
+    AlbumesComponent, AlbumComponent, ProdAltaComponent, 
+    PerfilComponent, PopComponent,
+    TruequesComponent, TruequeComponent
+  ],
+  entryComponents:[MensajesComponent, ChatComponent, 
+    AlbumesComponent, AlbumComponent, ProdAltaComponent, 
+    PerfilComponent, PopComponent,
+    TruequesComponent, TruequeComponent
+  ],
   providers:[
     Camera,
     ImagePicker,

@@ -75,11 +75,14 @@ export class ProdAltaComponent implements OnInit {
     }
     var cont = 0
     for(let p of fTroque){
-      
+      if(p.zona === ""){
+        p.zona = this.user.zona
+      }
       this.troque = {
       nombre: p.nombre,
       descripcion: p.descripcion,
       etiquetas: p.etiquetas,
+      zona: p.zona,
       owner: this.user.correo,
       imagen: "",
       album : this.user.correo+"-"+f.nombreA
@@ -99,7 +102,8 @@ export class ProdAltaComponent implements OnInit {
       control.push(this.fBuilder.group({
         nombre: ["", new FormControl( Validators.required)],
           descripcion: ["", new FormControl( Validators.required)],
-          etiquetas: []
+          etiquetas: [],
+          zona: [""]
       }))
     }
   }

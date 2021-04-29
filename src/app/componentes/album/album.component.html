@@ -41,6 +41,11 @@
     <ion-item *ngFor="let item of album | filtro: filtroBuscar" (click)="openProduct(item)">
       <ion-thumbnail slot="start">
         <img src="{{item.imagen}}">
+        <ion-fab vertical="center" horizontal="end">
+          <ion-fab-button (click)="aTrueque(item)" color="tertiary" size="small">
+            <ion-icon name="sync"></ion-icon>
+          </ion-fab-button>
+        </ion-fab>
       </ion-thumbnail>
       <ion-label>
         <h3>

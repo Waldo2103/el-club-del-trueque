@@ -60,6 +60,7 @@ export class HomePage implements OnInit {
         //console.log(a);
       })
     })
+    //this.userLogin = localStorage.getItem("userLogin")
   }
 
   public presentAlert(header: string, subHeader: string, message: string) {

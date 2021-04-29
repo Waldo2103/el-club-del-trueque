@@ -21,7 +21,7 @@ export class ChatComponent implements OnInit, AfterViewChecked {
   @ViewChild('content') content: any;
   public chat: any;
   public mensajes = [];
-  public room: any;
+  public room: Array<any> = [];
   public mens: string;
   public userLogin: string;
   public owner: boolean;
@@ -49,8 +49,7 @@ export class ChatComponent implements OnInit, AfterViewChecked {
     this.chat = this.navParams.get('chat')
     console.log("entro en init de chatcomp")
     this.mensService.getMensaje(this.chat.uid).subscribe( (room) =>{
-      this.room = room;
-      
+        this.room = room.messages;      
     })
   }
   
@@ -72,7 +71,7 @@ const mensaje: message = {
     this.mens = "";
     this.scrollToBottomOnInit()
     }
-    this.scrollToBottomOnInit()
+    //this.scrollToBottomOnInit()
   }
   
 }

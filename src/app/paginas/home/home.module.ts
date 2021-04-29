@@ -8,6 +8,8 @@ import { HomePageRoutingModule } from './home-routing.module';
 
 import { HomePage } from './home.page';
 import { PipesModule } from '../../pipes/pipes.module';
+import { ImagePicker } from '@ionic-native/image-picker/ngx';
+import { Camera } from '@ionic-native/camera/ngx';
 
 
 @NgModule({
@@ -18,6 +20,7 @@ import { PipesModule } from '../../pipes/pipes.module';
     IonicModule,
     HomePageRoutingModule
   ],
+  providers: [ImagePicker, Camera],
   declarations: [HomePage]
 })
 export class HomePageModule {}
