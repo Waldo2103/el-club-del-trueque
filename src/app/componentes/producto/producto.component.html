@@ -14,7 +14,7 @@
   <ion-card>
     <img [src]="producto.imagen" />
     <ion-fab vertical="center" horizontal="end">
-      <ion-fab-button (click)="trocar(producto)" color="tertiary" size="small">
+      <ion-fab-button *ngIf="!ownerOfProduct" (click)="trocar(producto)" color="tertiary" size="small">
         <ion-icon name="sync"></ion-icon>
       </ion-fab-button>
     </ion-fab>
@@ -25,6 +25,7 @@
 
     <ion-card-content>
       <p>{{producto.descripcion}}</p>
+      <p *ngIf="!producto.estado" style="color: red;"><b>Este producto se eliminará, luego de finalizado el proceso de intercambio</b></p>
     </ion-card-content>
   </ion-card>
 </ion-content>

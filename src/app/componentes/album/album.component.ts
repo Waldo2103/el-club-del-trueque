@@ -15,13 +15,14 @@ export class AlbumComponent implements OnInit {
 
   public alb: any;
   public album: Array<Producto> = [];
-  public usuarioL: any;
+  public ownerAlbum: any;
   public usuarioP: any;
   public uidChat: string;
   public ownerOfAlbum: boolean = true;
   filtroBuscar = '';
   public enTrueque: boolean = false;
   public troque: producto;
+  public userLogin;
 
   constructor(
     public modal: ModalController,
@@ -46,16 +47,17 @@ export class AlbumComponent implements OnInit {
 
   traerAlbum() {
     this.alb = this.navParams.get('album')
-    this.usuarioL = this.navParams.get("usuarioL");
-    //console.log("aaaa"+this.alb)
+    this.ownerAlbum = this.navParams.get("ownerAlbum");
+    this.userLogin = this.navParams.get("userLogin");//NO SE ESTA USANDO PERO SE PODRIA PASAR A PRODUCTO
     if (this.alb === undefined) {
-      this.prodServ.getProductosXOwner(this.usuarioL.correo).subscribe(prods=>{
+      this.ownerOfAlbum = false;
+      this.prodServ.getProductosXOwner(this.ownerAlbum).subscribe(prods=>{
         this.album = prods;
       })
     } else {
+      this.ownerOfAlbum = true;
       this.albServ.getAlbum(this.alb.id).subscribe(al => {
       this.album = al;
-      //console.log("bbbb" + JSON.stringify(al))
     })
     }
     

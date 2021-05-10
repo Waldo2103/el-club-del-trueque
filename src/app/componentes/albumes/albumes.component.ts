@@ -43,8 +43,7 @@ export class AlbumesComponent implements OnInit {
         this.userServ.getUsuario(this.userLogin.correo).subscribe(pro => {
           this.usuario = []
           this.usuario = pro;
-          //this.validacionChat();
-          uns.unsubscribe()
+          //uns.unsubscribe() LO COMENTO PORQUE SINO CUANDO SE CREA UNO NUEVO NO SE ACTUALIZA EL LISTADO
         })
       });
 
@@ -52,11 +51,11 @@ export class AlbumesComponent implements OnInit {
   }
 
   openAlbum(album){
-    //console.log("genial")
     this.modalP.create({
       component: AlbumComponent,
       componentProps: {
-        album: album
+        album: album,
+        userLogin: this.userLogin
       }
     }).then((modal)=>modal.present())
   }

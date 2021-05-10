@@ -84,8 +84,10 @@ export class ProdAltaComponent implements OnInit {
       etiquetas: p.etiquetas,
       zona: p.zona,
       owner: this.user.correo,
+      apodo: this.user.apodo,
       imagen: "",
-      album : this.user.correo+"-"+f.nombreA
+      album : this.user.correo+"-"+f.nombreA,
+      estado: true
     }
     await this.subirArchivo(cont, this.troque)
     cont++

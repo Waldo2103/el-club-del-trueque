@@ -1,26 +1,24 @@
 <ion-header>
   <ion-toolbar>
     <ion-buttons slot="start">
-      <ion-back-button defaultHref="home" (click)="closeTrueque()"></ion-back-button>
+      <ion-back-button defaultHref="/folder/Trueques" (click)="closeTrueque()"></ion-back-button>
     </ion-buttons>
-    <ion-title>{{estado}}</ion-title>
+    <ion-title>Sala de Trueque</ion-title>
   </ion-toolbar>
 </ion-header>
 <ion-content>
   <div class="cont d height-100 width-100 center-horizontal center-vertical flex-v">
     <div class="b height-45 width-100 center-horizontal center-vertical
       flex-v">
-      <ion-item>
-        <ion-avatar>
-          <ion-img src="./assets/img/registro.png"></ion-img>
-        </ion-avatar>
-        <ion-label>
-          <h2>@{{usuarioP.apodo}}</h2>
-        </ion-label>
-      </ion-item>
+      <ion-label *ngIf="troqueComprador === undefined">
+        <h2>@{{usuarioP.apodo}}</h2>
+      </ion-label>
+      <ion-label *ngIf="troqueComprador !== undefined">
+        <h2>@{{troqueVendedor.apodo}}</h2>
+      </ion-label>
       <ion-card>
-        
-        
+
+
         <ion-card-header>
           <img [src]="troqueVendedor.imagen" />
         </ion-card-header>
@@ -49,56 +47,60 @@
         </ion-col>
       </div> -->
     </div>
-    <div *ngIf="!btnContraoferta">
+    <div *ngIf="!nuevaOferta">
       <ion-row size="12">
         <ion-col size="6">
-          <ion-button fill="outline" expand="block" color="success" [disabled]="!troqueAgregado" (click)="ofertar()">Ofertar</ion-button>
+          <ion-button fill="outline" expand="block" color="success" [disabled]="!troqueAgregado" (click)="ofertar()">
+            Ofertar</ion-button>
         </ion-col>
         <ion-col size="6">
-          <ion-button fill="outline" expand="block" color="danger">Cancelar</ion-button>
+          <ion-button fill="outline" expand="block" color="danger" (click)="cambiarEstadoTrueque('rechazado')">Cancelar</ion-button>
         </ion-col>
       </ion-row>
     </div>
-    <div *ngIf="btnContraoferta">
+    <div *ngIf="nuevaOferta">
       <ion-row size="12">
         <ion-col size="4">
-          <ion-button fill="outline" expand="block" color="success">Confirmar</ion-button>
+          <ion-button fill="outline" expand="block" color="success" (click)="cambiarEstadoTrueque('confirmado')" [disabled]="btnContraoferta">Confirmar</ion-button>
         </ion-col>
         <ion-col size="4">
-          <ion-button fill="outline" expand="block" color="warning" [disabled]="!nuevaOferta">Contraofertar</ion-button>
+          <ion-button fill="outline" expand="block" color="warning" (click)="cambiarEstadoTrueque('pendiente')" [disabled]="!btnContraoferta">Contraofertar</ion-button>
         </ion-col>
         <ion-col size="4">
-          <ion-button fill="outline" expand="block" color="danger" (click)="rechazarTrueque()">Rechazar</ion-button>
+          <ion-button fill="outline" expand="block" color="danger" (click)="cambiarEstadoTrueque('rechazado')">Rechazar</ion-button>
         </ion-col>
       </ion-row>
     </div>
 
-    <div class="c height-45 width-100 center-horizontal center-vertical
-      flex-v">
-        <ion-label>
-          <h2>@{{usuarioL.apodo}}</h2>
-        </ion-label>
-        <ion-card *ngIf="troqueComprador===undefined" (click)="agregarTroque()">
-          
-          
-          <ion-card-header>
-            <img src="./assets/img/plus.png" />
-          </ion-card-header>
-          <ion-card-content>
-            Agrega el Troque que ofrecerás a cambio
-          </ion-card-content>
-        </ion-card>
-        <ion-card *ngIf="troqueComprador!==undefined">
-          
-          
-          <ion-card-header>
-            <img [src]="troqueComprador.imagen" />
-          </ion-card-header>
-          <ion-card-content>
-           {{troqueComprador.nombre}} 
-          </ion-card-content>
-        </ion-card>
-        <!-- <ion-col style="display: block; margin-left: auto; margin-right: auto;" size="12">
+    <div class="c height-45 width-100 center-horizontal center-vertical flex-v">
+      <ion-label *ngIf="troqueComprador === undefined">
+        <h2>@{{usuarioL.apodo}}</h2>
+      </ion-label>
+      <ion-label *ngIf="troqueComprador !== undefined">
+        <h2>@{{troqueComprador.apodo}}</h2>
+      </ion-label>
+      <ion-card *ngIf="troqueComprador===undefined" (click)="agregarTroque()">
+        <ion-card-header>
+          <img src="./assets/img/plus.png" />
+        </ion-card-header>
+        <ion-card-content>
+          Agrega el Troque que ofrecerás a cambio
+        </ion-card-content>
+      </ion-card>
+      <ion-card *ngIf="troqueComprador!==undefined">
+
+
+        <ion-card-header>
+          <img [src]="foto" />
+        </ion-card-header>
+        <ion-card-content>
+          {{troqueComprador.nombre}}
+          <ion-button *ngIf="modificable" (click)="agregarTroque()" color="tertiary">
+            <ion-icon name="pencil"></ion-icon>
+          </ion-button>
+        </ion-card-content>
+      </ion-card>
+      <!-- <ion-col style="display: block; margin-left: auto; margin-right: auto;" size="12">
           <ion-slides [options]="{ slidesPerView: 'auto', zoom: false, grabCursor: true }">
             <ion-slide *ngFor="let troque of troquesComprador"
               style="width: 150px; height: 180px; border: 2px solid #517566">

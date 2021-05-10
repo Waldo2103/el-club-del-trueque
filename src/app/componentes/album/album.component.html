@@ -41,7 +41,7 @@
     <ion-item *ngFor="let item of album | filtro: filtroBuscar" (click)="openProduct(item)">
       <ion-thumbnail slot="start">
         <img src="{{item.imagen}}">
-        <ion-fab vertical="center" horizontal="end">
+        <ion-fab *ngIf="!ownerOfAlbum" vertical="center" horizontal="end">
           <ion-fab-button (click)="aTrueque(item)" color="tertiary" size="small">
             <ion-icon name="sync"></ion-icon>
           </ion-fab-button>
@@ -54,8 +54,11 @@
         <p>
           {{ item.descripcion }}
         </p>
-        <p>
+        <p *ngIf="item.estado">
           {{ item.etiquetas }}
+        </p>
+        <p style="color: red;" *ngIf="!item.estado">
+          <b>En proceso de intercambio</b>
         </p>
       </ion-label>
     </ion-item>

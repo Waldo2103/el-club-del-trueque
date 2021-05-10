@@ -5,6 +5,7 @@ import { Router } from '@angular/router';
 import { ModalController, NavParams } from '@ionic/angular';
 import { mensaje, MensajesService } from 'src/app/servicios/mensajes/mensajes.service';
 import { producto, ProductosService } from 'src/app/servicios/productos/productos.service';
+import { trueque } from 'src/app/servicios/trueque/trueque.service';
 import { UsuariosService } from 'src/app/servicios/usuarios/usuarios.service';
 import { message } from "../../models/message";
 import { ChatComponent } from '../chat/chat.component';
@@ -62,6 +63,8 @@ export class ProductoComponent implements OnInit {
     this.prod = this.navParams.get('producto')
     this.prodServ.getProducto(this.prod.id).subscribe( pro =>{
       this.producto = pro;
+      this.producto.id = this.prod.id;
+      //console.log(JSON.stringify(pro)+"al traer producto")
     })
     
   }
@@ -163,6 +166,7 @@ export class ProductoComponent implements OnInit {
   }
 
   trocar(troqueV){
+    console.log(troqueV)
     let troqueC = undefined;
     this.modalTrueque.create({
       component: TruequeComponent,
