@@ -47,31 +47,41 @@
         </ion-col>
       </div> -->
     </div>
-    <div *ngIf="!nuevaOferta">
-      <ion-row size="12">
-        <ion-col size="6">
-          <ion-button fill="outline" expand="block" color="success" [disabled]="!troqueAgregado" (click)="ofertar()">
-            Ofertar</ion-button>
-        </ion-col>
-        <ion-col size="6">
-          <ion-button fill="outline" expand="block" color="danger" (click)="cambiarEstadoTrueque('rechazado')">Cancelar</ion-button>
-        </ion-col>
-      </ion-row>
+    <div *ngIf="!finalizado">
+      <div *ngIf="!nuevaOferta">
+        <ion-row size="12">
+          <ion-col size="6">
+            <ion-button *ngIf="!confirmado" fill="outline" expand="block" color="success" [disabled]="!troqueAgregado"
+              (click)="ofertar()">
+              Ofertar
+            </ion-button>
+            <ion-button *ngIf="confirmado" fill="outline" expand="block" color="success" (click)="finalizar()">
+              Calificar Troquero!
+            </ion-button>
+          </ion-col>
+          <ion-col size="6">
+            <ion-button fill="outline" expand="block" color="danger" (click)="cambiarEstadoTrueque('cancelado')">
+              Cancelar</ion-button>
+          </ion-col>
+        </ion-row>
+      </div>
+      <div *ngIf="nuevaOferta">
+        <ion-row size="12">
+          <ion-col size="4">
+            <ion-button fill="outline" expand="block" color="success" (click)="cambiarEstadoTrueque('confirmado')"
+              [disabled]="btnContraoferta">Confirmar</ion-button>
+          </ion-col>
+          <ion-col size="4">
+            <ion-button fill="outline" expand="block" color="warning" (click)="cambiarEstadoTrueque('pendiente')"
+              [disabled]="!btnContraoferta">Contraofertar</ion-button>
+          </ion-col>
+          <ion-col size="4">
+            <ion-button fill="outline" expand="block" color="danger" (click)="cambiarEstadoTrueque('rechazado')">
+              Rechazar</ion-button>
+          </ion-col>
+        </ion-row>
+      </div>
     </div>
-    <div *ngIf="nuevaOferta">
-      <ion-row size="12">
-        <ion-col size="4">
-          <ion-button fill="outline" expand="block" color="success" (click)="cambiarEstadoTrueque('confirmado')" [disabled]="btnContraoferta">Confirmar</ion-button>
-        </ion-col>
-        <ion-col size="4">
-          <ion-button fill="outline" expand="block" color="warning" (click)="cambiarEstadoTrueque('pendiente')" [disabled]="!btnContraoferta">Contraofertar</ion-button>
-        </ion-col>
-        <ion-col size="4">
-          <ion-button fill="outline" expand="block" color="danger" (click)="cambiarEstadoTrueque('rechazado')">Rechazar</ion-button>
-        </ion-col>
-      </ion-row>
-    </div>
-
     <div class="c height-45 width-100 center-horizontal center-vertical flex-v">
       <ion-label *ngIf="troqueComprador === undefined">
         <h2>@{{usuarioL.apodo}}</h2>

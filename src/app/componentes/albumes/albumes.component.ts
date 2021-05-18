@@ -17,6 +17,7 @@ export class AlbumesComponent implements OnInit {
   public userLogin: any;
   public usuario;
   public userParam: any;
+  public modo: string;
   constructor(
     private albServ: AlbumesService,
     private modal: ModalController,
@@ -33,54 +34,65 @@ export class AlbumesComponent implements OnInit {
       this.userLogin = JSON.parse(localStorage.getItem('userLogin'));
     }
     this.traerAlbumes()
+    this.modo = await this.navParams.get('modo');
+    if (this.modo != undefined) {
+      setTimeout(() => {
+        if (this.modo === 'cam') {
+          this.openCamera({})
+        } else if (this.modo === 'gal') {
+          this.openGallery({})
+        }
+      }, 2000);
+
+    }
   }
 
   traerAlbumes() {
-      let uns = this.albServ.getAlbumesXUsuario(this.userLogin.correo).subscribe(albumes => {
-        this.albumes = []
-        this.albumes = albumes
-        //console.log(this.albumes)
-        this.userServ.getUsuario(this.userLogin.correo).subscribe(pro => {
-          this.usuario = []
-          this.usuario = pro;
-          //uns.unsubscribe() LO COMENTO PORQUE SINO CUANDO SE CREA UNO NUEVO NO SE ACTUALIZA EL LISTADO
-        })
-      });
+    let uns = this.albServ.getAlbumesXUsuario(this.userLogin.correo).subscribe(albumes => {
+      this.albumes = []
+      this.albumes = albumes
+      //console.log(this.albumes)
+      this.userServ.getUsuario(this.userLogin.correo).subscribe(pro => {
+        this.usuario = []
+        this.usuario = pro;
+        //uns.unsubscribe() LO COMENTO PORQUE SINO CUANDO SE CREA UNO NUEVO NO SE ACTUALIZA EL LISTADO
+      })
+    });
 
 
   }
 
-  openAlbum(album){
+  openAlbum(album) {
     this.modalP.create({
       component: AlbumComponent,
       componentProps: {
         album: album,
         userLogin: this.userLogin
       }
-    }).then((modal)=>modal.present())
+    }).then((modal) => modal.present())
   }
 
-  openGallery(prod){
+  openGallery(prod) {
     this.modal.create({
       component: ProdAltaComponent,
       componentProps: {
         prod: prod,
         modo: "gallery"
       }
-    }).then((modal)=>modal.present())
+    }).then((modal) => modal.present())
   }
 
-  openCamera(prod){
+  openCamera(prod) {
     this.modal.create({
       component: ProdAltaComponent,
       componentProps: {
         prod: prod,
         modo: "camera"
       }
-    }).then((modal)=>modal.present())
+    }).then((modal) => modal.present())
   }
-//sirve solo cuando se entra a ver el perfil de otro usuario
-  closeAlbum(){
+  //sirve solo cuando se entra a ver el perfil de otro usuario
+  closeAlbum() {
     this.modal.dismiss()
   }
 

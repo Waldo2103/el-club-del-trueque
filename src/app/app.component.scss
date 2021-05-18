@@ -24,8 +24,8 @@
 .menu-header-bg{
   height: 250px;
   width: 350px;
-  //background: #00af91;
-  background:  linear-gradient( #ffcc29 85%, #00af91 );
+  //background: #2cc18a;
+  background:  linear-gradient( #2cc18a 85%, #8a2cc1 );
   //transform: rotate(-15deg);
   -moz-border-radius: 50%;
     -webkit-border-radius: 50%;
@@ -37,7 +37,7 @@
 
 ion-menu ion-content {
   
-  --background:  linear-gradient( #ffcc29 70%, #00af91 );
+  --background:  linear-gradient(  #2cc18a 70%, #8a2cc1  );
   //--background: var(--ion-item-background, var(--ion-background-color, #fff));
 }
 

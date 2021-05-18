@@ -26,39 +26,47 @@
 @import "~@ionic/angular/css/flex-utils.css";
 
 @font-face {
-    font-family: "Questrial" !important;
-    src: url('./assets/font/Questrial/Questrial-Regular.ttf');
+  font-family: "Questrial" !important;
+  src        : url('./assets/font/Questrial/Questrial-Regular.ttf');
 }
 
 $font-family-base: "Questrial" !important;
 
-  
-  .spinner {
-    position: absolute;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 100vh;
-    height: 100vh;
-    // margin: 100px auto;
-    -webkit-animation: 3s rotate linear infinite;
-    animation: 3s rotate linear infinite;
-    -webkit-transform-origin: 50% 50%;
-    transform-origin: 50% 50%;
-  }
+
+.spinner {
+  position                : absolute;
+  display                 : flex;
+  align-items             : center;
+  justify-content         : center;
+  width                   : 100vh;
+  height                  : 100vh;
+  // margin: 100px auto;
+  -webkit-animation       : 3s rotate linear infinite;
+  animation               : 3s rotate linear infinite;
+  -webkit-transform-origin: 50% 50%;
+  transform-origin        : 50% 50%;
+}
+
 //esta class es para el popover
-  .my-custom-class{
-    --max-width: 30%;
-    orientation:initial;
+.my-custom-class {
+  --max-width: 30%;
+  orientation: initial;
+}
+
+
+ion-toolbar {
+  --background: #2cc18a;
+  color       : #8a2cc1;
+
+  & ion-buttons ion-menu-button {
+    color: #8a2cc1 !important;
   }
+}
 
 
-  ion-toolbar{
-    --background: #ffcc29;
-    color: #00af91;
-    & ion-buttons ion-menu-button{
-      color: #00af91 !important;
-    }
-  }
 
-
+.calificacion .modal-wrapper {
+  /* padding: 30px; */
+background: rgba(0,0,0,0.5);
+align-content: center;
+}

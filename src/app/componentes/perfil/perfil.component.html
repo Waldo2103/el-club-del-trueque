@@ -33,12 +33,6 @@
         </h2>
       </ion-card-content>
       <ion-card-title color="success">
-        <ion-button shape="round" fill="outline" color="dark" (click)="crearChat()">
-          <ion-icon color="danger" name="chatbubbles"></ion-icon> Enviar mensaje
-        </ion-button>
-
-      </ion-card-title>
-      <ion-card-title color="success">
         <ion-button shape="round" fill="outline" color="dark" (click)="verAlbumes()">
           <ion-icon color="secondary" name="images"></ion-icon> Mis Albumes
         </ion-button>
@@ -154,26 +148,25 @@
     <ion-card color="secondary" class="post-list-card">
       <ion-item lines="none">
         <ion-label>
-          Calificación promedio: <span color="tertiary">3.5 </span>
-          <ion-icon name="star" color="tertiary"></ion-icon>
-          <ion-icon name="star" color="tertiary"></ion-icon>
-          <ion-icon name="star" color="tertiary"></ion-icon>
-          <ion-icon name="star-half" color="tertiary"></ion-icon>
-          <ion-icon name="star-outline" color="tertiary"></ion-icon>
-
+          Calificación promedio: <span color="tertiary">{{caliprome | number: '1.2-2'}} </span>
+          <ion-icon [name]="estre[0]" color="tertiary"></ion-icon>
+          <ion-icon [name]="estre[1]" color="tertiary"></ion-icon>
+          <ion-icon [name]="estre[2]" color="tertiary"></ion-icon>
+          <ion-icon [name]="estre[3]" color="tertiary"></ion-icon>
+          <ion-icon [name]="estre[4]" color="tertiary"></ion-icon>
         </ion-label>
       </ion-item>
 
     </ion-card>
   </ng-container>
   <ng-container>
-    <ion-card color="quinto" class="post-list-card" *ngFor="let post of [1,1,1,1,1,1,1,1,1,1]; let i = index">
+    <ion-card color="quinto" class="post-list-card" *ngFor="let cali of calificaciones; let i = index">
       <ion-item lines="none">
         <ion-avatar slot="start">
           <img src="../../../assets/img/registro.png">
         </ion-avatar>
         <ion-label>
-          Fulano de Tal
+          {{cali.usuario}}
           <p>hace 1 semana</p>
         </ion-label>
         <ion-buttons slot="end">
@@ -183,8 +176,8 @@
         </ion-buttons>
       </ion-item>
 
-      <ion-card-content class="post-list-content">
-        todo bien no me afano todo bien no me afano todo bien no me afano todo bien no me afano
+      <ion-card-content class="">
+        <h2>"{{cali.comentario}}"</h2>
       </ion-card-content>
     </ion-card>
   </ng-container>

@@ -1,6 +1,16 @@
 <ion-content>
-
-  <ion-list *ngIf="1===0">
+  <ion-segment (ionChange)="segmentChanged($event)" value="{{pestania}}">
+    <ion-segment-button value="pendientes">
+      <ion-label>En Curso</ion-label>
+    </ion-segment-button>
+    <ion-segment-button value="confirmados">
+      <ion-label>Confirmados</ion-label>
+    </ion-segment-button>
+    <ion-segment-button value="finalizados">
+      <ion-label>Finalizados</ion-label>
+    </ion-segment-button>
+  </ion-segment>
+  <!-- <ion-list *ngIf="1===0">
     <ion-item *ngFor="let i of [1,1,1,1,1,1,1,1,1,1,1]">
       <ion-thumbnail slot="start">
         <ion-skeleton-text animated></ion-skeleton-text>
@@ -23,9 +33,69 @@
         <ion-skeleton-text width="80%"></ion-skeleton-text>
       </ion-label>
     </ion-item>
+  </ion-list> -->
+  <ion-list *ngIf="pestania==='pendientes'">
+    <ion-item *ngFor="let item of truequesP" (click)="openTrueque(item)">
+      <div *ngIf="item.vendedor.owner === this.userLogin.correo">
+        <ion-thumbnail slot="start">
+        <img src="{{item.comprador.imagen}}">
+      </ion-thumbnail>
+      <ion-label>
+        <h3>
+          {{ item.comprador.apodo }}
+        </h3>
+        <p>
+          {{ item.estado.trueque }}
+        </p>
+      </ion-label>
+      </div>
+      <div *ngIf="item.comprador.owner === this.userLogin.correo">
+        <ion-thumbnail slot="start">
+        <img src="{{item.vendedor.imagen}}">
+      </ion-thumbnail>
+      <ion-label>
+        <h3>
+          {{item.vendedor.apodo}}
+        </h3>
+        <p>
+          {{ item.estado.trueque }}
+        </p>
+      </ion-label>
+      </div>
+    </ion-item>
   </ion-list>
-  <ion-list *ngIf="1===1">
-    <ion-item *ngFor="let item of trueques " (click)="openTrueque(item)">
+  <ion-list *ngIf="pestania==='confirmados'">
+    <ion-item *ngFor="let item of truequesC " (click)="openTrueque(item)">
+      <div *ngIf="item.vendedor.owner === this.userLogin.correo">
+        <ion-thumbnail slot="start">
+        <img src="{{item.comprador.imagen}}">
+      </ion-thumbnail>
+      <ion-label>
+        <h3>
+          {{ item.comprador.apodo }}
+        </h3>
+        <p>
+          {{ item.estado.trueque }}
+        </p>
+      </ion-label>
+      </div>
+      <div *ngIf="item.comprador.owner === this.userLogin.correo">
+        <ion-thumbnail slot="start">
+        <img src="{{item.vendedor.imagen}}">
+      </ion-thumbnail>
+      <ion-label>
+        <h3>
+          {{item.vendedor.apodo}}
+        </h3>
+        <p>
+          {{ item.estado.trueque }}
+        </p>
+      </ion-label>
+      </div>
+    </ion-item>
+  </ion-list>
+  <ion-list *ngIf="pestania==='finalizados'">
+    <ion-item *ngFor="let item of truequesF" (click)="openTrueque(item)">
       <div *ngIf="item.vendedor.owner === this.userLogin.correo">
         <ion-thumbnail slot="start">
         <img src="{{item.comprador.imagen}}">

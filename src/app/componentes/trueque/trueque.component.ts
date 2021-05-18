@@ -11,6 +11,7 @@ import { AlbumesComponent } from '../albumes/albumes.component';
 import { ProductoComponent } from '../producto/producto.component';
 import { AlbumComponent } from '../album/album.component';
 import { trueque, TruequeService } from 'src/app/servicios/trueque/trueque.service';
+import { CalificaComponent } from '../califica/califica.component';
 
 
 
@@ -39,9 +40,11 @@ export class TruequeComponent implements OnInit {
   public modificable: boolean = false;
   public sameTroque: boolean = false;
   public altaNueva: boolean = false;
+  public confirmado: boolean = false;
   public mathRandom;
   public cambioEstado: boolean = false;
   public oferta: boolean = false;
+  public finalizado: boolean;
   constructor(
     private modal: ModalController,
     public navParams: NavParams,
@@ -49,6 +52,7 @@ export class TruequeComponent implements OnInit {
     private mensServ: MensajesService,
     private userServ: UsuariosService,
     private modalC: ModalController,
+    private modalCali: ModalController,
     private photoViewer: PhotoViewer,
     private iPicker: ImagePicker,
     private camera: Camera,
@@ -82,6 +86,22 @@ export class TruequeComponent implements OnInit {
       this.troqueVendedor = this.trueque.vendedor;
       this.troqueComprador = this.trueque.comprador;
       this.truequeEstado = this.trueque.estado;
+    }
+    if (this.truequeEstado != undefined) {
+      if (this.truequeEstado.trueque === "confirmado") {
+        this.confirmado = true;
+      } else {
+        this.confirmado = false;
+      }
+      if (this.truequeEstado.trueque === "finalizado") {
+        this.finalizado = true;
+      } else if (this.usuarioL.correo === this.troqueComprador.owner && this.truequeEstado.comprador === 'finalizado') {
+        this.finalizado = true;
+      } else if (this.usuarioL.correo === this.troqueVendedor.owner && this.truequeEstado.vendedor === 'finalizado') {
+        this.finalizado = true;
+      } else {
+        this.finalizado = false;
+      }
     }
     if (!this.troqueVendedor.estado) {
       alert("El dueño de la publicación ya lo trocó con otro usuario")
@@ -397,32 +417,7 @@ export class TruequeComponent implements OnInit {
       //alta nueva es que se sube de la camara o galeria un nuevo producto y no lo toma de uno existente
       if (this.altaNueva) {
         await this.subirArchivo()
-        /*    //la subida es por una nueva oferta y por ende se crea todo el registro del trueque
-       if(this.oferta){
-         //ACA metemos lo que se hace en el oferta
-       let data: trueque = {
-         id: [this.troqueComprador.owner, this.troqueVendedor.owner, this.mathRandom],
-         comprador: this.troqueComprador,
-         vendedor: this.troqueVendedor,
-         estado: { trueque: "pendiente", comprador: "confirmado", vendedor: "pendiente" }
-       }
-       //alert("voy a crear el trueque")
-       this.truequeServ.createTrueque(data);
-       alert(`El trueque ha sido iniciado con éxito!!! Tenés que esperar que @${this.troqueVendedor.apodo} responda tu oferta`);
-       this.modal.dismiss()
-       //la subida es por un trueque existente por ende solo se modifica un registro existente
-       }else */ /* if(this.cambioEstado){
-          let trueque = {
-            trueque: "pendiente",
-            comprador: this.truequeEstado.vendedor,
-            vendedor: this.truequeEstado.comprador,
-            uid: this.trueque.uid,
-            compradorT: this.troqueComprador
-          }
-          this.truequeServ.updateTrueque(trueque)
-          this.modal.dismiss()
-        } */
-        //this.trueque.uid = this.nombreArchivo
+        
         trueque = {
           trueque: estado,
           comprador: this.truequeEstado.vendedor,
@@ -479,6 +474,8 @@ export class TruequeComponent implements OnInit {
       
       await this.prodServ.updateProducto(this.troqueVendedor.id, false);
       this.modal.dismiss()
+    } else if (estado === 'cancelado') {
+      this.modal.dismiss()
     }
 
     let truequeR = {
@@ -494,7 +491,7 @@ export class TruequeComponent implements OnInit {
     }
     //si se rechaza se pide confirmacion
     if (estado === 'rechazado') {
-      this.alertaConfirmacion('Finalizar Trueque', truequeR, 'Si hacés clic en SI Cancelarás el trueque. ¿Estás')
+      this.alertaConfirmacion('Cancelar Trueque', 'Si hacés clic en SI cancelarás el trueque. ¿Estás seguro?', 'rechazar', truequeR)
     }
   }
   async ofertar() {
@@ -522,7 +519,7 @@ export class TruequeComponent implements OnInit {
 
   }
 
-  public alertaConfirmacion(header: string, trueque, message: string) {
+  public alertaConfirmacion(header: string, message: string, opcion:string, trueque?) {
     this.alertCtrl.create({
       header,
       message,
@@ -536,14 +533,83 @@ export class TruequeComponent implements OnInit {
         {
           text: 'Si',
           handler: async () => {
-            this.truequeServ.updateTrueque(trueque)
+            if (opcion === "finalizar") {
+              this.calificar()
+              
+            } else if(opcion === 'rechazar') {
+              this.truequeServ.updateTrueque(trueque)
             await this.prodServ.updateProducto(this.troqueComprador.id, true);
             await this.prodServ.updateProducto(this.troqueVendedor.id, true);
             this.modal.dismiss()
+            }
+            
           }
         }
       ]
     }).then(a => { a.present(); });
+  }
+  finalizar(){
+    //agregar alerta de que confirme si intercambio producto y en ese caso pedir calificacion del troquero
+    this.alertaConfirmacion('Finalizar Trueque', '¿Ya te reuniste con el troquero?\nCalificalo!', 'finalizar')
+  }
+  calificar(){
+    let estado;
+    let esComprador: boolean;
+    if (this.troqueComprador.owner === this.usuarioL.correo) {
+      esComprador = true;
+    }else if (this.troqueVendedor.owner === this.usuarioL.correo) {
+      esComprador = false;
+    } else {
+      alert("Hay un error a detectar el usuario en calificar");
+    }
+    if (esComprador) {
+      if (this.truequeEstado.vendedor === 'confirmado') {
+        this.truequeEstado.comprador = 'finalizado';
+        this.truequeEstado.trueque = 'confirmado';
+        estado = 'confirmado';
+      } else if (this.truequeEstado.vendedor === 'finalizado') {
+        this.truequeEstado.comprador = 'finalizado';
+        this.truequeEstado.trueque = 'finalizado';
+        estado = 'finalizado';
+      }
+    } else if (!esComprador) {
+      if (this.truequeEstado.comprador === 'confirmado') {
+        this.truequeEstado.vendedor = 'finalizado';
+        this.truequeEstado.trueque = 'confirmado';
+        estado = 'confirmado';
+      } else if (this.truequeEstado.comprador === 'finalizado') {
+        this.truequeEstado.vendedor = 'finalizado';
+        this.truequeEstado.trueque = 'finalizado';
+        estado = 'finalizado';
+      }
+    } else {
+      alert("Error al validar si es comprador o no en calificar")
+    }
+      
+    let truequeF = {
+      trueque: estado,
+      comprador: this.truequeEstado.comprador,
+      vendedor: this.truequeEstado.vendedor,
+      uid: this.trueque.uid,
+    }
+    //alert(truequeF)
+
+    this.modalCali.create({
+      component: CalificaComponent,
+      cssClass:'calificacion',
+      showBackdrop: true,
+      backdropDismiss: true,
+      componentProps: {
+        trueque: this.trueque,
+        usuarioL: this.usuarioL,
+        truequeF
+      }
+    }).then(async (modalE) => {
+      modalE.present();
+      const { data } = await modalE.onWillDismiss();
+
+    })
+    //this.truequeServ.updateTrueque(truequeF)
   }
 }
 

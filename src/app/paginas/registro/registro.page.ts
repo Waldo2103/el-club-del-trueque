@@ -12,6 +12,7 @@ import * as firebase from 'firebase';
 import { AlertController, MenuController } from '@ionic/angular';
 import { FormGroup, FormBuilder, FormControl, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
+import { CalificaService } from 'src/app/servicios/califica/califica.service';
 
 @Component({
   selector: 'app-registro',
@@ -36,10 +37,10 @@ export class RegistroPage implements OnInit {
  mail:string;
  password:string;
  password2:string;
-  modalText: string;
+ modalText: string;
 
   constructor(private authService: AuthService,
-    //private resulService: ResultadosService,
+    private caliService: CalificaService,
     private alertCtrl: AlertController,
     private ctrl: MenuController,
     private router: Router, private formBuilder: FormBuilder) { // private toastService: ToastrService
@@ -85,13 +86,16 @@ public presentAlert(header: string, subHeader: string, message: string) {
 
 public RegistrarCliente() {
    
-  this.authService.RegistrarClienteDatos(this.usuario, this.password).then(auth => {
+  this.authService.RegistrarClienteDatos(this.usuario, this.password).then(async auth => {
     this.usuario = new Cliente();
     this.password = '';
     //this.ocultarSeccion0 = false;
     //this.ocultarSeccion1 = true;
     //this.ocultarSeccion2 = true;
+    //se da de alta el registro de comentarios
+    this.caliService.createCalificaInicial(this.usuario.correo);
     this.presentAlert('Exito!', null, '¡Usted ha sido registrado!');
+
   }).catch(err => {
     this.presentAlert('¡Error!', 'Error en el registro.', 'Error en base de datos.');
     console.log(err);

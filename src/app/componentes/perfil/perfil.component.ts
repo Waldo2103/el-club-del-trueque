@@ -1,9 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActionSheetController, ModalController, NavParams } from '@ionic/angular';
-import { mensaje, MensajesService } from 'src/app/servicios/mensajes/mensajes.service';
 import { usuario, UsuariosService } from 'src/app/servicios/usuarios/usuarios.service';
 import { AlbumesComponent } from '../albumes/albumes.component';
-import { ChatComponent } from '../chat/chat.component';
 import { PhotoViewer } from '@ionic-native/photo-viewer/ngx';
 import { PopoverController } from '@ionic/angular';
 import { PopComponent } from '../pop/pop.component';
@@ -12,6 +10,8 @@ import { ImagePicker, ImagePickerOptions } from "@ionic-native/image-picker/ngx"
 import { Camera, CameraOptions } from '@ionic-native/camera/ngx';
 import { StorageService } from 'src/app/servicios/storage/storage.service';
 import { Router } from '@angular/router';
+import { califica, CalificaService } from 'src/app/servicios/califica/califica.service';
+import { AngularFireAuth } from '@angular/fire/auth';
 
 @Component({
   selector: 'app-perfil',
@@ -19,27 +19,30 @@ import { Router } from '@angular/router';
   styleUrls: ['./perfil.component.scss'],
 })
 export class PerfilComponent implements OnInit {
-  public colores=["danger", "secondary", "tertiary", "primary","success","danger", "secondary", "tertiary", "primary","success","danger", "secondary", "tertiary", "primary","success","danger", "secondary", "tertiary", "primary","success","danger", "secondary", "tertiary", "primary","success","danger", "secondary", "tertiary", "primary","success","danger", "secondary", "tertiary", "primary","success","danger", "secondary", "tertiary", "primary","success","danger", "secondary", "tertiary", "primary","success","danger", "secondary", "tertiary", "primary","success","danger", "secondary", "tertiary", "primary","success"]
-  public usuarioL;
-  public usuarioP:any = "";
-  public userParam:any;
-  public uidChat: string;
+  //public usuarioL;
+  public usuarioP: any = "";
+  public userParam: any;
+  //public uidChat: string;
   public modoEditar: boolean = false;
   public form: FormGroup;
   /**  REVISAR QUE ESTEN CORRECTOS LOS CAMPOS */
   public datos: usuario;
-  
+
   /**PARA SUBIR ARCHIVO */
   public nombreArchivo = '';
   public porcentaje = 0;
   public finalizado = false;
   public foto;
   public fotoASub;
-  public vModo;
+  //public vModo;
   public cambieFoto: boolean = false;
+  public calificaciones = []
+  private userLogin;
+  public caliprome: number = 0;
+  public calipromeRed: number = 0;
+  public estre = [];
   constructor(
     private navParams: NavParams,
-    private mensServ: MensajesService,
     private userServ: UsuariosService,
     private modal: ModalController,
     private modalC: ModalController,
@@ -50,7 +53,9 @@ export class PerfilComponent implements OnInit {
     private camera: Camera,
     private storageServ: StorageService,
     private actionSheetController: ActionSheetController,
-    private router: Router
+    private router: Router,
+    private caliServ: CalificaService,
+    private AFauth: AngularFireAuth
   ) {
     this.form = this.fbu.group({
       apellido: '',
@@ -60,113 +65,131 @@ export class PerfilComponent implements OnInit {
       nombre: '',
       zona: ''
     })
-   }
+  }
 
   async ngOnInit() {
-    this.usuarioL = JSON.parse(localStorage.getItem("userLogin"));
+    /* await this.AFauth.authState.subscribe(res =>{
+      this.userLogin = res.email
+      this.usuarioP = JSON.parse(localStorage.getItem("userLogin"));
+      if (this.userLogin !== this.usuarioP.correo) {
+        this.usuarioP = this.userServ.getUsuario(this.userLogin)//ACA ESTA EL PROBLEMA QUE TRAE CUALQUIER GILADA
+      }
+      this.caliServ.getCalifica(this.usuarioP.correo).subscribe(resul => {
+        this.calificaciones =  resul.payload.data()["calificaciones"]
+      })
+    }); */
     //this.usuarioP.apodo=""
     this.userParam = await this.navParams.get('perfil');
     if (this.userParam !== undefined) {
       this.usuarioP = this.userParam;
-      await this.traerUserP();
+      await this.caliServ.getCalifica(this.usuarioP.correo).subscribe(resul => {
+        if (resul.payload.data() === undefined) {
+          this.calificaciones = []
+          this.calcularEstrellas(0);
+        } else{
+          this.calificaciones =  resul.payload.data()["calificaciones"]
+          let sumaCali = 0;
+          this.calificaciones.forEach(cali=>{
+            sumaCali = sumaCali + cali.estrellas
+          })
+          this.calcularEstrellas(sumaCali);
+        }
+      })
     } else {
-      this.usuarioP = JSON.parse(localStorage.getItem('userLogin'));
+      //this.usuarioP = JSON.parse(localStorage.getItem('userLogin'));
+      await this.AFauth.authState.subscribe(res =>{
+        this.userLogin = res.email
+        this.usuarioP = JSON.parse(localStorage.getItem("userLogin"));
+        if (this.userLogin !== this.usuarioP.correo) {
+          this.usuarioP = this.userServ.getUsuario(this.userLogin)//ACA ESTA EL PROBLEMA QUE TRAE CUALQUIER GILADA
+        }
+        console.log(this.usuarioP.correo)
+        this.caliServ.getCalifica(this.usuarioP.correo).subscribe(resul => {
+          if (resul.payload.data() === undefined) {
+            this.calificaciones = []
+            this.calcularEstrellas(0);
+          } else{
+            this.calificaciones =  resul.payload.data()["calificaciones"]
+            let sumaCali = 0;
+            this.calificaciones.forEach(cali=>{
+              sumaCali = sumaCali + cali.estrellas
+            })
+            this.calcularEstrellas(sumaCali);
+          }
+        })
+      });
     }
     
-    
+
   }
 
-  async traerUserP(){
-    //this.userParam = await this.navParams.get('perfil');
+  calcularEstrellas(sumaCali){
+    if (sumaCali === 0) {
+      this.caliprome = 0
+    this.calipromeRed = 0
+    if (this.calipromeRed === 0) {
+        this.estre = ["star-outline","star-outline","star-outline","star-outline","star-outline"]
+      }
+    } else {
+      
+      this.caliprome = sumaCali / this.calificaciones.length
+      this.calipromeRed = parseFloat(this.caliprome.toFixed(1)) 
+      /**ACA SE SETEAN LOS ICONOS DE ESTRELLAS */
+      
+      if (this.calipromeRed === 1) {
+        this.estre = ["star","star-outline","star-outline","star-outline","star-outline"]
+      } else if (this.calipromeRed <= 1.5 && this.calipromeRed > 1) {
+        this.estre = ["star","star-half","star-outline","star-outline","star-outline"]
+      } else if (this.calipromeRed >= 1.6 && this.calipromeRed < 2) {
+        this.estre = ["star","star","star-outline","star-outline","star-outline"]
+      }
+      if (this.calipromeRed === 2) {
+        this.estre = ["star","star","star-outline","star-outline","star-outline"]
+      } else if (this.calipromeRed <= 2.5 && this.calipromeRed > 2) {
+        this.estre = ["star","star","star-half","star-outline","star-outline"]
+      } else if (this.calipromeRed >= 2.6 && this.calipromeRed < 3) {
+        this.estre = ["star","star","star","star-outline","star-outline"]
+      }
+      if (this.calipromeRed === 3) {
+        this.estre = ["star","star","star","star-outline","star-outline"]
+      } else if (this.calipromeRed <= 3.5 && this.calipromeRed > 3) {
+        this.estre = ["star","star","star-","star-half","star-outline"]
+      } else if (this.calipromeRed >= 3.6 && this.calipromeRed < 4) {
+        this.estre = ["star","star","star","star","star-outline"]
+      }
+      if (this.calipromeRed === 4) {
+        this.estre = ["star","star","star","star","star-outline"]
+      } else if (this.calipromeRed <= 4.5 && this.calipromeRed > 4) {
+        this.estre = ["star","star","star","star","star-half"]
+      } else if (this.calipromeRed >= 4.6 && this.calipromeRed < 5) {
+        this.estre = ["star","star","star","star","star"]
+      }
+      if (this.calipromeRed === 5) {
+        this.estre = ["star","star","star","star","star"]
+      } 
+    }
     
-    this.userServ.getUsuario(this.userParam.correo).subscribe(resp=>{
+  }
+  async traerUserP() {
+    this.userServ.getUsuario(this.userParam.correo).subscribe(resp => {
       this.usuarioP = resp
     });
   }
-  verAlbumes(){
+  verAlbumes() {
     this.modalC.create({
       component: AlbumesComponent,
       componentProps: {
         usuarioP: this.usuarioP
       }
-    }).then((modalE)=>{modalE.present();console.log("creo modal de chat exist")})
-  }
-  crearChat(){
-    let uns = this.mensServ.getMensajeXUsuario(this.usuarioL.correo).subscribe((resp) =>{
-      console.log("hice getMensajeXUsuario")
-      if (resp != undefined) {
-        resp.map(res =>{
-          console.log("hice mapeo getMensajeXUsuario")
-        if ((res.id[0] === this.usuarioL.correo || res.id[1] === this.usuarioL.correo) && (res.id[0] === this.usuarioP.correo || res.id[1] === this.usuarioP.correo)) {
-          let chatE = {
-            id: res.id[0],
-            descripcion: res.descripcion,
-            nombre: res.nombre[1],
-            imagen: res.imagen[1],
-            //messages: data.messages,
-            uid: res.uid
-          }
-          //this.modal.dismiss()
-          this.modalC.create({
-            component: ChatComponent,
-            componentProps: {
-              chat: chatE
-            }
-          }).then((modalE)=>{modalE.present();console.log("creo modal de chat exist")})
-      } else {
-        console.log("a este error no deberia entrar")
-      }
-      })
-      } else {
-        let data: mensaje = {
-          nombre: [this.usuarioL.nombre,this.usuarioP.nombre],
-          descripcion: '',
-          id: [this.usuarioL.correo,this.usuarioP.correo],
-          imagen: [this.usuarioL.foto,this.usuarioP.foto],
-          uid: ``,
-          /* messages:  {
-            content: "",
-            type: "",   
-            date: new Date(),
-            owner: ""
-          } */
-        }
-        let res = this.mensServ.createMensajes(data)
-        res.then(resp=>{
-          console.log("entre en then de la creacion del mensaje")
-          this.uidChat = resp;
-          let chat = {
-          id: data.id[0],
-          descripcion: data.descripcion,
-          nombre: data.nombre[1],
-          imagen: data.imagen[1],
-          //messages: data.messages,
-          uid: this.uidChat
-        }
-        //this.router.navigate['folder/Mensajes']
-        //this.modal.dismiss()
-        this.modalC.create({
-          component: ChatComponent,
-          componentProps: {
-            chat: chat
-          }
-        }).then((modalC)=>{modalC.present();this.modalC.dismiss();console.log("creo modal de chat nuevo")})
-        })
-      }
-      uns.unsubscribe()
-      
-    })
-    
-    
-    
+    }).then((modalE) => { modalE.present();})
   }
 
-  closePerfil(){
+  closePerfil() {
     this.modal.dismiss()
   }
 
-  public fullScreen(image){
-    this.photoViewer.show(image, this.usuarioP.nombre, {share: false, headers: ''});
+  public fullScreen(image) {
+    this.photoViewer.show(image, this.usuarioP.nombre, { share: false, headers: '' });
   }
 
   async presentPopover(ev: any) {
@@ -180,21 +203,21 @@ export class PerfilComponent implements OnInit {
     });
     await popover.present();
 
-    const { data } = await  popover.onWillDismiss();
-    console.log('onWillDismiss resolved with role', data);
+    const { data } = await popover.onWillDismiss();
+    //console.log('onWillDismiss resolved with role', data);
     /* const { role } = await  popover.onDidDismiss();
     console.log('onWillDismiss resolved with role', role); */
     if (data != undefined) {
       if (data.item === "Editar") {
-      this.modoEditar = true;
-    } else {
-      this.modoEditar = false;
+        this.modoEditar = true;
+      } else {
+        this.modoEditar = false;
+      }
     }
-    }
-    
+
   }
 
-  async cambiarFoto(){
+  async cambiarFoto() {
     /** REVISAR: FALTA AGREGAR QUE BORRE LA QUE YA TIENE DE STORAGE */
     const accSheet = await this.actionSheetController.create({
       header: 'Foto de Perfil',
@@ -234,26 +257,26 @@ export class PerfilComponent implements OnInit {
 
     /* const { data } = await  popover.onWillDismiss();
     console.log('onWillDismiss resolved with role', data); */
-    const { data } = await  accSheet.onDidDismiss();
+    const { data } = await accSheet.onDidDismiss();
     console.log('onDidDismiss resolved with role', data);
 
     //await this.modoEntrada(data.modo)
-    
+
     //this.borrarFotoVieja()
   }
 
-  async modiPerfil(form){
-    if(this.cambieFoto){
+  async modiPerfil(form) {
+    if (this.cambieFoto) {
       await this.subirArchivo();
     }
-    
-   // console.log(form)//esto queda sin uso, se podria
-                    // sacar despues de probarlo si funciona tomar datos del form posta
+
+    // console.log(form)//esto queda sin uso, se podria
+    // sacar despues de probarlo si funciona tomar datos del form posta
     let u = this.form.value;
     let valida: usuario;
     if (u.apellido === "") {
       u.apellido = this.usuarioP.apellido
-    } 
+    }
     if (u.apodo === "") {
       u.apodo = this.usuarioP.apodo
     }
@@ -266,7 +289,7 @@ export class PerfilComponent implements OnInit {
     if (u.zona === "") {
       u.zona = this.usuarioP.zona
     }
-    this. datos =  {
+    this.datos = {
       correo: this.usuarioP.correo,
       apellido: u.apellido,
       apodo: u.apodo,
@@ -275,7 +298,7 @@ export class PerfilComponent implements OnInit {
       nombre: u.nombre,
       zona: u.zona
     }
-    this.userServ.updateUsuario(this.datos).then(res=>{
+    this.userServ.updateUsuario(this.datos).then(res => {
       //alert(res)
       this.usuarioP.foto = this.datos.foto;
       this.usuarioP = this.datos;
@@ -287,7 +310,7 @@ export class PerfilComponent implements OnInit {
         nombre: '',
         zona: ''
       })
-    }).catch(err =>{ alert(err)})
+    }).catch(err => { alert(err) })
     this.modoEditar = false;
   }
 
@@ -318,7 +341,7 @@ export class PerfilComponent implements OnInit {
       // imageData is either a base64 encoded string or a file URI
       // If it's base64 (DATA_URL):
       this.foto = ('data:image/jpeg;base64,' + imageData);
-      
+
       this.fotoASub = imageData;
       this.cambieFoto = true;
       this.usuarioP.foto = this.foto;
@@ -328,7 +351,7 @@ export class PerfilComponent implements OnInit {
       alert(err)
     });
   }
-//Abre la galeria para seleccionar fotos
+  //Abre la galeria para seleccionar fotos
   abrirGaleria() {
 
     const options2: ImagePickerOptions = {
@@ -339,56 +362,56 @@ export class PerfilComponent implements OnInit {
     }
     this.iPicker.getPictures(options2).then(async (res) => {
       //agrego un nuevo formulario de troque
-      if (res!=="OK") {//le puse esto porque me paso que devolvia esto a veces al iniar
-      //tener en cuenta que lo puede devolver como array y en ese caso seria res[0]
-      this.foto = ('data:image/jpeg;base64,' + res);
-      this.fotoASub =  res;
-      //await this.subirArchivo()
-      this.cambieFoto = true;
-      this.usuarioP.foto = this.foto;
-    }else{
-      this.abrirGaleria()
-    }
-    
+      if (res !== "OK") {//le puse esto porque me paso que devolvia esto a veces al iniar
+        //tener en cuenta que lo puede devolver como array y en ese caso seria res[0]
+        this.foto = ('data:image/jpeg;base64,' + res);
+        this.fotoASub = res;
+        //await this.subirArchivo()
+        this.cambieFoto = true;
+        this.usuarioP.foto = this.foto;
+      } else {
+        this.abrirGaleria()
+      }
+
     }, (err) => {
       alert("hay algo mal que no anda bien con estas fotos" + (JSON.stringify(err)))
-    }).catch(err =>{alert(err)});
+    }).catch(err => { alert(err) });
   }
 
   //Sube el archivo a Cloud Storage
   public subirArchivo() {
     let f = this.fotoASub;
-    
+
     //genero el nombre del archivo
     var fe = new Date();
     //var fec: string = fe.getDate()+"-"+fe.getMonth()+"-"+fe.getUTCFullYear()+"_"+fe.getUTCHours()+fe.getUTCMinutes();
     //firebase no acepta el arroba entonces lo reemplazo
-    this.nombreArchivo =`${this.usuarioL.correo.replace( '@', '-' ).toLowerCase()}.jpg`;//fotoPerfil/admin-admin.com.jpg
+    this.nombreArchivo = `${this.usuarioP.correo.replace('@', '-').toLowerCase()}.jpg`;//fotoPerfil/admin-admin.com.jpg
     var referencia = this.storageServ.referenciaCloudStorage(`fotoPerfil/${this.nombreArchivo}`);
     var tarea = this.storageServ.tareaCloudStorage(this.nombreArchivo, f);
-      //Cambia el porcentaje
+    //Cambia el porcentaje
     tarea.percentageChanges().subscribe((porcentaje) => {
       this.porcentaje = Math.round(porcentaje);
       if (this.porcentaje == 100) {
         this.finalizado = true;
       }
     });
-//tomo la referencia de la imagen y creo un troque
+    //tomo la referencia de la imagen y creo un troque
     referencia.putString(f, 'base64', { contentType: 'image/jpeg' }).then(async (snapshot) => {
       this.datos.foto = await snapshot.ref.getDownloadURL()
-      
-      
+
+
     })
-    
+
   }
-  borrarFotoVieja(){
-    this.storageServ.deleteArchivo('fotoPerfil/'+this.usuarioL.correo.replace( '@', '-' ).toLowerCase()+'.jpg');
+  borrarFotoVieja() {
+    this.storageServ.deleteArchivo('fotoPerfil/' + this.usuarioP.correo.replace('@', '-').toLowerCase() + '.jpg');
     this.usuarioP.foto = "";
     this.datos.foto = ""
   }
-  cancelarModi(){
+  cancelarModi() {
     this.modoEditar = false;
   }
- 
+
 
 }

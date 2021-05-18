@@ -1,13 +1,14 @@
 import { Component, OnInit } from '@angular/core';
 import { FirebaseService } from 'src/app/servicios/firebase/firebase.service';
 import { Producto } from '../../clases/producto/producto';
-import { AlertController, ModalController } from '@ionic/angular';
+import { ActionSheetController, AlertController, ModalController } from '@ionic/angular';
 import { Router } from '@angular/router';
 import { ProductoComponent } from 'src/app/componentes/producto/producto.component';
 import { producto, ProductosService } from 'src/app/servicios/productos/productos.service';
 import { MensajesService } from 'src/app/servicios/mensajes/mensajes.service';
 import { AngularFireAuth } from '@angular/fire/auth';
 import { UsuariosService } from 'src/app/servicios/usuarios/usuarios.service';
+import { AlbumesComponent } from 'src/app/componentes/albumes/albumes.component';
 
 @Component({
   selector: 'app-home',
@@ -40,7 +41,8 @@ export class HomePage implements OnInit {
     private router: Router,
     private modal: ModalController,
     private AFauth: AngularFireAuth,
-    private userServ: UsuariosService
+    private userServ: UsuariosService,
+    private actionSheetController: ActionSheetController
     ) { }
 
   ngOnInit() {
@@ -138,4 +140,40 @@ export class HomePage implements OnInit {
     }).then((modal)=>modal.present())
   }
 
+  async publicar(){
+    const accSheet = await this.actionSheetController.create({
+      header: 'Agrega tu Troque',
+      cssClass: 'my-custom-class2',
+      buttons: [{
+        text: 'Sacar Foto',
+        icon: 'camera',
+        handler: () => {
+          this.abrirAlbum('cam')
+        }
+      }, {
+        text: 'Subir desde Galería',
+        icon: 'image',
+        handler: () => {
+          this.abrirAlbum('gal')
+        }
+        }, {
+        text: 'Cancel',
+        icon: 'close',
+        role: 'cancel',
+        handler: () => {
+        }
+      }]
+    });
+    await accSheet.present();
+    const { data } = await accSheet.onDidDismiss();
+  }
+
+  public abrirAlbum(modo:string){
+    this.modal.create({
+      component: AlbumesComponent,
+      componentProps: {
+        modo: modo
+      }
+    }).then((modal)=>modal.present())
+  }
 }

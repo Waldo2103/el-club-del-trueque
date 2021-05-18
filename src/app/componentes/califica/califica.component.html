@@ -1,0 +1,26 @@
+<ion-card>
+  <!-- <ion-card-header></ion-card-header> -->
+  <ion-card-content>
+    <ion-card-title>Calificá al Troquero!</ion-card-title>
+    <br>
+    <ion-label style="color: gray;">Te quedan {{cantCarac}} caracteres </ion-label>
+    <ion-item>
+      <ion-textarea (ionChange)="contador($event)" maxlength="120" placeholder="Agregale un comentario sobre tu experiencia">
+      </ion-textarea>
+    </ion-item>
+    <br>
+    <ion-label>Puntua el intercambio de 1 a 5 </ion-label>
+    <ion-icon name="star" color="tertiary"></ion-icon>
+    <ion-item class="puntua">
+      <ion-icon (click)="puntuar(1)" name="star" [class]="{ok: estrellas >= 1, no: estrellas === 0}"></ion-icon>
+      <ion-icon (click)="puntuar(2)" name="star" [class]="{ok: estrellas >= 2, no: estrellas < 2}"></ion-icon>
+      <ion-icon (click)="puntuar(3)" name="star" [class]="{ok: estrellas >= 3, no: estrellas < 3}"></ion-icon>
+      <ion-icon (click)="puntuar(4)" name="star" [class]="{ok: estrellas >= 4, no: estrellas < 4}"></ion-icon>
+      <ion-icon (click)="puntuar(5)" name="star" [class]="{ok: estrellas >= 5, no: estrellas < 5}"></ion-icon>
+    </ion-item>
+    <ion-buttons>
+      <ion-button color="secondary" (click)="calificar()">Calificar!</ion-button>
+      <ion-button color="tertiary" (click)="cancelar()">Cancelar</ion-button>
+    </ion-buttons>
+  </ion-card-content>
+</ion-card>

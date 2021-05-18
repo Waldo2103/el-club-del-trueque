@@ -33,8 +33,7 @@ export class MensajesService {
      })
   }
 
-  getMensajeXUsuario(id){    
-    
+  getMensajeXUsuario(id){
     return this.db.collection('mensajes', ref => ref.where("id", "array-contains", id)).snapshotChanges().pipe( map(chat=>{
       console.log("chat.length: "+chat.length)
       if (chat.length === 0) {
@@ -50,9 +49,6 @@ export class MensajesService {
     }
       
     }));
-    /* const promises = id.map(u => this.db.collection("mensajes").doc(u).snapshotChanges().pipe( map(chats=>{
-      console.log("getMensajes"+ chats)
-    }))); */
     }
   
 

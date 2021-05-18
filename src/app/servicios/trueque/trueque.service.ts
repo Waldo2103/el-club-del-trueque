@@ -54,4 +54,7 @@ export class TruequeService {
   updateTrueque(trueque){
     return this.db.collection('trueques').doc(trueque.uid).update({'estado.trueque':trueque.trueque, 'estado.comprador':trueque.comprador, 'estado.vendedor':trueque.vendedor, 'comprador':trueque.compradorT})
   }
+  updateTruequeFinalizar(trueque){
+    return this.db.collection('trueques').doc(trueque.uid).update({'estado.trueque':trueque.trueque, 'estado.comprador':trueque.comprador, 'estado.vendedor':trueque.vendedor})
+  }
 }
