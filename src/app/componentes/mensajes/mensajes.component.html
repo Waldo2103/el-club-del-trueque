@@ -10,8 +10,12 @@
         </ion-avatar>
         <ion-label>
           <h2><b>{{mens.nombre}}</b></h2>
-          <h3>{{mens.descripcion}}</h3>
-          <p>Accede con click</p>
+          <div *ngIf="(!mens.ult.read) && mens.ult.owner !== mens.id">
+            <p><b>{{mens.ult.content}}<ion-icon name="alert-circle-outline" color="success"></ion-icon></b></p>
+          </div>
+          <div *ngIf="mens.ult.read || mens.ult.owner === mens.id">
+            <p>{{mens.ult.content}}</p>
+          </div>
         </ion-label>
       </ion-item>
     </div>

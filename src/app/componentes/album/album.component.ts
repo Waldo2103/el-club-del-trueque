@@ -4,6 +4,7 @@ import { AlertController, ModalController, NavParams } from '@ionic/angular';
 import { Producto } from 'src/app/clases/producto/producto';
 import { AlbumesService } from 'src/app/servicios/albumes/albumes.service';
 import { producto, ProductosService } from 'src/app/servicios/productos/productos.service';
+import { PerfilComponent } from '../perfil/perfil.component';
 import { ProductoComponent } from '../producto/producto.component';
 
 @Component({
@@ -69,15 +70,29 @@ export class AlbumComponent implements OnInit {
     this.filtroBuscar = texto;
   }
 
-  openProduct(producto){
+  async openProduct(producto){
     
     if (!this.enTrueque) {
-      this.modalP.create({
+      const modal = await this.modalP.create({
       component: ProductoComponent,
       componentProps: {
         producto: producto
       }
-    }).then((modal)=>modal.present())
+    });//.then((modal)=>modal.present())
+    await modal.present();
+    const data = await modal.onWillDismiss().then(async (res:any) =>{//res puede trae {action:"verPerfil",datos:this.usuarioP}
+      if (res.data.action === "verPerfil") {
+        const modalPe = await this.modal.create({
+          component: PerfilComponent,
+          componentProps: {
+            perfil: res.data.datos
+          }
+        });//.then((modalP)=>{modalP.present();this.modal.dismiss();console.log("creo modal de perfil nuevo")})
+        await modalPe.present()
+      }
+      
+    })
+
     }
     
   }

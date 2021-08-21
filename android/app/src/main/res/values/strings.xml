@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">el-club-del-trueque</string>
+    <string name="title_activity_main">el-club-del-trueque</string>
+    <string name="package_name">io.ionic.ecdtArg</string>
+    <string name="custom_url_scheme">io.ionic.ecdtArg</string>
+</resources>

@@ -12,7 +12,7 @@
   </ion-fab-list>
 </ion-fab>
 <ion-header>
-  <ion-toolbar *ngIf="userParam!==undefined">
+  <ion-toolbar *ngIf="userParam!==undefined || this.userParam == ''">
     <ion-button slot="start" (click)="closeAlbum()" fill="none">
       <ion-icon name="arrow-back-outline"></ion-icon>
     </ion-button>

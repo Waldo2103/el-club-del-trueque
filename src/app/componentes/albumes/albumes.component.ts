@@ -1,5 +1,7 @@
+import { Location } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { AngularFireAuth } from '@angular/fire/auth';
+import { ActivatedRoute, Router } from '@angular/router';
 import { ModalController, NavParams } from '@ionic/angular';
 import { AlbumesService } from 'src/app/servicios/albumes/albumes.service';
 import { UsuariosService } from 'src/app/servicios/usuarios/usuarios.service';
@@ -23,12 +25,15 @@ export class AlbumesComponent implements OnInit {
     private modal: ModalController,
     private modalP: ModalController,
     private userServ: UsuariosService,
-    private navParams: NavParams
+    private navParams: NavParams,
+    private router: Router,
+    private location: Location
   ) { }
 
   async ngOnInit() {
-    this.userParam = await this.navParams.get('usuarioP');
-    if (this.userParam !== undefined) {
+    this.userParam = JSON.parse(localStorage.getItem('userP'));
+    if (this.userParam !== undefined || this.userParam == "") {
+      //SE MODIFICÓ, SE TOMARÁ POR LOCALSTORAGE
       this.userLogin = this.userParam;
     } else {
       this.userLogin = JSON.parse(localStorage.getItem('userLogin'));
@@ -62,14 +67,18 @@ export class AlbumesComponent implements OnInit {
 
   }
 
-  openAlbum(album) {
-    this.modalP.create({
+  async openAlbum(album) {
+    const modal = await this.modalP.create({
       component: AlbumComponent,
       componentProps: {
         album: album,
         userLogin: this.userLogin
       }
-    }).then((modal) => modal.present())
+    });
+    await modal.present()
+    const data = await modal.onWillDismiss().then(res =>{
+      //recargar el album
+    })
   }
 
   openGallery(prod) {
@@ -93,7 +102,10 @@ export class AlbumesComponent implements OnInit {
   }
   //sirve solo cuando se entra a ver el perfil de otro usuario
   closeAlbum() {
-    this.modal.dismiss()
+    localStorage.setItem("userP", "")
+    //this.modal.dismiss()
+    //this.router.navigate(['/folder/Perfil'] )
+    this.location.back();
   }
 
 }

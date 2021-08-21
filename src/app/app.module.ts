@@ -3,8 +3,8 @@ import { BrowserModule } from '@angular/platform-browser';
 import { RouteReuseStrategy } from '@angular/router';
 
 import { IonicModule, IonicRouteStrategy, IonMenu } from '@ionic/angular';
-import { SplashScreen } from '@ionic-native/splash-screen/ngx';
-import { StatusBar } from '@ionic-native/status-bar/ngx';
+/* import { SplashScreen } from '@ionic-native/splash-screen/ngx';
+import { StatusBar } from '@ionic-native/status-bar/ngx'; */
 
 import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
@@ -17,7 +17,7 @@ import { AngularFirestore, AngularFirestoreModule } from '@angular/fire/firestor
 
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 
-import { Facebook  } from '@ionic-native/facebook/ngx';
+//import { Facebook  } from '@ionic-native/facebook/ngx';
 import { GooglePlus  } from '@ionic-native/google-plus/ngx';
 import { CommonModule } from '@angular/common';
 import { MensajesComponent } from './componentes/mensajes/mensajes.component';
@@ -44,9 +44,9 @@ import { PhotoViewer } from "@ionic-native/photo-viewer/ngx";
     exports:[],
   providers: [
     GooglePlus,
-    Facebook,
-    StatusBar,
-    SplashScreen,
+    //Facebook,
+    /* StatusBar,
+    SplashScreen, */
     PhotoViewer,
     //native
     //Geolocation,

@@ -23,7 +23,6 @@ export class MensajesService {
   constructor(private db: AngularFirestore) { }
 
   async createMensajes(data:mensaje): Promise<any>{
-
     const docRef = this.db.collection("mensajes").doc();
     data.uid = docRef.ref.id
     docRef.set(data);

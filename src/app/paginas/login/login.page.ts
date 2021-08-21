@@ -87,7 +87,7 @@ export class LoginPage implements OnInit {
     });
       
   }
-  loginFacebook(): void {
+  /* loginFacebook(): void {
     this.authService.loginWithFacebook()
     .then(res =>{
       this.router.navigate(['/home']);
@@ -95,7 +95,7 @@ export class LoginPage implements OnInit {
       this.presentAlert('Error!', null, '¡Se produjo un error!');
     });
       
-  }
+  } */
 
   onLoginRedirect(): void {
     this.router.navigate(['home']);

@@ -3,4 +3,5 @@ export interface message{
     type: string
     date: Date
     owner: string
+    read: boolean
 }

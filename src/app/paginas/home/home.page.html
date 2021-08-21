@@ -40,8 +40,8 @@
       <ion-card (click)="openProduct(item)">
         <ion-card-header>
           <img [src]="item.imagen" />
-          <ion-card-title color="cuarto">{{item.nombre}}</ion-card-title>
-          <ion-card-subtitle color="quinto">{{item.etiquetas}}</ion-card-subtitle>
+          <ion-card-title color="tertiary">{{item.nombre}}</ion-card-title>
+          <ion-card-subtitle color="secondary">{{item.etiquetas}}</ion-card-subtitle>
 
         </ion-card-header>
         <ion-card-content>
@@ -69,21 +69,21 @@
     </ion-item-->
   </ion-list>
 </ion-content>
-<ion-tab-bar slot="bottom">
+<ion-tab-bar slot="bottom" color="tertiary">
   <ion-tab-button (click)="publicar()">
-    <ion-icon name="camera"></ion-icon>
-    <ion-label>Publicar</ion-label>
+    <ion-icon name="camera" color="secondary"></ion-icon>
+    <ion-label color="secondary">Publicar</ion-label>
   </ion-tab-button>
 
   <ion-tab-button routerLink="../folder/Trueques">
-    <ion-icon name="sync"></ion-icon>
-    <ion-label>Trueques Activos</ion-label>
+    <ion-icon name="sync" color="secondary"></ion-icon>
+    <ion-label color="secondary">Trueques Activos</ion-label>
   </ion-tab-button>
 
   <ion-tab-button routerLink="../folder/Mensajes">
-    <ion-icon name="mail"></ion-icon>
-    <ion-label>Mensajes</ion-label>
-    <ion-badge>6</ion-badge>
+    <ion-icon name="mail" color="secondary"></ion-icon>
+    <ion-label color="secondary">Mensajes</ion-label>
+   <!--  <ion-badge>6</ion-badge> -->
   </ion-tab-button>
 
   <!-- <ion-tab-button routerLink="../folder/Grupos">

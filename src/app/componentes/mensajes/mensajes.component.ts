@@ -29,24 +29,18 @@ export class MensajesComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-    console.log("entre en mmensaje component")
     this.traerUserLogin();
   }
   traerUserLogin() {
-    console.log("entre en mmensaje component - traeruser")
     this.AFauth.authState.subscribe(async res => {
       this.userLogin = res.email
-      console.log("entre en mmensaje component - traeruser  - authstate")
       let uns = await this.mensServ.getMensajeXUsuario(this.userLogin).subscribe(mensajes => {
         this.mensajes = []
         this.mensajes = mensajes
-        console.log(this.mensajes)
-        console.log("entre en mmensaje component - traeruser auth - getmensuser")
         this.userServ.getUsuario(this.userLogin).subscribe(pro => {
           this.usuario = []
           this.usuario = pro;
           this.validacionChat();
-          console.log("entre en mmensaje component - traeruser get user")
           uns.unsubscribe()
         })
       });
@@ -71,7 +65,8 @@ export class MensajesComponent implements OnInit {
             nombre: mensaje.nombre[1],
             imagen: mensaje.imagen[1],
             messages: mensaje.messages,
-            uid: mensaje.uid
+            uid: mensaje.uid,
+            ult: mensaje.messages[mensaje.messages.length - 1]
           })
         } else if (mensaje.id[1] === this.userLogin) {
           this.mensajesBis.push({
@@ -80,7 +75,8 @@ export class MensajesComponent implements OnInit {
             nombre: mensaje.nombre[0],
             imagen: mensaje.imagen[0],
             messages: mensaje.messages,
-            uid: mensaje.uid
+            uid: mensaje.uid,
+            ult: mensaje.messages[mensaje.messages.length - 1]
           })
         }
         i++;
@@ -92,13 +88,17 @@ export class MensajesComponent implements OnInit {
   }
 
 
-  openChat(chat) {
-    this.modal.create({
+  async openChat(chat) {
+    const modal = await this.modal.create({
       component: ChatComponent,
       componentProps: {
         chat: chat
       }
-    }).then((modal) => modal.present())
+    });
+      await modal.present()
+      const data = await modal.onWillDismiss().then(res =>{
+        this.traerUserLogin();
+      })
   }
 
 }

@@ -1,5 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import { FirebaseService } from 'src/app/servicios/firebase/firebase.service';
 import { Producto } from '../../clases/producto/producto';
 import { ActionSheetController, AlertController, ModalController } from '@ionic/angular';
 import { Router } from '@angular/router';
@@ -9,6 +8,8 @@ import { MensajesService } from 'src/app/servicios/mensajes/mensajes.service';
 import { AngularFireAuth } from '@angular/fire/auth';
 import { UsuariosService } from 'src/app/servicios/usuarios/usuarios.service';
 import { AlbumesComponent } from 'src/app/componentes/albumes/albumes.component';
+import { NotificacionesService } from 'src/app/servicios/notificaciones/notificaciones.service';
+import { PerfilComponent } from 'src/app/componentes/perfil/perfil.component';
 
 @Component({
   selector: 'app-home',
@@ -42,7 +43,8 @@ export class HomePage implements OnInit {
     private modal: ModalController,
     private AFauth: AngularFireAuth,
     private userServ: UsuariosService,
-    private actionSheetController: ActionSheetController
+    private actionSheetController: ActionSheetController,
+    
     ) { }
 
   ngOnInit() {
@@ -128,16 +130,31 @@ export class HomePage implements OnInit {
     });
   }
 
-  openProduct(producto){
+  async openProduct(producto){
     //producto = JSON.stringify(producto);
     //producto = JSON.parse(producto);
     //console.log("producto en open modal"+producto)
-    this.modal.create({
+    const modal = await this.modal.create({
       component: ProductoComponent,
       componentProps: {
         producto: producto
       }
-    }).then((modal)=>modal.present())
+    });//.then((modal)=>modal.present())
+    await modal.present();
+    const data = await modal.onWillDismiss().then(async (res:any) =>{//res puede trae {action:"verPerfil",datos:this.usuarioP}
+      console.log(res)
+      if (res.data.action === "verPerfil") {
+        console.log("para no verme mas")
+        const modalPe = await this.modal.create({
+          component: PerfilComponent,
+          componentProps: {
+            perfil: res.data.datos
+          }
+        });//.then((modalP)=>{modalP.present();this.modal.dismiss();console.log("creo modal de perfil nuevo")})
+        await modalPe.present()
+      }
+      
+    })
   }
 
   async publicar(){

@@ -1,45 +1,43 @@
 <ion-header *ngIf="userParam!==undefined">
   <ion-toolbar>
-    <ion-button slot="start" defaultHref="/folder/Albumes" (click)="closePerfil()" fill="none">
+    <ion-button slot="start"  (click)="closePerfil()" fill="none"> <!--defaultHref="/folder/Albumes"-->
       <ion-icon name="arrow-back-outline"></ion-icon>
     </ion-button>
     <ion-title></ion-title>
   </ion-toolbar>
 </ion-header>
-<ion-content padding *ngIf="usuarioP!=''">
+<ion-content padding *ngIf="usuarioP!==''">
   <!-- INFO, FOTOS Y CONTACTO USUARIO EXTERNO -->
   <ion-card *ngIf="userParam!==undefined" color="tertiary" class="cardPrincipal">
     <ion-card-header>
       <ion-item color="tertiary" lines="none">
-        <ion-avatar (click)="fullScreen(usuarioP.foto)" class="principal" slot="start">
-          <ion-img [src]="usuarioP.foto"></ion-img>
+        <ion-avatar (click)="fullScreen(userParam.foto)" class="principal" slot="start">
+          <ion-img [src]="userParam.foto"></ion-img>
         </ion-avatar>
 
         <ion-label>
-          <h1 *ngIf="usuarioP.apodo!=''"><b>@{{usuarioP.apodo}}</b></h1>
-          <h1 *ngIf="usuarioP.apodo==''"><b>{{usuarioP.nombre}}</b></h1>
+          <h1 *ngIf="userParam.apodo!=''"><b>@{{userParam.apodo}}</b></h1>
+          <h1 *ngIf="userParam.apodo==''"><b>{{userParam.nombre}}</b></h1>
           <h2>
-            <ion-icon color="success" name="map"></ion-icon> {{usuarioP.zona}}
+            <ion-icon color="success" name="map"></ion-icon> {{userParam.zona}}
           </h2>
           <h3>
-            <ion-icon color="tertiary" name="timer"></ion-icon> {{usuarioP.fechaAlta * 1000 | date: 'd/M'}} meses en<p>El
+            <ion-icon color="tertiary" name="timer"></ion-icon> {{userParam.fechaAlta * 1000 | date: 'd/M'}} meses en<p>El
               Club del Trueque</p>
           </h3>
         </ion-label>
       </ion-item>
       <ion-card-content color="success">
         <h2>
-          <ion-icon color="tertiary" name="finger-print"></ion-icon> {{usuarioP.descripcion}}
+          <ion-icon color="tertiary" name="finger-print"></ion-icon> {{userParam.descripcion}}
         </h2>
       </ion-card-content>
       <ion-card-title color="success">
         <ion-button shape="round" fill="outline" color="dark" (click)="verAlbumes()">
           <ion-icon color="secondary" name="images"></ion-icon> Mis Albumes
         </ion-button>
-
       </ion-card-title>
     </ion-card-header>
-
   </ion-card>
   <!-- INFO, FOTOS Y CONTACTO PERFIL PROPIO-->
   <ion-card *ngIf="userParam===undefined" color="tertiary" class="cardPrincipal">
@@ -128,12 +126,12 @@
       <ion-button  *ngIf="modoEditar" color="danger" shape="round" (click)="cancelarModi()">
         <ion-icon name="close-circle-outline"></ion-icon>
       </ion-button>
-      <ion-card-title color="success">
+      <!-- <ion-card-title color="success">
         <ion-button *ngIf="userParam!==undefined" shape="round" fill="outline" color="dark" (click)="crearChat()">
           <ion-icon color="danger" name="chatbubbles"></ion-icon> Enviar mensaje
         </ion-button>
 
-      </ion-card-title>
+      </ion-card-title> -->
       <ion-card-title color="success">
         <ion-button shape="round" fill="outline" color="dark" (click)="verAlbumes()">
           <ion-icon color="secondary" name="images"></ion-icon> Mis Albumes

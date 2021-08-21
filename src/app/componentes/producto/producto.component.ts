@@ -9,8 +9,8 @@ import { trueque } from 'src/app/servicios/trueque/trueque.service';
 import { UsuariosService } from 'src/app/servicios/usuarios/usuarios.service';
 import { message } from "../../models/message";
 import { ChatComponent } from '../chat/chat.component';
-import { PerfilComponent } from '../perfil/perfil.component';
-import { TruequeComponent } from '../trueque/trueque.component';
+//import { PerfilComponent } from '../perfil/perfil.component';
+//import { TruequeComponent } from '../trueque/trueque.component';
 
 @Component({
   selector: 'app-producto',
@@ -153,12 +153,14 @@ export class ProductoComponent implements OnInit {
   }
 
   verPerfil(){
-    this.modalPerfil.create({
+    const data = {action:"verPerfil",datos:this.usuarioP}
+    this.modal.dismiss(data);//cierro el modal y en AlbumComponent y HomePage los derivo a Perfil
+    /* this.modalPerfil.create({
       component: PerfilComponent,
       componentProps: {
         perfil: this.usuarioP
       }
-    }).then((modalP)=>{modalP.present();this.modal.dismiss();console.log("creo modal de perfil nuevo")})
+    }).then((modalP)=>{modalP.present();this.modal.dismiss();console.log("creo modal de perfil nuevo")}) */
   }
 
   closeProduct(){
@@ -168,7 +170,7 @@ export class ProductoComponent implements OnInit {
   trocar(troqueV){
     console.log(troqueV)
     let troqueC = undefined;
-    this.modalTrueque.create({
+    /* this.modalTrueque.create({
       component: TruequeComponent,
       componentProps: {
         troqueV,
@@ -176,7 +178,7 @@ export class ProductoComponent implements OnInit {
         usuarioL: this.usuarioL,
         usuarioP: this.usuarioP
       }
-    }).then((modalP)=>{modalP.present();this.modal.dismiss();console.log("creo modal de trueque nuevo")})
+    }).then((modalP)=>{modalP.present();this.modal.dismiss();console.log("creo modal de trueque nuevo")}) */
   }
 
 }

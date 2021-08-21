@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActionSheetController, ModalController, NavParams } from '@ionic/angular';
-import { usuario, UsuariosService } from 'src/app/servicios/usuarios/usuarios.service';
+import {  UsuariosService } from 'src/app/servicios/usuarios/usuarios.service';
 import { AlbumesComponent } from '../albumes/albumes.component';
 import { PhotoViewer } from '@ionic-native/photo-viewer/ngx';
 import { PopoverController } from '@ionic/angular';
@@ -12,6 +12,9 @@ import { StorageService } from 'src/app/servicios/storage/storage.service';
 import { Router } from '@angular/router';
 import { califica, CalificaService } from 'src/app/servicios/califica/califica.service';
 import { AngularFireAuth } from '@angular/fire/auth';
+import { FirestoreService } from 'src/app/servicios/firestore.service';
+
+import { usuario } from "../../../app/models";
 
 @Component({
   selector: 'app-perfil',
@@ -41,6 +44,8 @@ export class PerfilComponent implements OnInit {
   public caliprome: number = 0;
   public calipromeRed: number = 0;
   public estre = [];
+  public uid;
+  public lades = ''
   constructor(
     private navParams: NavParams,
     private userServ: UsuariosService,
@@ -55,8 +60,20 @@ export class PerfilComponent implements OnInit {
     private actionSheetController: ActionSheetController,
     private router: Router,
     private caliServ: CalificaService,
-    private AFauth: AngularFireAuth
+    private AFauth: AngularFireAuth,
+    private fireServ: FirestoreService
   ) {
+    this.userServ.stateAuth().subscribe(res =>{
+      if (res !== null) {
+        //console.log(res)
+        this.uid = res.email;
+        if (this.usuarioP === "") {
+          this.getUserInfo(this.uid);
+        }
+      }
+    })
+    //console.log(this.uid)
+      
     this.form = this.fbu.group({
       apellido: '',
       apodo: '',
@@ -80,8 +97,10 @@ export class PerfilComponent implements OnInit {
     }); */
     //this.usuarioP.apodo=""
     this.userParam = await this.navParams.get('perfil');
+    
     if (this.userParam !== undefined) {
       this.usuarioP = this.userParam;
+      //console.log(this.usuarioP)
       await this.caliServ.getCalifica(this.usuarioP.correo).subscribe(resul => {
         if (resul.payload.data() === undefined) {
           this.calificaciones = []
@@ -97,13 +116,13 @@ export class PerfilComponent implements OnInit {
       })
     } else {
       //this.usuarioP = JSON.parse(localStorage.getItem('userLogin'));
-      await this.AFauth.authState.subscribe(res =>{
-        this.userLogin = res.email
+      //await this.AFauth.authState.subscribe(res =>{
+        /* this.userLogin = res.email
         this.usuarioP = JSON.parse(localStorage.getItem("userLogin"));
         if (this.userLogin !== this.usuarioP.correo) {
           this.usuarioP = this.userServ.getUsuario(this.userLogin)//ACA ESTA EL PROBLEMA QUE TRAE CUALQUIER GILADA
-        }
-        console.log(this.usuarioP.correo)
+        } */
+        //console.log(this.usuarioP.correo)
         this.caliServ.getCalifica(this.usuarioP.correo).subscribe(resul => {
           if (resul.payload.data() === undefined) {
             this.calificaciones = []
@@ -117,7 +136,7 @@ export class PerfilComponent implements OnInit {
             this.calcularEstrellas(sumaCali);
           }
         })
-      });
+      //});
     }
     
 
@@ -176,12 +195,16 @@ export class PerfilComponent implements OnInit {
     });
   }
   verAlbumes() {
-    this.modalC.create({
+    this.modal.dismiss().then( ()=>{
+       localStorage.setItem("userP", JSON.stringify(this.usuarioP))
+       this.router.navigate(['/folder/Albumes'] )
+    })
+    /* this.modalC.create({
       component: AlbumesComponent,
       componentProps: {
         usuarioP: this.usuarioP
       }
-    }).then((modalE) => { modalE.present();})
+    }).then((modalE) => { modalE.present();}) */
   }
 
   closePerfil() {
@@ -329,7 +352,7 @@ export class PerfilComponent implements OnInit {
 
   abrirCamara() {
     const options: CameraOptions = {
-      quality: 100,
+      quality: 65,
       destinationType: this.camera.DestinationType.DATA_URL,
       encodingType: this.camera.EncodingType.JPEG,
       mediaType: this.camera.MediaType.PICTURE,
@@ -355,7 +378,7 @@ export class PerfilComponent implements OnInit {
   abrirGaleria() {
 
     const options2: ImagePickerOptions = {
-      quality: 70,
+      quality: 65,
       allow_video: false,
       outputType: 1,
       //maximumImagesCount: 1
@@ -411,6 +434,13 @@ export class PerfilComponent implements OnInit {
   }
   cancelarModi() {
     this.modoEditar = false;
+  }
+
+  public getUserInfo(uid){
+    const path = 'usuarios';
+    this.fireServ.getDoc<usuario>(path, uid).subscribe(res =>{
+      this.usuarioP = res;
+    });
   }
 
 

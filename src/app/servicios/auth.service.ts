@@ -10,7 +10,7 @@ import * as firebase from 'firebase/app';
 import { AngularFirestore, QuerySnapshot, DocumentSnapshot } from '@angular/fire/firestore';
 
 import { GooglePlus  } from '@ionic-native/google-plus/ngx';
-import { Facebook, FacebookLoginResponse } from '@ionic-native/facebook/ngx';
+//import { Facebook, FacebookLoginResponse } from '@ionic-native/facebook/ngx';
 
 
 @Injectable({
@@ -18,7 +18,7 @@ import { Facebook, FacebookLoginResponse } from '@ionic-native/facebook/ngx';
 })
 export class AuthService {
 
-  constructor(public AFauth: AngularFireAuth, public router: Router, private db: AngularFirestore, private gp: GooglePlus, private face: Facebook) { }
+  constructor(public AFauth: AngularFireAuth, public router: Router, private db: AngularFirestore, private gp: GooglePlus/* , private face: Facebook */) { }
 
   async sendVerificationEmail(): Promise<void>{
     return (await this.AFauth.currentUser).sendEmailVerification();
@@ -57,20 +57,20 @@ export class AuthService {
      
     });
   }
-  loginWithFacebook(){
+/*   loginWithFacebook(){
     var permissions =['email', 'public_profile'];
     return this.face.login(permissions).then((response: FacebookLoginResponse)=>{
       const credential_face = firebase.default.auth.FacebookAuthProvider.credential(response.authResponse.accessToken);
       return this.AFauth.signInWithCredential(credential_face);
     });
-  }
+  } */
 
 
   logout() {
     return this.AFauth.signOut().then(()=>{
       this.gp.disconnect();
       localStorage.setItem("userLogin", "")
-      this.face.logout();
+      /* this.face.logout(); */
       this.router.navigate(['/login'])
     });
   }
@@ -94,5 +94,17 @@ export class AuthService {
     foto: d.foto,
     nombre: d.nombre
   });
+}
+
+async getUid(){
+  const user = await this.AFauth.currentUser;
+  if (user === null) {
+    return null;
+  } else {
+    return user.uid;
+  }
+}
+stateAuth(){
+  return this.AFauth.authState;
 }
 }

@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { AngularFireAuth } from '@angular/fire/auth';
 import { AngularFirestore } from '@angular/fire/firestore';
 import { map } from 'rxjs/operators';
 
@@ -15,7 +16,29 @@ export interface usuario{
   providedIn: 'root'
 })
 export class UsuariosService {
-  constructor(private db: AngularFirestore) { }
+  constructor(
+    private db: AngularFirestore,
+    private AFauth: AngularFireAuth
+    ) {
+      this.getUid()
+      this.stateAuth()
+     }
+
+    async getUid(){
+      const user = await this.AFauth.currentUser;
+      if (user === null) {
+        return null;
+      } else {
+        return user.uid;
+      }
+      /* this.AFauth.authState.subscribe(res=>{
+        return res.email;
+      }) */
+    }
+
+    stateAuth(){
+      return this.AFauth.authState
+    }
 
   createUsuarios(data: usuario){
     return this.db.collection('usuarios').add(data);
@@ -39,5 +62,8 @@ export class UsuariosService {
     return this.db.collection('usuarios').doc(datos.correo).set(datos);
   }
 
+  setToken(userUpdate, uid){
+    return this.db.collection('usuarios').doc(uid).update(userUpdate);
+  }
 
 }

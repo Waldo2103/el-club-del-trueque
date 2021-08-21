@@ -1,0 +1,54 @@
+{
+  "project_info": {
+    "project_number": "440923603237",
+    "project_id": "el-club-del-trueque-f911a",
+    "storage_bucket": "el-club-del-trueque-f911a.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:440923603237:android:54a2bbd6e4587604fd5acc",
+        "android_client_info": {
+          "package_name": "io.ionic.ecdtArg"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "440923603237-mi683hov13sto037b7hih754ar0ebm7p.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "io.ionic.ecdtArg",
+            "certificate_hash": "c968548cbaa32649673f2111a47efe0ff6899764"
+          }
+        },
+        {
+          "client_id": "440923603237-ss5qqon6tm2vak64tgupjmpa49ekem4g.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA3wxkGHlZ2rPN8PXuzHkpOZDXitaK9ALg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "440923603237-ss5qqon6tm2vak64tgupjmpa49ekem4g.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "440923603237-sdgg6ob2i4r8dmm0d1v2g8o2805e3lit.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "io.ionic.ecdtArg"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

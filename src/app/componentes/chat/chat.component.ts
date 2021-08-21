@@ -7,6 +7,7 @@ import { Subscription } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { MensajesService } from 'src/app/servicios/mensajes/mensajes.service';
 import { message } from "../../models/message"; 
+import { FirebaseService } from 'src/app/servicios/firebase.service';
 
 
 
@@ -31,11 +32,12 @@ export class ChatComponent implements OnInit, AfterViewChecked {
     private navParams: NavParams,
     private modal: ModalController,
     private mensService: MensajesService,
-    private AFauth: AngularFireAuth
+    private AFauth: AngularFireAuth,
+    private fbServ: FirebaseService
   ) { }
 
   scrollToBottomOnInit() {
-    this.content.scrollToBottom(100);
+    this.content.scrollToBottom(1000);
   }
   ngAfterViewChecked(){
     this.scrollToBottomOnInit()
@@ -47,9 +49,13 @@ export class ChatComponent implements OnInit, AfterViewChecked {
       this.userLogin = res.email
     });
     this.chat = this.navParams.get('chat')
-    console.log("entro en init de chatcomp")
     this.mensService.getMensaje(this.chat.uid).subscribe( (room) =>{
-        this.room = room.messages;      
+        this.room = room.messages; 
+        console.log(room.messages[(room.messages.length - 1)].read, this.userLogin, room.messages[(room.messages.length - 1)].owner)
+        if (room.messages[(room.messages.length - 1)].read === false && this.userLogin !== room.messages[(room.messages.length - 1)].owner) {
+          this.markAsRead(room);  
+        }
+           
     })
   }
   
@@ -61,17 +67,22 @@ export class ChatComponent implements OnInit, AfterViewChecked {
   sendMessage(){
     if(this.mens !== ""){
       
-const mensaje: message = {
-      content: this.mens,
-      date: new Date(),
-      type: "text",
-      owner: this.userLogin
-    }
+    const mensaje: message = {
+          content: this.mens,
+          date: new Date(),
+          type: "text",
+          owner: this.userLogin,
+          read: false
+        }
     this.mensService.sendMsgToFirebase(mensaje , this.chat.uid)
     this.mens = "";
     this.scrollToBottomOnInit()
     }
     //this.scrollToBottomOnInit()
+  }
+  markAsRead(sala){
+    sala.messages[(sala.messages.length - 1)].read = true;
+    this.fbServ.updateDoc(sala, '/mensajes/', sala.uid);
   }
   
 }
