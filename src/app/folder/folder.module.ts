@@ -38,12 +38,12 @@ import { TruequeComponent } from '../componentes/trueque/trueque.component';
   ],
   declarations: [FolderPage, 
     MensajesComponent, ChatComponent, 
-    AlbumesComponent, AlbumComponent, ProdAltaComponent, 
+    AlbumComponent, AlbumesComponent,
     PerfilComponent, PopComponent,
     TruequesComponent, TruequeComponent
   ],
   entryComponents:[MensajesComponent, ChatComponent, 
-    AlbumesComponent, AlbumComponent, ProdAltaComponent, 
+    AlbumComponent, AlbumesComponent,
     PerfilComponent, PopComponent,
     TruequesComponent, TruequeComponent
   ],

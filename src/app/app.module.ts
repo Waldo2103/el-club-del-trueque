@@ -24,13 +24,16 @@ import { MensajesComponent } from './componentes/mensajes/mensajes.component';
 import { FolderPage } from './folder/folder.page';
 import { ProductoComponent } from './componentes/producto/producto.component';
 import { PhotoViewer } from "@ionic-native/photo-viewer/ngx";
+import { ProdAltaComponent } from './componentes/prod-alta/prod-alta.component';
+import { AlbumesComponent } from './componentes/albumes/albumes.component';
+import { GrupoComponent } from './componentes/grupos/grupo/grupo.component';
 
 
 
 
 @NgModule({
-  declarations: [AppComponent, FolderPage, ProductoComponent],
-  entryComponents: [FolderPage, ProductoComponent],
+  declarations: [AppComponent, FolderPage, ProductoComponent, ProdAltaComponent, AlbumesComponent, GrupoComponent],
+  entryComponents: [FolderPage, ProductoComponent, ProdAltaComponent, AlbumesComponent, GrupoComponent],
   imports: [
     BrowserModule, 
     IonicModule.forRoot(), 

@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 import { IonicModule } from '@ionic/angular';
 
@@ -8,8 +8,11 @@ import { HomePageRoutingModule } from './home-routing.module';
 
 import { HomePage } from './home.page';
 import { PipesModule } from '../../pipes/pipes.module';
-import { ImagePicker } from '@ionic-native/image-picker/ngx';
+
 import { Camera } from '@ionic-native/camera/ngx';
+import { ImagePicker } from "@ionic-native/image-picker/ngx";
+import { File } from "@ionic-native/file/ngx";
+import { ProdAltaComponent } from 'src/app/componentes/prod-alta/prod-alta.component';
 
 
 @NgModule({
@@ -18,9 +21,11 @@ import { Camera } from '@ionic-native/camera/ngx';
     CommonModule,
     FormsModule,
     IonicModule,
-    HomePageRoutingModule
+    HomePageRoutingModule,
+    ReactiveFormsModule
   ],
-  providers: [ImagePicker, Camera],
-  declarations: [HomePage]
+  providers: [ImagePicker, Camera, File],
+  declarations: [HomePage],
+  entryComponents: []
 })
 export class HomePageModule {}

@@ -10,6 +10,7 @@ import { UsuariosService } from 'src/app/servicios/usuarios/usuarios.service';
 import { AlbumesComponent } from 'src/app/componentes/albumes/albumes.component';
 import { NotificacionesService } from 'src/app/servicios/notificaciones/notificaciones.service';
 import { PerfilComponent } from 'src/app/componentes/perfil/perfil.component';
+import { ProdAltaComponent } from 'src/app/componentes/prod-alta/prod-alta.component';
 
 @Component({
   selector: 'app-home',
@@ -165,13 +166,13 @@ export class HomePage implements OnInit {
         text: 'Sacar Foto',
         icon: 'camera',
         handler: () => {
-          this.abrirAlbum('cam')
+          this.openCamera('')
         }
       }, {
         text: 'Subir desde Galería',
         icon: 'image',
         handler: () => {
-          this.abrirAlbum('gal')
+          this.openGallery('')
         }
         }, {
         text: 'Cancel',
@@ -182,15 +183,65 @@ export class HomePage implements OnInit {
       }]
     });
     await accSheet.present();
-    const { data } = await accSheet.onDidDismiss();
+    const  data  = await accSheet.onDidDismiss().then(()=>{
+      console.log("cossooooooooooooooooooooooooooovich")
+    });
   }
 
-  public abrirAlbum(modo:string){
+  async openGallery(prod) {
+    const modal = await this.modal.create({
+      component: ProdAltaComponent,
+      componentProps: {
+        prod: prod,
+        modo: "gallery"
+      }
+    });
+    modal.present();
+    const data = await modal.onDidDismiss().then(async res=>{
+      if (res.data.action === "verAlbumes") {
+        console.log("casaaaaaaaaaaaaavich")
+        const modal2 = await this.modal.create({
+          component: AlbumesComponent,
+          componentProps: {
+            usuarioP: res.data.datos
+          }
+        });
+        modal2.present();
+      } 
+      console.log("cossooooooooooooooooooooooooooovich")
+    });
+  }
+
+  async openCamera(prod) {
+    const modal = await this.modal.create({
+      component: ProdAltaComponent,
+      componentProps: {
+        prod: prod,
+        modo: "camera"
+      }
+    });
+    modal.present();
+    const data = await modal.onDidDismiss().then(async res=>{
+      if (res.data.action === "verAlbumes") {
+        console.log("casaaaaaaaaaaaaavich")
+        const modal2 = await this.modal.create({
+          component: AlbumesComponent,
+          componentProps: {
+            usuarioP: res.data.datos
+          }
+        });
+        modal2.present();
+      } 
+      console.log("cossooooooooooooooooooooooooooovich")
+    });
+  }
+
+  /* public abrirAlbum(modo:string){
     this.modal.create({
       component: AlbumesComponent,
       componentProps: {
         modo: modo
       }
     }).then((modal)=>modal.present())
-  }
+  } */
 }

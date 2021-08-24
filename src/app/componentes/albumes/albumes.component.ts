@@ -31,7 +31,9 @@ export class AlbumesComponent implements OnInit {
   ) { }
 
   async ngOnInit() {
-    this.userParam = JSON.parse(localStorage.getItem('userP'));
+    if (localStorage.getItem('userP') !== "") {
+      this.userParam = JSON.parse(localStorage.getItem('userP'));
+    }
     if (this.userParam !== undefined || this.userParam == "") {
       //SE MODIFICÓ, SE TOMARÁ POR LOCALSTORAGE
       this.userLogin = this.userParam;
@@ -82,6 +84,7 @@ export class AlbumesComponent implements OnInit {
   }
 
   openGallery(prod) {
+    console.log(prod)
     this.modal.create({
       component: ProdAltaComponent,
       componentProps: {
@@ -92,6 +95,7 @@ export class AlbumesComponent implements OnInit {
   }
 
   openCamera(prod) {
+    console.log(prod)
     this.modal.create({
       component: ProdAltaComponent,
       componentProps: {

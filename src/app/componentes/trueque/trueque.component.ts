@@ -7,8 +7,8 @@ import { ImagePicker, ImagePickerOptions } from "@ionic-native/image-picker/ngx"
 import { Camera, CameraOptions } from '@ionic-native/camera/ngx';
 import { producto, ProductosService } from 'src/app/servicios/productos/productos.service';
 import { PhotoViewer } from '@ionic-native/photo-viewer/ngx';
-import { AlbumesComponent } from '../albumes/albumes.component';
-import { ProductoComponent } from '../producto/producto.component';
+//import { AlbumesComponent } from '../albumes/albumes.component';
+//import { ProductoComponent } from '../producto/producto.component';
 import { AlbumComponent } from '../album/album.component';
 import { trueque, TruequeService } from 'src/app/servicios/trueque/trueque.service';
 import { CalificaComponent } from '../califica/califica.component';

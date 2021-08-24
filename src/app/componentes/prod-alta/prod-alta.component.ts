@@ -218,7 +218,8 @@ export class ProdAltaComponent implements OnInit {
     }
   }
   closeAlbum(){
-    this.modal.dismiss()
+    const data = {action:"verAlbumes",datos:this.user}
+    this.modal.dismiss(data);//cierro el modal  en HomePage los derivo a Albumes
   }
 }
 

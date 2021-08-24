@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActionSheetController, ModalController, NavParams } from '@ionic/angular';
 import {  UsuariosService } from 'src/app/servicios/usuarios/usuarios.service';
-import { AlbumesComponent } from '../albumes/albumes.component';
+//import { AlbumesComponent } from '../albumes/albumes.component';
 import { PhotoViewer } from '@ionic-native/photo-viewer/ngx';
 import { PopoverController } from '@ionic/angular';
 import { PopComponent } from '../pop/pop.component';
