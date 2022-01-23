@@ -24,6 +24,7 @@ export class AppComponent {
   public appPages = [
     { title: 'Inicio', url: '/home', icon: 'home', color: "success" },
     { title: 'Perfil', url: '/folder/Perfil', icon: 'person', color: "primary" },
+    { title: 'Grupos', url: '/folder/Grupos', icon: 'people', color: "secondary" },
     { title: 'Mis Trueques', url: '/folder/Trueques', icon: 'sync', color: "danger" },
     { title: 'Mensajes', url: '/folder/Mensajes', icon: 'mail', color: "tertiary" },
     { title: 'Mis Albumes', url: '/folder/Albumes', icon: 'images', color: "secondary" }/*,

@@ -3,8 +3,9 @@ import { Component, OnInit } from '@angular/core';
 import { AngularFireAuth } from '@angular/fire/auth';
 import { Router } from '@angular/router';
 import { ModalController, NavParams } from '@ionic/angular';
+import { Producto } from 'src/app/clases/producto/producto';
 import { mensaje, MensajesService } from 'src/app/servicios/mensajes/mensajes.service';
-import { producto, ProductosService } from 'src/app/servicios/productos/productos.service';
+import { ProductosService } from 'src/app/servicios/productos/productos.service';
 import { trueque } from 'src/app/servicios/trueque/trueque.service';
 import { UsuariosService } from 'src/app/servicios/usuarios/usuarios.service';
 import { message } from "../../models/message";
@@ -21,7 +22,7 @@ export class ProductoComponent implements OnInit {
 
   public userLogin: string;
   public prod: any;
-  public producto: any;
+  public producto: Producto;
   public usuarioL: any;
   public usuarioP: any = [];
   public msg: message;
@@ -44,6 +45,7 @@ export class ProductoComponent implements OnInit {
   ) { }
 
   ngOnInit() {
+    this.prod = this.navParams.get('producto')
     this.traerUserLogin()
   }
 
@@ -53,19 +55,19 @@ export class ProductoComponent implements OnInit {
       this.userServ.getUsuario(this.userLogin).subscribe( user =>{
         this.usuarioL = user;
       })
-      this.traerProducto();
-    this.traerOwnerProduct();
+      //this.traerProducto();
+      this.traerOwnerProduct();
     });
 
     
   }
+  //No se está usando
   async traerProducto(){
     this.prod = this.navParams.get('producto')
-    this.prodServ.getProducto(this.prod.id).subscribe( pro =>{
+    /* this.prodServ.getProducto(this.prod.id).subscribe( pro =>{
       this.producto = pro;
       this.producto.id = this.prod.id;
-      //console.log(JSON.stringify(pro)+"al traer producto")
-    })
+    }) */
     
   }
 
@@ -155,12 +157,6 @@ export class ProductoComponent implements OnInit {
   verPerfil(){
     const data = {action:"verPerfil",datos:this.usuarioP}
     this.modal.dismiss(data);//cierro el modal y en AlbumComponent y HomePage los derivo a Perfil
-    /* this.modalPerfil.create({
-      component: PerfilComponent,
-      componentProps: {
-        perfil: this.usuarioP
-      }
-    }).then((modalP)=>{modalP.present();this.modal.dismiss();console.log("creo modal de perfil nuevo")}) */
   }
 
   closeProduct(){
@@ -170,6 +166,15 @@ export class ProductoComponent implements OnInit {
   trocar(troqueV){
     console.log(troqueV)
     let troqueC = undefined;
+    let datos = [
+      troqueV,
+        troqueC,
+         this.usuarioL,
+         this.usuarioP
+        ]
+    const data = {action:"trocar",datos};
+    
+    this.modal.dismiss(data);
     /* this.modalTrueque.create({
       component: TruequeComponent,
       componentProps: {

@@ -6,8 +6,9 @@ import { ImagePicker, ImagePickerOptions } from "@ionic-native/image-picker/ngx"
 import { File } from "@ionic-native/file/ngx";
 import { FormBuilder, FormControl, Validators, FormGroup, FormArray } from '@angular/forms';
 import { album, AlbumesService } from 'src/app/servicios/albumes/albumes.service';
-import { producto, ProductosService } from 'src/app/servicios/productos/productos.service';
+import { ProductosService } from 'src/app/servicios/productos/productos.service';
 import { StorageService } from 'src/app/servicios/storage/storage.service';
+import { Producto } from 'src/app/clases/producto/producto';
 
 @Component({
   selector: 'app-prod-alta',
@@ -21,7 +22,7 @@ export class ProdAltaComponent implements OnInit {
   fotos: any = [];//se guardan las fotos en formato de listado
   form: FormGroup;
   public album: album;//se guarda el album que se creará
-  public troque: producto;//se guarda 1 troque que se creara
+  public troque: Producto;//se guarda 1 troque que se creara
   public user;//guardo los datos del usuario logueado
   //public mostrarForm: boolean = false; //esto es para que no muestre el formulario si aun no se cargo una foto
   constructor(

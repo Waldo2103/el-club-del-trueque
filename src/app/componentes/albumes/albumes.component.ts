@@ -34,7 +34,7 @@ export class AlbumesComponent implements OnInit {
     if (localStorage.getItem('userP') !== "") {
       this.userParam = JSON.parse(localStorage.getItem('userP'));
     }
-    if (this.userParam !== undefined || this.userParam == "") {
+    if (this.userParam !== undefined && this.userParam !== "") {
       //SE MODIFICÓ, SE TOMARÁ POR LOCALSTORAGE
       this.userLogin = this.userParam;
     } else {

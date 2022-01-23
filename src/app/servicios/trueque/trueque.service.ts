@@ -1,11 +1,11 @@
 import { Injectable } from '@angular/core';
 import { AngularFirestore } from '@angular/fire/firestore';
 import { map } from 'rxjs/operators';
-import { producto } from '../productos/productos.service';
+import { Producto } from 'src/app/clases/producto/producto';
 export interface trueque {
   id: Array<string>
-  comprador: producto
-  vendedor: producto
+  comprador: Producto
+  vendedor: Producto
   estado: estado //pendiente confirmado cancelado finalizado
   uid?: string
 }

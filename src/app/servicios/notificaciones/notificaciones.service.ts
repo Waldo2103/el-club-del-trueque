@@ -37,7 +37,9 @@ export class NotificacionesService  {
       //console.log("res notiserv",res.email);
       this.email = res.email;
       if (res != null) {
-        this.inicializar();
+        if(this.platform.is("capacitor")){
+          this.inicializar();
+        }
       }
     });
   }

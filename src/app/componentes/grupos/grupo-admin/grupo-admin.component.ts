@@ -9,6 +9,8 @@ export class GrupoAdminComponent implements OnInit {
 
   constructor() { }
 
-  ngOnInit() {}
+  ngOnInit() {
+    console.log("entre a grupoAdmin")
+  }
 
 }

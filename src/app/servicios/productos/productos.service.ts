@@ -1,8 +1,9 @@
 import { Injectable } from '@angular/core';
 import { AngularFirestore } from '@angular/fire/firestore';
 import { map } from 'rxjs/operators';
+import { Producto } from 'src/app/clases/producto/producto';
 
-export interface producto {
+/*export interface producto {
   id?: string
   nombre: string
   descripcion: string 
@@ -13,7 +14,7 @@ export interface producto {
   imagen: string
   album: string
   estado?: boolean
-}
+}*/
 
 @Injectable({
   providedIn: 'root'
@@ -23,14 +24,14 @@ export class ProductosService {
 
   constructor(private db: AngularFirestore) { }
 
-  createProducto(data: producto){
+  createProducto(data: Producto){
     return this.db.collection('productos').add(data);
   }
   //trae los productos trocables
   getProductos(){
     return this.db.collection('productos', ref => ref.where("estado", "==", true)).snapshotChanges().pipe(map(products=>{
       return products.map(a =>{
-        const data = a.payload.doc.data() as producto;
+        const data = a.payload.doc.data() as Producto;
         data.id = a.payload.doc.id;
         return data;
       })
@@ -45,7 +46,7 @@ export class ProductosService {
     return this.db.collection('productos', ref => ref.where("owner", "==", owner)).snapshotChanges().pipe(map(productos =>{
       //console.log("servi"+JSON.stringify(productos))
       return productos.map(a =>{
-        const data = a.payload.doc.data() as producto;
+        const data = a.payload.doc.data() as Producto;
         data.id = a.payload.doc.id;
         return data;
       })

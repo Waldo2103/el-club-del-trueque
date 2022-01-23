@@ -3,7 +3,7 @@ import { Router } from '@angular/router';
 import { AlertController, ModalController, NavParams } from '@ionic/angular';
 import { Producto } from 'src/app/clases/producto/producto';
 import { AlbumesService } from 'src/app/servicios/albumes/albumes.service';
-import { producto, ProductosService } from 'src/app/servicios/productos/productos.service';
+import { ProductosService } from 'src/app/servicios/productos/productos.service';
 import { PerfilComponent } from '../perfil/perfil.component';
 import { ProductoComponent } from '../producto/producto.component';
 
@@ -22,7 +22,7 @@ export class AlbumComponent implements OnInit {
   public ownerOfAlbum: boolean = true;
   filtroBuscar = '';
   public enTrueque: boolean = false;
-  public troque: producto;
+  public troque: Producto;
   public userLogin;
 
   constructor(
@@ -109,7 +109,7 @@ export class AlbumComponent implements OnInit {
     this.alertaConfirmacion("Selección de Troque",troque,"¿Estás seguro de que esto es lo que querés trocar?")
   }
 
-  public alertaConfirmacion(header: string, troque: producto, message: string) {
+  public alertaConfirmacion(header: string, troque: Producto, message: string) {
     this.alertCtrl.create({
       header,
       message,

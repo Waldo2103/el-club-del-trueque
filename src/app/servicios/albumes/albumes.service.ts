@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { AngularFirestore } from '@angular/fire/firestore';
 import { map } from 'rxjs/operators';
-import { producto } from "../productos/productos.service";
+import { Producto } from 'src/app/clases/producto/producto';
 
 export interface album {
   nombre: string
@@ -47,7 +47,7 @@ export class AlbumesService {
       return this.db.collection('productos', ref => ref.where("album", "==", idAlbum)).snapshotChanges().pipe(map(productos =>{
         //console.log("servi"+JSON.stringify(productos))
         return productos.map(a =>{
-          const data = a.payload.doc.data() as producto;
+          const data = a.payload.doc.data() as Producto;
           data.id = a.payload.doc.id;
           return data;
         })

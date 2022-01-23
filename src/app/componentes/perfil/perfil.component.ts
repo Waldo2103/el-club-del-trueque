@@ -12,7 +12,7 @@ import { StorageService } from 'src/app/servicios/storage/storage.service';
 import { Router } from '@angular/router';
 import { califica, CalificaService } from 'src/app/servicios/califica/califica.service';
 import { AngularFireAuth } from '@angular/fire/auth';
-import { FirestoreService } from 'src/app/servicios/firestore.service';
+import { FirebaseService } from 'src/app/servicios/firebase.service';
 
 import { usuario } from "../../../app/models";
 
@@ -61,7 +61,7 @@ export class PerfilComponent implements OnInit {
     private router: Router,
     private caliServ: CalificaService,
     private AFauth: AngularFireAuth,
-    private fireServ: FirestoreService
+    private fireServ: FirebaseService
   ) {
     this.userServ.stateAuth().subscribe(res =>{
       if (res !== null) {
@@ -222,7 +222,7 @@ export class PerfilComponent implements OnInit {
       //componentProps: {modo: 'editar'},
       event: ev,
       translucent: true,
-      mode: 'ios'
+      mode: 'md'
     });
     await popover.present();
 
@@ -438,7 +438,7 @@ export class PerfilComponent implements OnInit {
 
   public getUserInfo(uid){
     const path = 'usuarios';
-    this.fireServ.getDoc<usuario>(path, uid).subscribe(res =>{
+    this.fireServ.getDocId<usuario>(path, uid).subscribe(res =>{
       this.usuarioP = res;
     });
   }

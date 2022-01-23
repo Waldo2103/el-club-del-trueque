@@ -8,6 +8,7 @@ import { NavParams, PopoverController } from '@ionic/angular';
 })
 export class PopComponent implements OnInit {
   public items = ["Editar"];
+  public modo;
   
   constructor(
     private popo: PopoverController,
@@ -15,6 +16,12 @@ export class PopComponent implements OnInit {
     ) { }
 
   ngOnInit() {
+    this.modo = this.navParams.get('modo');
+    if (this.modo === 'grupos') {
+      this.items = ['Crear Grupo', 'Unirse a un Grupo']
+    } else {
+      this.items = ["Editar"];
+    }
   }
 
   onClick(i: number){

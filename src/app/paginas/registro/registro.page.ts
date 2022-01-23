@@ -1,18 +1,13 @@
 import { Component, OnInit } from '@angular/core';
 import { AuthService } from '../../servicios/auth.service';
 import { Cliente } from '../../clases/cliente/cliente';
-//import { Anonimo } from '../../clases/anonimo';
-//import { Herramientas } from '../../clases/herramientas/herramientas';
-//import { CajaSonido } from '../../clases/cajaSonido';
 
 import * as firebase from 'firebase';
-//import { Camera } from '@ionic-native/camera/ngx';
-//import { CameraOptions } from '@ionic-native/camera';
-//import { BarcodeScannerOptions, BarcodeScanResult, BarcodeScanner } from '@ionic-native/barcode-scanner/ngx';
 import { AlertController, MenuController } from '@ionic/angular';
 import { FormGroup, FormBuilder, FormControl, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { CalificaService } from 'src/app/servicios/califica/califica.service';
+import { FirebaseService } from 'src/app/servicios/firebase.service';
 
 @Component({
   selector: 'app-registro',
@@ -34,16 +29,19 @@ export class RegistroPage implements OnInit {
     ]
   };
 
- mail:string;
- password:string;
- password2:string;
- modalText: string;
+  mail:string;
+  password:string;
+  password2:string;
+  modalText: string;
 
   constructor(private authService: AuthService,
     private caliService: CalificaService,
     private alertCtrl: AlertController,
     private ctrl: MenuController,
-    private router: Router, private formBuilder: FormBuilder) { // private toastService: ToastrService
+    private router: Router, 
+    private formBuilder: FormBuilder,
+    private fireServ: FirebaseService
+    ) { 
 
       this.form = this.formBuilder.group({
         mail: new FormControl('', Validators.compose([
@@ -85,8 +83,7 @@ public presentAlert(header: string, subHeader: string, message: string) {
 }
 
 public RegistrarCliente() {
-   
-  this.authService.RegistrarClienteDatos(this.usuario, this.password).then(async auth => {
+  this.fireServ.createDoc('usuarios', this.usuario).then(async () => {
     this.usuario = new Cliente();
     this.password = '';
     //this.ocultarSeccion0 = false;

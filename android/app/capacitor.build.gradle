@@ -19,7 +19,7 @@ dependencies {
     implementation "com.android.support:support-v4:27.+"
     implementation "com.google.android.gms:play-services-auth:15.0.1"
     implementation "com.google.android.gms:play-services-identity:15.0.1"
-    implementation "com.android.support:appcompat-v7:23+"
+    implementation "com.android.support:appcompat-v7:27.+"
     implementation "com.android.support:support-v13:27.+"
     implementation "me.leolin:ShortcutBadger:1.1.17@aar"
     implementation "com.google.firebase:firebase-messaging:17.0.+"

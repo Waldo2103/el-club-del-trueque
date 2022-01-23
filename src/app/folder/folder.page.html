@@ -4,6 +4,9 @@
       <ion-menu-button></ion-menu-button>
     </ion-buttons>
     <ion-title>{{ folder }}</ion-title>
+    <ion-buttons *ngIf="folder==='Grupos'" slot="end">
+      <ion-button (click)="presentPopover($event)" id="opciones"><ion-icon color="dark" name="ellipsis-vertical-outline"></ion-icon></ion-button>
+    </ion-buttons>
   </ion-toolbar>
 </ion-header>
 
@@ -16,5 +19,6 @@
   <app-mensajes *ngIf="folder==='Mensajes'"></app-mensajes>
   <app-albumes *ngIf="folder==='Albumes'"></app-albumes>
   <app-perfil *ngIf="folder==='Perfil'"></app-perfil>
+  <app-grupo-lista [opcion]="opcion" *ngIf="folder==='Grupos'"></app-grupo-lista>
   <app-trueques *ngIf="folder==='Trueques'"></app-trueques>
 </ion-content>

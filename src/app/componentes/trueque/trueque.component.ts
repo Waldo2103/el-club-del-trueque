@@ -5,13 +5,16 @@ import { StorageService } from 'src/app/servicios/storage/storage.service';
 import { UsuariosService } from 'src/app/servicios/usuarios/usuarios.service';
 import { ImagePicker, ImagePickerOptions } from "@ionic-native/image-picker/ngx";
 import { Camera, CameraOptions } from '@ionic-native/camera/ngx';
-import { producto, ProductosService } from 'src/app/servicios/productos/productos.service';
+import { ProductosService } from 'src/app/servicios/productos/productos.service';
 import { PhotoViewer } from '@ionic-native/photo-viewer/ngx';
 //import { AlbumesComponent } from '../albumes/albumes.component';
 //import { ProductoComponent } from '../producto/producto.component';
 import { AlbumComponent } from '../album/album.component';
 import { trueque, TruequeService } from 'src/app/servicios/trueque/trueque.service';
 import { CalificaComponent } from '../califica/califica.component';
+import { Producto } from 'src/app/clases/producto/producto';
+import { FirebaseService } from 'src/app/servicios/firebase.service';
+import { AlertasService } from 'src/app/servicios/alertas/alertas.service';
 
 
 
@@ -23,9 +26,9 @@ import { CalificaComponent } from '../califica/califica.component';
 export class TruequeComponent implements OnInit {
   public trueque: trueque;
   public estado = "Trueque NO Iniciado";
-  public troqueComprador: producto;
-  public troqueCompradorBis: producto;
-  public troqueVendedor: producto;
+  public troqueComprador: Producto;
+  public troqueCompradorBis: Producto;
+  public troqueVendedor: Producto;
   public foto = "";
   public fotoASub;
   public usuarioP;
@@ -48,9 +51,10 @@ export class TruequeComponent implements OnInit {
   constructor(
     private modal: ModalController,
     public navParams: NavParams,
+    private alertServ: AlertasService,
     private actionSheetController: ActionSheetController,
     private mensServ: MensajesService,
-    private userServ: UsuariosService,
+    private fireServ: FirebaseService,
     private modalC: ModalController,
     private modalCali: ModalController,
     private photoViewer: PhotoViewer,
@@ -105,6 +109,7 @@ export class TruequeComponent implements OnInit {
     }
     if (!this.troqueVendedor.estado) {
       alert("El dueño de la publicación ya lo trocó con otro usuario")
+      //this.modal.dismiss()
     }
 
 
@@ -151,70 +156,70 @@ export class TruequeComponent implements OnInit {
 
   async agregarTroque() {
     try {
-      
-    
-    if (this.troqueComprador === undefined || this.usuarioL.correo === this.troqueComprador.owner) {
-      const accSheet = await this.actionSheetController.create({
-        header: 'Agrega tu Troque',
-        cssClass: 'my-custom-class2',
-        buttons: [{
-          text: 'Buscar en tus Troques',
-          icon: 'images',
-          handler: () => {
-            this.troqueCompradorBis = this.troqueComprador;
-            this.buscarEnProductos()
-          }
-        }, {
-          text: 'Sacar Foto',
-          icon: 'camera',
-          handler: () => {
-            this.troqueCompradorBis = this.troqueComprador;
-            this.abrirCamara()
-          }
-        }, {
-          text: 'Subir desde Galería',
-          icon: 'image',
-          handler: () => {
-            this.troqueCompradorBis = this.troqueComprador;
-            this.abrirGaleria()
-          }
-        }, {
-          text: 'Cancel',
-          icon: 'close',
-          role: 'cancel',
-          handler: () => {
-          }
-        }]
-      });
-      await accSheet.present();
-      const { data } = await accSheet.onDidDismiss();
-    } else {
-      const accSheet = await this.actionSheetController.create({
-        header: 'Agrega tu Troque',
-        cssClass: 'my-custom-class2',
-        buttons: [{
-          text: 'Buscar en sus Troques',
-          icon: 'images',
-          handler: () => {
-            this.troqueCompradorBis = this.troqueComprador;
-            this.buscarEnProductos()
-          }
-        }, {
-          text: 'Cancel',
-          icon: 'close',
-          role: 'cancel',
-          handler: () => {
-          }
-        }]
-      });
-      await accSheet.present();
-      const { data } = await accSheet.onDidDismiss();
-    }
-  } catch (error) {
-      alert(error)
-  }
 
-    
+
+      if (this.troqueComprador === undefined || this.usuarioL.correo === this.troqueComprador.owner) {
+        const accSheet = await this.actionSheetController.create({
+          header: 'Agrega tu Troque',
+          cssClass: 'my-custom-class2',
+          buttons: [{
+            text: 'Buscar en tus Troques',
+            icon: 'images',
+            handler: () => {
+              this.troqueCompradorBis = this.troqueComprador;
+              this.buscarEnProductos()
+            }
+          }, {
+            text: 'Sacar Foto',
+            icon: 'camera',
+            handler: () => {
+              this.troqueCompradorBis = this.troqueComprador;
+              this.abrirCamara()
+            }
+          }, {
+            text: 'Subir desde Galería',
+            icon: 'image',
+            handler: () => {
+              this.troqueCompradorBis = this.troqueComprador;
+              this.abrirGaleria()
+            }
+          }, {
+            text: 'Cancel',
+            icon: 'close',
+            role: 'cancel',
+            handler: () => {
+            }
+          }]
+        });
+        await accSheet.present();
+        const { data } = await accSheet.onDidDismiss();
+      } else {
+        const accSheet = await this.actionSheetController.create({
+          header: 'Agrega tu Troque',
+          cssClass: 'my-custom-class2',
+          buttons: [{
+            text: 'Buscar en sus Troques',
+            icon: 'images',
+            handler: () => {
+              this.troqueCompradorBis = this.troqueComprador;
+              this.buscarEnProductos()
+            }
+          }, {
+            text: 'Cancel',
+            icon: 'close',
+            role: 'cancel',
+            handler: () => {
+            }
+          }]
+        });
+        await accSheet.present();
+        const { data } = await accSheet.onDidDismiss();
+      }
+    } catch (error) {
+      alert(error)
+    }
+
+
   }
 
   async buscarEnProductos() {
@@ -278,7 +283,7 @@ export class TruequeComponent implements OnInit {
     }
     if (this.foto === "") {
       this.cambioEstado = false;
-    }else {
+    } else {
       this.cambioEstado = true;
     }
     this.camera.getPicture(options).then(async (imageData) => {
@@ -306,7 +311,8 @@ export class TruequeComponent implements OnInit {
           owner: this.usuarioL.correo,
           apodo: this.usuarioL.apodo,
           imagen: "",
-          album: ""
+          album: "",
+          zona: ""
         }
       }
 
@@ -353,6 +359,7 @@ export class TruequeComponent implements OnInit {
           apodo: this.usuarioL.apodo,
           imagen: "",
           album: "",
+          zona: ""
         }
         if (res !== undefined) {
           this.troqueAgregado = true;
@@ -375,35 +382,35 @@ export class TruequeComponent implements OnInit {
   //Sube el archivo a Cloud Storage
   async subirArchivo() {
     try {
-      
-    
-    let f = this.fotoASub;
 
-    //genero el nombre del archivo
-    var fe = new Date();
-    //var fec: string = fe.getDate()+"-"+fe.getMonth()+"-"+fe.getUTCFullYear()+"_"+fe.getUTCHours()+fe.getUTCMinutes();
-    //firebase no acepta el arroba entonces lo reemplazo
-    if (this.trueque !== undefined) {
-      this.nombreArchivo = `${this.troqueComprador.owner.replace('@', '-').toLowerCase()}_${this.trueque.id[2]}.jpg`;// tomo el del id del trueque para pisar la imagen
-    }else{
-      this.nombreArchivo = `${this.troqueComprador.owner.replace('@', '-').toLowerCase()}_${this.mathRandom}.jpg`;
-    }
-    var referencia = this.storageServ.referenciaCloudStorage(`productosTemp/${this.nombreArchivo}`);
-    var tarea = this.storageServ.tareaCloudStorage(this.nombreArchivo, f);
-    //Cambia el porcentaje
-    tarea.percentageChanges().subscribe((porcentaje) => {
-      /* this.porcentaje = Math.round(porcentaje);
-      if (this.porcentaje == 100) {
-        this.finalizado = true;
-      } */
-    });
-    //tomo la referencia de la imagen y creo un troque
-    await referencia.putString(f, 'base64', { contentType: 'image/jpeg' }).then(async (snapshot) => {
-      this.troqueComprador.imagen = await snapshot.ref.getDownloadURL();
-    })
-  } catch (error) {
+
+      let f = this.fotoASub;
+
+      //genero el nombre del archivo
+      var fe = new Date();
+      //var fec: string = fe.getDate()+"-"+fe.getMonth()+"-"+fe.getUTCFullYear()+"_"+fe.getUTCHours()+fe.getUTCMinutes();
+      //firebase no acepta el arroba entonces lo reemplazo
+      if (this.trueque !== undefined) {
+        this.nombreArchivo = `${this.troqueComprador.owner.replace('@', '-').toLowerCase()}_${this.trueque.id[2]}.jpg`;// tomo el del id del trueque para pisar la imagen
+      } else {
+        this.nombreArchivo = `${this.troqueComprador.owner.replace('@', '-').toLowerCase()}_${this.mathRandom}.jpg`;
+      }
+      var referencia = this.storageServ.referenciaCloudStorage(`productosTemp/${this.nombreArchivo}`);
+      var tarea = this.storageServ.tareaCloudStorage(this.nombreArchivo, f);
+      //Cambia el porcentaje
+      tarea.percentageChanges().subscribe((porcentaje) => {
+        /* this.porcentaje = Math.round(porcentaje);
+        if (this.porcentaje == 100) {
+          this.finalizado = true;
+        } */
+      });
+      //tomo la referencia de la imagen y creo un troque
+      await referencia.putString(f, 'base64', { contentType: 'image/jpeg' }).then(async (snapshot) => {
+        this.troqueComprador.imagen = await snapshot.ref.getDownloadURL();
+      })
+    } catch (error) {
       alert(error)
-  }
+    }
 
   }
   closeTrueque() {
@@ -417,7 +424,7 @@ export class TruequeComponent implements OnInit {
       //alta nueva es que se sube de la camara o galeria un nuevo producto y no lo toma de uno existente
       if (this.altaNueva) {
         await this.subirArchivo()
-        
+
         trueque = {
           trueque: estado,
           comprador: this.truequeEstado.vendedor,
@@ -435,14 +442,14 @@ export class TruequeComponent implements OnInit {
       }
       if (!this.altaNueva) {
         trueque = {
-        trueque: estado,
-        comprador: this.truequeEstado.comprador,
-        vendedor: this.truequeEstado.vendedor,
-        uid: this.trueque.uid,
-        compradorT: this.troqueComprador
+          trueque: estado,
+          comprador: this.truequeEstado.comprador,
+          vendedor: this.truequeEstado.vendedor,
+          uid: this.trueque.uid,
+          compradorT: this.troqueComprador
+        }
       }
-      }
-      
+
     } else if (estado === 'rechazado') {
       if (this.truequeEstado.comprador === 'pendiente') {
         this.truequeEstado.comprador = 'rechazado';
@@ -471,11 +478,22 @@ export class TruequeComponent implements OnInit {
       if (this.troqueComprador.nombre !== "Mi Troque") {
         await this.prodServ.updateProducto(this.troqueComprador.id, false);
       }
-      
+
       await this.prodServ.updateProducto(this.troqueVendedor.id, false);
       this.modal.dismiss()
     } else if (estado === 'cancelado') {
-      this.modal.dismiss()
+      this.alertServ.alertaConfirmacion(
+        "Cancelar Trueque",
+        "¿Estás seguro de que querés cancelar el intercambio?",
+        ["Si", "No"]).then(resp => {
+          if (resp) {
+            // REVISAR Luego de esto se debe agregar para que se envie una notificación a la persona que se
+            // le canceló el trueque, ya que recibió una al haberlo iniciado
+            this.fireServ.deleteDoc(this.trueque.uid, "trueques");
+            this.alertServ.alertaInformacion("Cancelación realizada", "El intercambio fue cancelado.", "Ok")
+            this.modal.dismiss()
+          }
+        })
     }
 
     let truequeR = {
@@ -519,7 +537,7 @@ export class TruequeComponent implements OnInit {
 
   }
 
-  public alertaConfirmacion(header: string, message: string, opcion:string, trueque?) {
+  public alertaConfirmacion(header: string, message: string, opcion: string, trueque?) {
     this.alertCtrl.create({
       header,
       message,
@@ -535,29 +553,29 @@ export class TruequeComponent implements OnInit {
           handler: async () => {
             if (opcion === "finalizar") {
               this.calificar()
-              
-            } else if(opcion === 'rechazar') {
+
+            } else if (opcion === 'rechazar') {
               this.truequeServ.updateTrueque(trueque)
-            await this.prodServ.updateProducto(this.troqueComprador.id, true);
-            await this.prodServ.updateProducto(this.troqueVendedor.id, true);
-            this.modal.dismiss()
+              await this.prodServ.updateProducto(this.troqueComprador.id, true);
+              await this.prodServ.updateProducto(this.troqueVendedor.id, true);
+              this.modal.dismiss()
             }
-            
+
           }
         }
       ]
     }).then(a => { a.present(); });
   }
-  finalizar(){
+  finalizar() {
     //agregar alerta de que confirme si intercambio producto y en ese caso pedir calificacion del troquero
     this.alertaConfirmacion('Finalizar Trueque', '¿Ya te reuniste con el troquero?\nCalificalo!', 'finalizar')
   }
-  calificar(){
+  calificar() {
     let estado;
     let esComprador: boolean;
     if (this.troqueComprador.owner === this.usuarioL.correo) {
       esComprador = true;
-    }else if (this.troqueVendedor.owner === this.usuarioL.correo) {
+    } else if (this.troqueVendedor.owner === this.usuarioL.correo) {
       esComprador = false;
     } else {
       alert("Hay un error a detectar el usuario en calificar");
@@ -585,7 +603,7 @@ export class TruequeComponent implements OnInit {
     } else {
       alert("Error al validar si es comprador o no en calificar")
     }
-      
+
     let truequeF = {
       trueque: estado,
       comprador: this.truequeEstado.comprador,
@@ -596,7 +614,7 @@ export class TruequeComponent implements OnInit {
 
     this.modalCali.create({
       component: CalificaComponent,
-      cssClass:'calificacion',
+      cssClass: 'calificacion',
       showBackdrop: true,
       backdropDismiss: true,
       componentProps: {

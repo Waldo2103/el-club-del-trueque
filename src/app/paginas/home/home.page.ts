@@ -3,7 +3,6 @@ import { Producto } from '../../clases/producto/producto';
 import { ActionSheetController, AlertController, ModalController } from '@ionic/angular';
 import { Router } from '@angular/router';
 import { ProductoComponent } from 'src/app/componentes/producto/producto.component';
-import { producto, ProductosService } from 'src/app/servicios/productos/productos.service';
 import { MensajesService } from 'src/app/servicios/mensajes/mensajes.service';
 import { AngularFireAuth } from '@angular/fire/auth';
 import { UsuariosService } from 'src/app/servicios/usuarios/usuarios.service';
@@ -11,6 +10,8 @@ import { AlbumesComponent } from 'src/app/componentes/albumes/albumes.component'
 import { NotificacionesService } from 'src/app/servicios/notificaciones/notificaciones.service';
 import { PerfilComponent } from 'src/app/componentes/perfil/perfil.component';
 import { ProdAltaComponent } from 'src/app/componentes/prod-alta/prod-alta.component';
+import { TruequeComponent } from 'src/app/componentes/trueque/trueque.component';
+import { FirebaseService } from 'src/app/servicios/firebase.service';
 
 @Component({
   selector: 'app-home',
@@ -23,22 +24,10 @@ export class HomePage implements OnInit {
   filtroBuscar = '';
   public userLogin;
   public desplegado:boolean = true;
-  /* public itemSelected:Producto = {
-    id:'0',
-    correo: 'string',
-    clave: 'string',
-    nombre: 'string',
-    domicilio: 'string',
-    responsable: 'string',
-    telefono: 'string',
-    tipo: 'string' ,
-    productos: 'string', 
-    zonas: 'string', 
-    rutaDeFoto: 'string'
-  }; */
+  public pestania: string = "inicio";
 
   constructor(
-    private prodServ: ProductosService, 
+    private fireServ: FirebaseService,
     private alertCtrl: AlertController, 
     private router: Router,
     private modal: ModalController,
@@ -107,52 +96,65 @@ export class HomePage implements OnInit {
   }*/
 
   buscarProducto(event){
-    
     const texto = event.target.value;
     this.filtroBuscar = texto;
   }
 
   async traerTodos() {
-    await this.prodServ.getProductos().subscribe((productsSnapshot) => {
+    await this.fireServ.getDoc('productos').subscribe((productsSnapshot) => {
       this.listado = [];
-      this.listado = productsSnapshot
-      /*productsSnapshot.forEach((productData: any) => {
+      //this.listado = productsSnapshot;
+      productsSnapshot.forEach((productData: any) => {
         this.listado.push(
           {
-            id: productData.payload.doc.id,
-            nombre: productData.payload.doc.data().nombre,
-            owner: productData.payload.doc.data().owner,
-            descripcion: productData.payload.doc.data().descripcion,
-            etiquetas: productData.payload.doc.data().etiquetas,
-            imagen: productData.payload.doc.data().imagen         
+            id: productData.uid,
+            nombre: productData.nombre,
+            apodo: productData.apodo,
+            owner: productData.owner,
+            descripcion: productData.descripcion,
+            etiquetas: productData.etiquetas,
+            imagen: productData.imagen,
+            zona: productData.zona,
+            album: productData.album,         
         });
-        //console.log(this.listado[0].open = true);
-      })*/
+      })
     });
   }
-
+  /*Para evitar la dependencia circular:
+    abrimos el producto en un modal y para tomar una accion cerramos el modal y abrimos otro*/
   async openProduct(producto){
-    //producto = JSON.stringify(producto);
-    //producto = JSON.parse(producto);
-    //console.log("producto en open modal"+producto)
     const modal = await this.modal.create({
       component: ProductoComponent,
       componentProps: {
         producto: producto
       }
-    });//.then((modal)=>modal.present())
+    });
     await modal.present();
     const data = await modal.onWillDismiss().then(async (res:any) =>{//res puede trae {action:"verPerfil",datos:this.usuarioP}
-      console.log(res)
-      if (res.data.action === "verPerfil") {
-        console.log("para no verme mas")
-        const modalPe = await this.modal.create({
-          component: PerfilComponent,
-          componentProps: {
-            perfil: res.data.datos
-          }
-        });//.then((modalP)=>{modalP.present();this.modal.dismiss();console.log("creo modal de perfil nuevo")})
-        await modalPe.present()
+      //console.log(res)
+      if (res.data != undefined) {
+        if (res.data.action === "verPerfil") {
+          const modalPe = await this.modal.create({
+            component: PerfilComponent,
+            componentProps: {
+              perfil: res.data.datos
+            }
+          });
+          await modalPe.present()
+        } else if (res.data.action === "trocar") {
+          let datos = res.data.datos;
+          console.log(datos);
+          const modalPe = await this.modal.create({
+            component: TruequeComponent,
+      componentProps: {
+        troqueV: datos[0],
+        troqueC: datos[1],
+        usuarioL: datos[2],
+        usuarioP: datos[3]
+      }
+          });
+          await modalPe.present()
+        }
       }
       
     })
@@ -235,7 +237,10 @@ export class HomePage implements OnInit {
       console.log("cossooooooooooooooooooooooooooovich")
     });
   }
-
+  segmentChanged(ev: any) {
+    console.log('Segment changed', ev.detail.value);
+    this.pestania = ev.detail.value;
+  }
   /* public abrirAlbum(modo:string){
     this.modal.create({
       component: AlbumesComponent,

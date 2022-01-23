@@ -1,36 +1,63 @@
 import { Injectable } from '@angular/core';
 import { AlertController } from '@ionic/angular';
-import { producto } from '../productos/productos.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AlertasService {
-
   constructor(
     public alertCtrl: AlertController
   ) { }
-  public alertaConfirmacion(header: string, troque: producto, message: string) {
-    this.alertCtrl.create({
+  //Se muestra un titulo, un mensaje y las opciones Si y No
+  async alertaConfirmacion(header: string, message: string, buttons:Array<string>) {
+    var resp: Boolean;
+
+    const alCont = await this.alertCtrl.create({
       header,
       message,
       buttons: [ 
       {
-        text: 'No',
-        role: 'Cancel',
+        text: buttons[1],
         handler: () => {
-          console.log('Cancel clicked');
+          resp = false;
         }
       },
       {
-        text: 'Si',
+        text: buttons[0],
         handler: () => {
-          //this.troque = troque;
-          //this.closeAlbum()
-          //console.log('Buy clicked');
+          resp = true;
         }
       }
     ]
-    }).then(a => { a.present(); });
+    })
+    await alCont.present()
+    await alCont.onWillDismiss().then( () =>{
+        return resp;
+      }
+    );
+    return resp;
+  }
+
+  async alertaInformacion(header: string, message: string, button:string) {
+    var resp: Boolean;
+
+    const alCont = await this.alertCtrl.create({
+      header,
+      message,
+      buttons: [ 
+      {
+        text: button,
+        handler: () => {
+          resp = true;
+        }
+      }
+    ]
+    })
+    await alCont.present()
+    await alCont.onWillDismiss().then( () =>{
+        return resp;
+      }
+    );
+    return resp;
   }
 }

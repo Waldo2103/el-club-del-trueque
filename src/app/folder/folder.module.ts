@@ -25,6 +25,9 @@ import { PhotoViewer } from "@ionic-native/photo-viewer/ngx";
 import { PopComponent } from '../componentes/pop/pop.component';
 import { TruequesComponent } from '../componentes/trueques/trueques.component';
 import { TruequeComponent } from '../componentes/trueque/trueque.component';
+import { GrupoListaComponent } from '../componentes/grupos/grupo-lista/grupo-lista.component';
+import { GrupoComponent } from '../componentes/grupos/grupo/grupo.component';
+import { GrupoABMComponent } from '../componentes/grupos/grupo-abm/grupo-abm.component';
 
 @NgModule({
   imports: [
@@ -40,12 +43,15 @@ import { TruequeComponent } from '../componentes/trueque/trueque.component';
     MensajesComponent, ChatComponent, 
     AlbumComponent, AlbumesComponent,
     PerfilComponent, PopComponent,
-    TruequesComponent, TruequeComponent
+    TruequesComponent, TruequeComponent,
+    GrupoListaComponent, GrupoComponent,
+    GrupoABMComponent
   ],
   entryComponents:[MensajesComponent, ChatComponent, 
     AlbumComponent, AlbumesComponent,
     PerfilComponent, PopComponent,
-    TruequesComponent, TruequeComponent
+    TruequesComponent, TruequeComponent,
+    GrupoListaComponent, GrupoComponent
   ],
   providers:[
     Camera,

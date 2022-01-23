@@ -11,6 +11,17 @@
   </ion-toolbar>
 </ion-header>
 <ion-content>
+  <ion-segment (ionChange)="segmentChanged($event)" value="{{pestania}}">
+    <ion-segment-button value="inicio">
+      <ion-label>Inicio</ion-label>
+    </ion-segment-button>
+    <ion-segment-button value="grupos">
+      <ion-label>Grupos</ion-label>
+    </ion-segment-button>
+    <!--ion-segment-button value="comunidad">
+      <ion-label>Comunidad</ion-label>
+    </ion-segment-button-->
+  </ion-segment>
   <ion-list *ngIf="listado.length === 0">
     <ion-item *ngFor="let i of [1,1,1,1,1,1,1,1,1,1,1]">
       <ion-thumbnail slot="start">
