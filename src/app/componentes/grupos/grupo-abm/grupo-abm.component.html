@@ -1,3 +1,40 @@
-<p>
-  grupo-abm works!
-</p>
+<ion-header>
+  <ion-toolbar>
+    <ion-button slot="start" defaultHref="/folder/Albumes" (click)="closeGrupoABM()" fill="none">
+      <ion-icon name="arrow-back-outline"></ion-icon>
+    </ion-button>
+    <ion-title>{{modoTitu}}</ion-title>
+  </ion-toolbar>
+</ion-header>
+<ion-content>
+  <ion-list>
+    <form [formGroup]="form" (ngSubmit)="abmGrupo(form.value)">
+      <div class="form-group">
+          <ion-img src="{{foto}}"></ion-img>
+        <ion-item>
+          <ion-input class="album" color="dark" type="text" formControlName="nombre" placeholder="Nombre Grupo">
+          </ion-input>
+        </ion-item>
+        <ion-item>
+          <ion-input class="album" focus color="secondary" type="text" formControlName="descripcion" name="descripcion"
+            placeholder="Descripción Grupo"></ion-input>
+        </ion-item>
+        <ion-item>
+          <ion-checkbox formControlName="publico" color="primary"></ion-checkbox>
+          <ion-label>Grupo Público</ion-label>
+        </ion-item>
+      </div>
+      <div *ngIf="!uniqueAdmin && eligeAdmin" class="form-goup">
+          <!--ACA COMBO PARA ELEGIR ADMIN-->
+      </div>
+        <ion-button *ngIf="!eligeAdmin" color="success" shape="round" type="submit">
+          <ion-icon name="checkmark-circle-outline"></ion-icon> {{modoTitu}}
+        </ion-button>
+    </form>
+  </ion-list>
+</ion-content>
+<ion-fab *ngIf="!eligeAdmin" vertical="bottom" horizontal="end" slot="fixed">
+  <ion-fab-button color="success" (click)="agregarFoto()">
+    <ion-icon name="cloud-upload"></ion-icon>
+  </ion-fab-button>
+</ion-fab>
