@@ -28,7 +28,14 @@ import { ProdAltaComponent } from './componentes/prod-alta/prod-alta.component';
 import { AlbumesComponent } from './componentes/albumes/albumes.component';
 import { GrupoComponent } from './componentes/grupos/grupo/grupo.component';
 
+//import './polyfills';
 
+import {CdkTableModule} from '@angular/cdk/table';
+import {CdkTreeModule} from '@angular/cdk/tree';
+import {HttpClientModule} from '@angular/common/http';
+
+import {platformBrowserDynamic} from '@angular/platform-browser-dynamic';
+import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 
 
 @NgModule({
@@ -42,9 +49,10 @@ import { GrupoComponent } from './componentes/grupos/grupo/grupo.component';
     ReactiveFormsModule,
     AngularFireModule.initializeApp(environment.firebaseConfig),
     AngularFireAuthModule,
-    AngularFirestoreModule
+    AngularFirestoreModule,
+    BrowserAnimationsModule
   ],
-    exports:[],
+  exports: [],
   providers: [
     GooglePlus,
     //Facebook,

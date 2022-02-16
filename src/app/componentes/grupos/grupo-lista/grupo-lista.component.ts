@@ -9,13 +9,13 @@ import { PopComponent } from '../../pop/pop.component';
 import { GrupoABMComponent } from '../grupo-abm/grupo-abm.component';
 import { GrupoComponent } from '../grupo/grupo.component';
 
+
 @Component({
   selector: 'app-grupo-lista',
   templateUrl: './grupo-lista.component.html',
   styleUrls: ['./grupo-lista.component.scss'],
 })
 export class GrupoListaComponent implements OnInit, OnChanges {
-
   public grupos: any = [];
   public gruposBis: any = [];
   public userLogin: any;

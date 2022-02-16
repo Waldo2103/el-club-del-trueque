@@ -29,6 +29,12 @@ import { GrupoListaComponent } from '../componentes/grupos/grupo-lista/grupo-lis
 import { GrupoComponent } from '../componentes/grupos/grupo/grupo.component';
 import { GrupoABMComponent } from '../componentes/grupos/grupo-abm/grupo-abm.component';
 
+import { TableSearchComponent } from '../componentes/table-search/table-search.component';
+
+import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
+
+
+
 @NgModule({
   imports: [
     FormsModule,
@@ -45,20 +51,21 @@ import { GrupoABMComponent } from '../componentes/grupos/grupo-abm/grupo-abm.com
     PerfilComponent, PopComponent,
     TruequesComponent, TruequeComponent,
     GrupoListaComponent, GrupoComponent,
-    GrupoABMComponent
+    GrupoABMComponent, TableSearchComponent
   ],
   entryComponents:[MensajesComponent, ChatComponent, 
     AlbumComponent, AlbumesComponent,
     PerfilComponent, PopComponent,
     TruequesComponent, TruequeComponent,
-    GrupoListaComponent, GrupoComponent
+    GrupoListaComponent, GrupoComponent,
+    TableSearchComponent
   ],
   providers:[
     Camera,
     ImagePicker,
     File,
     NavParams,
-    PhotoViewer
+    PhotoViewer,
   ]
 })
 export class FolderPageModule {}

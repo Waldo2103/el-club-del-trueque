@@ -31,6 +31,7 @@ export class GrupoABMComponent implements OnInit {
   public mensaje: string
   public botones: Array<string>;
   public eligeAdmin: boolean = false;
+  public integrantes:Array<Object> = [];//integrantes del grupo para los checkbox
   constructor(
     private AFauth: AngularFireAuth,
     private fBuilder: FormBuilder,
@@ -47,11 +48,22 @@ export class GrupoABMComponent implements OnInit {
   ngOnInit() {
     this.modo = this.navParams.get('modo');
     this.grupo = this.navParams.get('grupo');
+    //se guarda un array con los integ y un campo en false
+    for (let int of this.grupo.integrantes) {
+      this.integrantes.push({
+        inte: int,
+        admin: false
+      }) 
+      
+      
+    }
+    console.log(this.grupo)
     this.traerUserLogin();
     this.form = this.fBuilder.group({
       nombre: [''],
       descripcion: new FormControl('', Validators.required),
       publico: new FormControl(false),
+      integrantes: new FormControl('')
     })
     switch (this.modo) {
       case "A":
@@ -73,6 +85,7 @@ export class GrupoABMComponent implements OnInit {
               // Elige Admin
               this.modoTitu = "Elegir Administrador"
               this.eligeAdmin = true;
+              this.modo = 'M'
             }
           })
         } else {
@@ -98,9 +111,11 @@ export class GrupoABMComponent implements OnInit {
           nombre: this.grupo.nombre,
           descripcion: this.grupo.descripcion,
           publico: this.grupo.publico,
+          integrantes: ''
         })
         break;
       case "M":
+        this.eligeAdmin = true;
         this.modoTitu = "Modificar Grupo"
         this.form.setValue({
           nombre: this.grupo.nombre,
@@ -158,7 +173,7 @@ export class GrupoABMComponent implements OnInit {
     this.alertServ.alertaInformacion(this.titulo, this.mensaje, "Aceptar").then(() => { this.modal.dismiss() })
   }
   async modiGrupo(grupo) {
-
+    console.log(this.integrantes)
   }
   traerUserLogin() {
     this.AFauth.authState.subscribe(res => {
@@ -280,6 +295,12 @@ export class GrupoABMComponent implements OnInit {
   }
   closeGrupoABM() {
     this.modal.dismiss();
+  }
+
+  filtroBuscar = '';
+  buscarUser(event){
+    const texto = event.target.value;
+    this.filtroBuscar = texto;
   }
 
 }

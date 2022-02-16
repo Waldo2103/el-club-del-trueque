@@ -12,7 +12,6 @@ import { PipesModule } from '../../pipes/pipes.module';
 import { Camera } from '@ionic-native/camera/ngx';
 import { ImagePicker } from "@ionic-native/image-picker/ngx";
 import { File } from "@ionic-native/file/ngx";
-import { ProdAltaComponent } from 'src/app/componentes/prod-alta/prod-alta.component';
 
 
 @NgModule({

@@ -10,7 +10,7 @@
   <ion-list>
     <form [formGroup]="form" (ngSubmit)="abmGrupo(form.value)">
       <div class="form-group">
-          <ion-img src="{{foto}}"></ion-img>
+        <ion-img src="{{foto}}"></ion-img>
         <ion-item>
           <ion-input class="album" color="dark" type="text" formControlName="nombre" placeholder="Nombre Grupo">
           </ion-input>
@@ -20,16 +20,24 @@
             placeholder="Descripción Grupo"></ion-input>
         </ion-item>
         <ion-item>
-          <ion-checkbox formControlName="publico" color="primary"></ion-checkbox>
+          <ion-checkbox formControlName="publico" color="secondary"></ion-checkbox>
           <ion-label>Grupo Público</ion-label>
         </ion-item>
       </div>
-      <div *ngIf="!uniqueAdmin && eligeAdmin" class="form-goup">
-          <!--ACA COMBO PARA ELEGIR ADMIN-->
+      <div *ngIf="eligeAdmin" class="form-goup">
+        <!--ACA COMBO PARA ELEGIR ADMIN-->
+        <!--app-table-search>Cargando</app-table-search-->
+        <ion-searchbar placeholder="Apodo o Nombre" (ionChange)="buscarUser($event)"></ion-searchbar>
+        <ion-list *ngFor="let user of grupo.integrantes | filtro: filtroBuscar">
+          <ion-item>
+            <ion-checkbox formControlName="integrantes" color="secondary" value="{{integrantes.admin}}"></ion-checkbox>
+            <ion-label>{{user}}</ion-label>
+          </ion-item>
+        </ion-list>
       </div>
-        <ion-button *ngIf="!eligeAdmin" color="success" shape="round" type="submit">
-          <ion-icon name="checkmark-circle-outline"></ion-icon> {{modoTitu}}
-        </ion-button>
+      <ion-button color="success" shape="round" type="submit">
+        <ion-icon name="checkmark-circle-outline"></ion-icon> {{modoTitu}}
+      </ion-button>
     </form>
   </ion-list>
 </ion-content>
